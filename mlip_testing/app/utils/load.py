@@ -1,4 +1,4 @@
-"""Utility functions for Dash app."""
+"""Helpers to load components into Dash app."""
 
 from __future__ import annotations
 
