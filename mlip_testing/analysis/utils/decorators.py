@@ -157,7 +157,7 @@ def build_table(
 
     def build_table_decorator(func: Callable) -> Callable:
         """
-        Decorate function to plot bar chart.
+        Decorate function to build table.
 
         Parameters
         ----------
@@ -173,7 +173,7 @@ def build_table(
         @functools.wraps(func)
         def build_table_wrapper(*args, **kwargs) -> dict[str, Any]:
             """
-            Wrap function to plot bar chart.
+            Wrap function to build table.
 
             Parameters
             ----------
