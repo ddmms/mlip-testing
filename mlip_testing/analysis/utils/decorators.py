@@ -5,6 +5,7 @@ from __future__ import annotations
 from collections.abc import Callable
 import functools
 from json import dump
+from pathlib import Path
 from typing import Any
 
 from dash import dash_table
@@ -130,6 +131,9 @@ def plot_parity(
             )
 
             fig.update_traces()
+
+            # Write to file
+            Path(filename).parent.mkdir(parents=True, exist_ok=True)
             fig.write_json(filename)
 
             return results
@@ -213,6 +217,7 @@ def build_table(
             )
 
             # Save dict of table to be loaded
+            Path(filename).parent.mkdir(parents=True, exist_ok=True)
             with open(filename, "w") as fp:
                 dump({"data": table.data, "columns": table.columns}, fp)
 
