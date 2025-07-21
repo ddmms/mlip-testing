@@ -12,7 +12,8 @@ from mlip_testing.analysis.utils.decorators import build_table, plot_parity
 from mlip_testing.analysis.utils.utils import mae
 from mlip_testing.calcs.models.models import MODELS
 
-OUT_PATH = Path(__file__).parent.parent.parent / "calcs" / "OC157" / "outputs"
+CALC_PATH = Path(__file__).parent.parent.parent / "calcs" / "OC157" / "outputs"
+OUT_PATH = Path(__file__).parent.parent.parent / "app" / "data" / "OC157"
 
 
 def get_relative_energies(energies: list) -> list:
@@ -47,7 +48,7 @@ def compositions() -> list:
     """
     all_compositions = []
     for model_name in MODELS:
-        for system_path in (OUT_PATH / model_name).glob("*.xyz"):
+        for system_path in (CALC_PATH / model_name).glob("*.xyz"):
             structs = read(system_path, index=":")
             compositions = [atoms.info["composition"] for atoms in structs]
             all_compositions.extend(compositions)
@@ -65,14 +66,14 @@ def labels() -> list:
         List of all relative energy labels.
     """
     for model_name in MODELS:
-        n_systems = len(list((OUT_PATH / model_name).glob("*.xyz")))
+        n_systems = len(list((CALC_PATH / model_name).glob("*.xyz")))
         break
     return ["E_2 - E_1", "E_3 - E_2", "E_3 - E_2"] * n_systems
 
 
 @pytest.fixture
 @plot_parity(
-    filename="figure_rel_energies.json",
+    filename=OUT_PATH / "figure_rel_energies.json",
     title="Relative energies",
     x_label="Predicted relative energy / eV",
     y_label="Reference relative energy / eV",
@@ -93,7 +94,7 @@ def relative_energies() -> dict[str, list]:
     results = {"ref": []} | {mlip: [] for mlip in MODELS}
     ref_stored = False
     for model_name in MODELS:
-        for system_path in (OUT_PATH / model_name).glob("*.xyz"):
+        for system_path in (CALC_PATH / model_name).glob("*.xyz"):
             structs = read(system_path, index=":")
             pred_energies = [atoms.get_potential_energy() for atoms in structs]
             results[model_name].extend(get_relative_energies(pred_energies))
@@ -159,7 +160,7 @@ def ranking_error(relative_energies: dict[str, list]) -> dict[str, float]:
     return results
 
 
-@build_table("oc157_metrics_table.json")
+@build_table(filename=OUT_PATH / "oc157_metrics_table.json")
 def test_oc157(
     oc157_mae: dict[str, float], ranking_error: dict[str, float]
 ) -> dict[str, dict]:
