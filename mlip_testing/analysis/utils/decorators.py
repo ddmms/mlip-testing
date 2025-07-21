@@ -16,7 +16,7 @@ def plot_parity(
     title: str | None = None,
     x_label: str | None = None,
     y_label: str | None = None,
-    hoverdata: dict | None = (),
+    hoverdata: dict | None = None,
     filename: str = "parity.json",
 ) -> Callable:
     """
@@ -81,9 +81,10 @@ def plot_parity(
             hovertemplate = "<b>Pred: </b>%{x}<br>" + "<b>Ref: </b>%{y}<br>"
 
             customdata = []
-            for i, key in enumerate(hoverdata):
-                hovertemplate += f"<b>{key}: </b>%{{customdata[{i}]}}<br>"
-            customdata = list(zip(*hoverdata.values(), strict=True))
+            if hoverdata:
+                for i, key in enumerate(hoverdata):
+                    hovertemplate += f"<b>{key}: </b>%{{customdata[{i}]}}<br>"
+                customdata = list(zip(*hoverdata.values(), strict=True))
 
             for mlip, value in results.items():
                 if mlip == "ref":
