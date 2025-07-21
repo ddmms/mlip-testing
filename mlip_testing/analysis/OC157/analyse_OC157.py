@@ -1,0 +1,185 @@
+"""Analyse OC157 benchmark."""
+
+from __future__ import annotations
+
+from pathlib import Path
+
+from ase.io import read
+import numpy as np
+import pytest
+
+from mlip_testing.analysis.utils.decorators import build_table, plot_parity
+from mlip_testing.analysis.utils.utils import mae
+from mlip_testing.calcs.models.models import MODELS
+
+OUT_PATH = Path(__file__).parent.parent.parent / "calcs" / "OC157" / "outputs"
+
+
+def get_relative_energies(energies: list) -> list:
+    """
+    Get pairs of relative energies for one triplet.
+
+    Parameters
+    ----------
+    energies
+        List of three energies to find relative energies for.
+
+    Returns
+    -------
+    list
+        All combinations of relative energies.
+    """
+    return [
+        energies[1] - energies[0],
+        energies[2] - energies[0],
+        energies[2] - energies[1],
+    ]
+
+
+def compositions() -> list:
+    """
+    Get list of compositions.
+
+    Returns
+    -------
+    list
+        List of all compositions.
+    """
+    all_compositions = []
+    for model_name in MODELS:
+        for system_path in (OUT_PATH / model_name).glob("*.xyz"):
+            structs = read(system_path, index=":")
+            compositions = [atoms.info["composition"] for atoms in structs]
+            all_compositions.extend(compositions)
+        break
+    return all_compositions
+
+
+def labels() -> list:
+    """
+    Get list of labels.
+
+    Returns
+    -------
+    list
+        List of all relative energy labels.
+    """
+    for model_name in MODELS:
+        n_systems = len(list((OUT_PATH / model_name).glob("*.xyz")))
+        break
+    return ["E_2 - E_1", "E_3 - E_2", "E_3 - E_2"] * n_systems
+
+
+@pytest.fixture
+@plot_parity(
+    filename="figure_rel_energies.json",
+    title="Relative energies",
+    x_label="Predicted relative energy / eV",
+    y_label="Reference relative energy / eV",
+    hoverdata={
+        "Composition": compositions(),
+        "Labels": labels(),
+    },
+)
+def relative_energies() -> dict[str, list]:
+    """
+    Get energy differences for all triplets.
+
+    Returns
+    -------
+    dict[str, list]
+        Dictionary of all reference and predicted relative energies.
+    """
+    results = {"ref": []} | {mlip: [] for mlip in MODELS}
+    ref_stored = False
+    for model_name in MODELS:
+        for system_path in (OUT_PATH / model_name).glob("*.xyz"):
+            structs = read(system_path, index=":")
+            pred_energies = [atoms.get_potential_energy() for atoms in structs]
+            results[model_name].extend(get_relative_energies(pred_energies))
+            if not ref_stored:
+                ref_energies = [atoms.info["ref_energy"] for atoms in structs]
+                results["ref"].extend(get_relative_energies(ref_energies))
+        ref_stored = True
+    return results
+
+
+@pytest.fixture
+def oc157_mae(relative_energies) -> dict[str, float]:
+    """
+    Get mean average error across all triplets.
+
+    Parameters
+    ----------
+    relative_energies
+        Dictionary of reference and predicted relative energies.
+
+    Returns
+    -------
+    dict[str, float]
+        Dictionary of predicted relative energy errors for all models.
+    """
+    results = {}
+    for model_name in MODELS:
+        results[model_name] = mae(
+            relative_energies["ref"], relative_energies[model_name]
+        )
+    return results
+
+
+@pytest.fixture
+def ranking_error(relative_energies: dict[str, list]) -> dict[str, float]:
+    """
+    Get ranking error across all triplets.
+
+    Parameters
+    ----------
+    relative_energies
+        Dictionary of reference and predicted relative energies.
+
+    Returns
+    -------
+    dict[str, float]
+        Dictionary of predicted ranking errors for all models.
+    """
+    results = {}
+    ref_ranks = []
+    for i in range(len(relative_energies) // 3):
+        ref_energies = relative_energies["ref"][3 * i : 3 * i + 3]
+        ref_ranks.append(np.argmin(ref_energies))
+
+    for model_name in MODELS:
+        pred_ranks = []
+        for i in range(len(relative_energies) // 3):
+            pred_energies = relative_energies[model_name][3 * i : 3 * i + 3]
+            pred_ranks.append(np.argmin(pred_energies))
+
+        results[model_name] = 1 - float(np.mean(ref_ranks == pred_ranks))
+
+    return results
+
+
+@build_table("oc157_metrics_table.json")
+def test_oc157(
+    oc157_mae: dict[str, float], ranking_error: dict[str, float]
+) -> dict[str, dict]:
+    """
+    Get all OC157 metrics.
+
+    Parameters
+    ----------
+    oc157_mae
+        Mean absolute errors for all models.
+    ranking_error
+        Ranking errors for all models.
+
+    Returns
+    -------
+    dict[str, dict]
+        Metric names and values for all models.
+    """
+    print(oc157_mae, ranking_error)
+    return {
+        "Mean Absolute Error": oc157_mae,
+        "Ranking Error": ranking_error,
+    }
