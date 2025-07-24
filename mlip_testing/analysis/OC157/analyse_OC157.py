@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from ase.io import read
+from ase.io import read, write
 import numpy as np
 import pytest
 
@@ -94,13 +94,18 @@ def relative_energies() -> dict[str, list]:
     results = {"ref": []} | {mlip: [] for mlip in MODELS}
     ref_stored = False
     for model_name in MODELS:
-        for system_path in (CALC_PATH / model_name).glob("*.xyz"):
+        for i, system_path in enumerate((CALC_PATH / model_name).glob("*.xyz")):
             structs = read(system_path, index=":")
             pred_energies = [atoms.get_potential_energy() for atoms in structs]
             results[model_name].extend(get_relative_energies(pred_energies))
             if not ref_stored:
                 ref_energies = [atoms.info["ref_energy"] for atoms in structs]
                 results["ref"].extend(get_relative_energies(ref_energies))
+
+            # Write structures in order as glob is unsorted
+            structs_dir = OUT_PATH / model_name
+            structs_dir.mkdir(parents=True, exist_ok=True)
+            write(structs_dir / f"{i}.xyz", structs)
         ref_stored = True
     return results
 
