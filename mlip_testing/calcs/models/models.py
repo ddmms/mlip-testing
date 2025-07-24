@@ -1,3 +1,7 @@
+"""Define classes for all models."""
+
+# ruff: noqa: D101, D102, F401
+
 from __future__ import annotations
 
 import dataclasses
@@ -35,12 +39,12 @@ ALL_MODELS["7net-mf-ompa-mpa"] = mlipx.GenericASECalculator(
 
 # https://github.com/orbital-materials/orb-models
 @dataclasses.dataclass
-class OrbCalc:
+class OrbCalc:  # numpydoc ignore=GL08
     name: str
     device: Device | None = None
     kwargs: dict = dataclasses.field(default_factory=dict)
 
-    def get_calculator(self, **kwargs):
+    def get_calculator(self, **kwargs):  # numpydoc ignore=GL08
         from orb_models.forcefield import pretrained
         from orb_models.forcefield.calculator import ORBCalculator
         import torch._dynamo
@@ -64,7 +68,7 @@ class OrbCalc:
         return calc
 
     @property
-    def available(self) -> bool:
+    def available(self) -> bool:  # numpydoc ignore=GL08
         try:
             from orb_models.forcefield import pretrained
             from orb_models.forcefield.calculator import ORBCalculator
@@ -108,13 +112,13 @@ ALL_MODELS["GRACE-2L-OMAT"] = mlipx.GenericASECalculator(
 
 
 @dataclasses.dataclass
-class FairChemCalc:
+class FairChemCalc:  # numpydoc ignore=GL08
     model_name: str
     task_name: str
     device: Device | str = "cpu"
     overrides: dict = dataclasses.field(default_factory=dict)
 
-    def get_calculator(self):
+    def get_calculator(self):  # numpydoc ignore=GL08
         from fairchem.core import FAIRChemCalculator, pretrained_mlip
         # torch.serialization.add_safe_globals([slice])
 
@@ -124,7 +128,7 @@ class FairChemCalc:
         return FAIRChemCalculator(predictor, task_name=self.task_name)
 
     @property
-    def available(self) -> bool:
+    def available(self) -> bool:  # numpydoc ignore=GL08
         try:
             from fairchem.core import pretrained_mlip
 
@@ -139,11 +143,11 @@ ALL_MODELS["fairchem-uma-sm"] = FairChemCalc(
 
 
 @dataclasses.dataclass
-class SumCalcWrapper:
+class SumCalcWrapper:  # numpydoc ignore=GL08
     model_names: list[str]
     d3_kwargs: dict | None = None
 
-    def get_calculator(self):
+    def get_calculator(self):  # numpydoc ignore=GL08
         from ase import units
         from ase.calculators.mixing import SumCalculator
         import torch
