@@ -7,6 +7,8 @@ import pathlib
 from pathlib import Path
 import zipfile
 
+from ase import Atoms
+from ase.calculators.calculator import Calculator
 from ase.io import read, write
 import mlipx
 from mlipx.abc import NodeWithCalculator
@@ -92,37 +94,91 @@ class OC157Benchmark(zntrack.Node):
     model: NodeWithCalculator = zntrack.deps()
     model_name: str = zntrack.params()
 
+    @staticmethod
+    def _incar_has_hubbard_u(incar_path: Path) -> bool:
+        """
+        Check whether Hubbard U correction was used.
+
+        Parameters
+        ----------
+        incar_path
+            Path to reference input file.
+
+        Returns
+        -------
+        bool
+            Whether Hubbard U correction was used.
+        """
+        if not incar_path.is_file():
+            return False
+        return "LDAU" in incar_path.read_text()
+
+    @staticmethod
+    def _find_energy(outcar, key="energy  without entropy=") -> float:
+        """
+        Find reference energy.
+
+        Parameters
+        ----------
+        outcar
+            Reference output file.
+        key
+            Key to access energy result.
+
+        Returns
+        -------
+        float
+            Reference energy.
+        """
+        with open(outcar, encoding="ISO-8859-1") as fh:
+            hits = [line for line in fh if key in line]
+        if not hits:
+            raise RuntimeError(f"No energy found in {outcar}")
+        return float(hits[-1].split()[-1])
+
+    @staticmethod
+    def _read_structure(folder: Path) -> Atoms:
+        """
+        Read reference structure.
+
+        Parameters
+        ----------
+        folder
+            Folder containing reference files.
+
+        Returns
+        -------
+        Atoms
+            Reference structure as an Atoms object.
+        """
+        for fname in ("CONTCAR", "POSCAR"):
+            fpath = folder / fname
+            if fpath.is_file():
+                return read(fpath, format="vasp")
+        raise FileNotFoundError(f"No CONTCAR/POSCAR in {folder}")
+
+    @staticmethod
+    def evaluate_energies(triplet: list[Atoms], calc: Calculator) -> None:
+        """
+        Evaluate energies for each triplet.
+
+        Parameters
+        ----------
+        triplet
+            Triplet of Atoms structures to calculate energies for.
+        calc
+            Calculator to use to evaluate structure energy.
+        """
+        for atoms in triplet:
+            atoms.calc = deepcopy(calc)
+            atoms.get_potential_energy()
+
     def run(self):
         """Run OC157 energy calculations."""
         calc = self.model.get_calculator()
         base_dir = get_benchmark_data("OC_Dataset.zip") / "OC_Dataset"
         n_systems = 200
         skip_hubbard_u = True
-
-        # ---- Helper functions ----
-        def _incar_has_hubbard_u(incar_path):
-            if not incar_path.is_file():
-                return False
-            return "LDAU" in incar_path.read_text()
-
-        def _find_energy(outcar, key="energy  without entropy="):
-            with open(outcar, encoding="ISO-8859-1") as fh:
-                hits = [line for line in fh if key in line]
-            if not hits:
-                raise RuntimeError(f"No energy found in {outcar}")
-            return float(hits[-1].split()[-1])
-
-        def _read_structure(folder):
-            for fname in ("CONTCAR", "POSCAR"):
-                fpath = folder / fname
-                if fpath.is_file():
-                    return read(fpath, format="vasp")
-            raise FileNotFoundError(f"No CONTCAR/POSCAR in {folder}")
-
-        def evaluate_energies(triplet):
-            for atoms in triplet:
-                atoms.calc = deepcopy(calc)
-                atoms.get_potential_energy()
 
         triplets = []
         system_ids = []
@@ -132,7 +188,7 @@ class OC157Benchmark(zntrack.Node):
             sys_id = f"{idx:03d}"
             sys_dir = base_dir / sys_id
 
-            if skip_hubbard_u and _incar_has_hubbard_u(sys_dir / "1" / "INCAR"):
+            if skip_hubbard_u and self._incar_has_hubbard_u(sys_dir / "1" / "INCAR"):
                 continue
 
             poscar = (sys_dir / "1" / "POSCAR").read_text().splitlines()[0].strip()
@@ -142,8 +198,8 @@ class OC157Benchmark(zntrack.Node):
             trio_atoms = []
             for member in (1, 2, 3):
                 subdir = sys_dir / str(member)
-                atoms = _read_structure(subdir)
-                energy = _find_energy(subdir / "OUTCAR")
+                atoms = self._read_structure(subdir)
+                energy = self._find_energy(subdir / "OUTCAR")
                 atoms.info["ref_energy"] = energy
                 atoms.info["composition"] = poscar
                 atoms.info["sys_id"] = sys_id
@@ -151,7 +207,7 @@ class OC157Benchmark(zntrack.Node):
             triplets.append(trio_atoms)
 
         for trio in tqdm(triplets, desc="Evaluating model on triplets"):
-            evaluate_energies(trio)
+            self.evaluate_energies(trio, calc)
             write_dir = OUT_PATH / self.model_name
             write_dir.mkdir(parents=True, exist_ok=True)
             write(write_dir / f"{trio[-1].info['sys_id']}.xyz", trio)
