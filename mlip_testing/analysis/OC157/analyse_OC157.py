@@ -165,8 +165,9 @@ def ranking_error(relative_energies: dict[str, list]) -> dict[str, float]:
     return results
 
 
+@pytest.fixture
 @build_table(filename=OUT_PATH / "oc157_metrics_table.json")
-def test_oc157(
+def metrics(
     oc157_mae: dict[str, float], ranking_error: dict[str, float]
 ) -> dict[str, dict]:
     """
@@ -189,3 +190,15 @@ def test_oc157(
         "Mean Absolute Error": oc157_mae,
         "Ranking Error": ranking_error,
     }
+
+
+def test_oc157(metrics: dict[str, dict]) -> None:
+    """
+    Run OC157 test.
+
+    Parameters
+    ----------
+    metrics
+        All OC157 metrics.
+    """
+    return
