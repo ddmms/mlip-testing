@@ -6,11 +6,11 @@ import json
 from pathlib import Path
 
 from dash.dash_table import DataTable
-from plotly.graph_objs import Figure
+from dash.dcc import Graph
 from plotly.io import read_json
 
 
-def rebuild_table(filename: str | Path) -> DataTable:
+def rebuild_table(filename: str | Path, id="table-1") -> DataTable:
     """
     Rebuild saved dash table.
 
@@ -18,11 +18,13 @@ def rebuild_table(filename: str | Path) -> DataTable:
     ----------
     filename
         Name of json file with saved table data.
+    id
+        ID for table.
 
     Returns
     -------
     DataTable
-        Dash DataTable.
+        Loaded Dash DataTable.
     """
     # Load JSON file
     with open(filename) as f:
@@ -31,10 +33,10 @@ def rebuild_table(filename: str | Path) -> DataTable:
     data = table_json["data"]
     columns = table_json["columns"]
 
-    return DataTable(data=data, columns=columns, editable=True)
+    return DataTable(data=data, columns=columns, editable=True, id=id)
 
 
-def read_plot(filename: str | Path) -> Figure:
+def read_plot(filename: str | Path, id: str = "figure-1") -> Graph:
     """
     Read preprepared plotly Figure.
 
@@ -42,10 +44,12 @@ def read_plot(filename: str | Path) -> Figure:
     ----------
     filename
         Name of json file with saved plot data.
+    id
+        ID for plot.
 
     Returns
     -------
-    Figure
-        Loaded plotly Figure.
+    Graph
+        Loaded plotly Graph.
     """
-    return read_json(filename)
+    return Graph(id=id, figure=read_json(filename))
