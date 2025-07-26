@@ -166,7 +166,14 @@ def ranking_error(relative_energies: dict[str, list]) -> dict[str, float]:
 
 
 @pytest.fixture
-@build_table(filename=OUT_PATH / "oc157_metrics_table.json")
+@build_table(
+    filename=OUT_PATH / "oc157_metrics_table.json",
+    metric_tooltips={
+        "Model": "Name of the model",
+        "MAE (meV)": "Mean Absolute Error (meV)",
+        "Ranking Error": "Error in ranking stability across triplets",
+    },
+)
 def metrics(
     oc157_mae: dict[str, float], ranking_error: dict[str, float]
 ) -> dict[str, dict]:
