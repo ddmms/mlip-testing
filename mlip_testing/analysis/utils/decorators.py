@@ -12,6 +12,8 @@ from dash import dash_table
 import numpy as np
 import plotly.graph_objects as go
 
+from mlip_testing.analysis.utils.utils import calc_ranks, calc_scores
+
 
 def plot_parity(
     title: str | None = None,
@@ -222,6 +224,10 @@ def build_table(
                 tooltip_header = metric_tooltips | summary_tooltips
             else:
                 tooltip_header = summary_tooltips
+
+            metrics_data = calc_scores(metrics_data)
+            metrics_data = calc_ranks(metrics_data)
+            metrics_columns += ("Score", "Rank")
 
             table = dash_table.DataTable(
                 metrics_data,
