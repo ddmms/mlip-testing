@@ -32,8 +32,17 @@ def rebuild_table(filename: str | Path, id="table-1") -> DataTable:
 
     data = table_json["data"]
     columns = table_json["columns"]
+    tooltip_header = table_json["tooltip_header"]
 
-    return DataTable(data=data, columns=columns, editable=True, id=id)
+    return DataTable(
+        data=data,
+        columns=columns,
+        tooltip_header=tooltip_header,
+        tooltip_delay=100,
+        tooltip_duration=None,
+        editable=True,
+        id=id,
+    )
 
 
 def read_plot(filename: str | Path, id: str = "figure-1") -> Graph:
