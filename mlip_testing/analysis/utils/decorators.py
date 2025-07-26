@@ -145,6 +145,7 @@ def plot_parity(
 
 def build_table(
     filename: str = "table.json",
+    metric_tooltips: dict[str, str] | None = None,
 ) -> Callable:
     """
     Build table MLIP results.
@@ -153,6 +154,8 @@ def build_table(
     ----------
     filename
         Filename to save table.
+    metric_tooltips
+        Tooltips for table metric headers.
 
     Returns
     -------
@@ -210,16 +213,34 @@ def build_table(
                     | {key: value[mlip] for key, value in results.items()},
                 )
 
+            summary_tooltips = {
+                "MLIP": "Name of the model",
+                "Score": "Average of metrics (lower is better)",
+                "Rank": "Model rank based on score (lower is better)",
+            }
+            if metric_tooltips:
+                tooltip_header = metric_tooltips | summary_tooltips
+            else:
+                tooltip_header = summary_tooltips
+
             table = dash_table.DataTable(
                 metrics_data,
                 [{"name": i, "id": i} for i in metrics_columns],
                 id="metrics",
+                tooltip_header=tooltip_header,
             )
 
             # Save dict of table to be loaded
             Path(filename).parent.mkdir(parents=True, exist_ok=True)
             with open(filename, "w") as fp:
-                dump({"data": table.data, "columns": table.columns}, fp)
+                dump(
+                    {
+                        "data": table.data,
+                        "columns": table.columns,
+                        "tooltip_header": tooltip_header,
+                    },
+                    fp,
+                )
 
             return results
 
