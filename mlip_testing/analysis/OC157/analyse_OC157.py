@@ -75,8 +75,8 @@ def labels() -> list:
 @plot_parity(
     filename=OUT_PATH / "figure_rel_energies.json",
     title="Relative energies",
-    x_label="Predicted relative energy / eV",
-    y_label="Reference relative energy / eV",
+    x_label="Predicted relative energy / meV",
+    y_label="Reference relative energy / meV",
     hoverdata={
         "Composition": compositions(),
         "Labels": labels(),
@@ -187,7 +187,7 @@ def metrics(
     """
     print(oc157_mae, ranking_error)
     return {
-        "Mean Absolute Error": oc157_mae,
+        "MAE (meV)": oc157_mae,
         "Ranking Error": ranking_error,
     }
 
