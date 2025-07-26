@@ -41,3 +41,48 @@ def rmse(ref: list, prediction: list) -> float:
         Root mean squared error.
     """
     return mean_squared_error(ref, prediction)
+
+
+def calc_scores(metrics_data: list[dict]) -> list[dict]:
+    """
+    Calculate score for each model and add to table data.
+
+    Parameters
+    ----------
+    metrics_data
+        Rows data containing model name and metric values.
+
+    Returns
+    -------
+    list[dict]
+        Rows of data with combined score for each model added.
+    """
+    for row in metrics_data:
+        score = 0
+        for key, value in row.items():
+            if key == "MLIP":
+                continue
+            score += value
+        row["Score"] = score
+
+    return metrics_data
+
+
+def calc_ranks(metrics_data: list[dict]) -> list[dict]:
+    """
+    Calculate rank for each model and add to table data.
+
+    Parameters
+    ----------
+    metrics_data
+        Rows data containing model name, metric values, and Score.
+
+    Returns
+    -------
+    list[dict]
+        Rows of data with rank for each model added.
+    """
+    metrics_data.sort(key=lambda x: x["Score"])
+    for i, row in enumerate(metrics_data):
+        row["Rank"] = i + 1
+    return metrics_data
