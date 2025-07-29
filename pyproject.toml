@@ -6,7 +6,7 @@ authors = [
     { name = "Elliott Kasoar" },
     { name = "Joe Hart" },
 ]
-requires-python = ">=3.10"
+requires-python = "<3.13,>=3.10"
 classifiers = [
     "Programming Language :: Python",
     "Programming Language :: Python :: 3.10",
@@ -20,10 +20,26 @@ classifiers = [
 readme = "README.md"
 
 dependencies = [
+    "dash>=3.1.1",
     "janus-core<1.0.0,>=0.8.2",
-    "plotly>=6.0.1",
-    "dash>=3.0.2",
-    "dash_bootstrap_components",
+    "kaleido>=1.0.0",
+    "mlipx<0.2,>=0.1.5",
+    "scikit-learn>=1.7.1",
+]
+
+[project.optional-dependencies]
+chgnet = [
+    "chgnet == 0.4.0",
+]
+dpa3 = [
+    "deepmd-kit == 3.1.0",
+]
+grace = [
+    "tensorpotential == 0.5.1",
+]
+mace = [
+    "mace-torch==0.3.13",
+    "torch-dftd==0.4.0",
 ]
 
 [project.urls]
@@ -44,7 +60,7 @@ dev = [
 docs = [
     "furo<2025.0.0,>=2024.1.29",
     "jupyter>=1.1.1",
-    "markupsafe<2.1",
+    "markupsafe",
     "nbsphinx>=0.9.6",
     "numpydoc<2.0.0,>=1.6.0",
     "sphinx<8.2.0,>=8.0.2",
