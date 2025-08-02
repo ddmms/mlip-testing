@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from dash import Dash, Input, Output
+from dash import Input, Output, callback
 from dash.dcc import Graph
 from dash.html import Div, Iframe
 
@@ -10,15 +10,13 @@ from mlip_testing.app.utils.weas import generate_weas_html
 
 
 def plot_from_table_column(
-    app: Dash, table_id: str, plot_id: str, column_to_plot: dict[str, Graph]
+    table_id: str, plot_id: str, column_to_plot: dict[str, Graph]
 ) -> None:
     """
     Attach callback to show plot when a table column is clicked.
 
     Parameters
     ----------
-    app
-        Dash application to register callback to.
     table_id
         ID for Dash table being clicked.
     plot_id
@@ -27,8 +25,8 @@ def plot_from_table_column(
         Dictionary relating table headers (keys.) and plot to show (values).
     """
 
-    @app.callback(Output(plot_id, "children"), Input(table_id, "active_cell"))
-    def callback(active_cell) -> Div:
+    @callback(Output(plot_id, "children"), Input(table_id, "active_cell"))
+    def show_plot(active_cell) -> Div:
         """
         Register callback to show plot when a table column is clicked.
 
@@ -50,16 +48,12 @@ def plot_from_table_column(
         raise ValueError("Invalid column_id")
 
 
-def struct_from_scatter(
-    app: Dash, scatter_id: str, struct_id: str, structs: list[str]
-) -> None:
+def struct_from_scatter(scatter_id: str, struct_id: str, structs: list[str]) -> None:
     """
     Attach callback to show a structure when a scatter point is clicked.
 
     Parameters
     ----------
-    app
-        Dash application to register callback to.
     scatter_id
         ID for Dash scatter being clicked.
     struct_id
@@ -68,8 +62,8 @@ def struct_from_scatter(
         List of structure filenames in same order as scatter data to be visualised.
     """
 
-    @app.callback(Output(struct_id, "children"), Input(scatter_id, "clickData"))
-    def callback(clickData):  # noqa: N803
+    @callback(Output(struct_id, "children"), Input(scatter_id, "clickData"))
+    def show_struct(clickData):  # noqa: N803
         """
         Register callback to show structure when a scatter point is clicked.
 
