@@ -4,11 +4,14 @@ from __future__ import annotations
 
 from dash.dash_table import DataTable
 from dash.development.base_component import Component
-from dash.html import H1, Div
+from dash.html import H1, H2, Div
 
 
 def layout_builder(
-    title: str, table: DataTable, extra_components: list[Component] | None = None
+    title: str,
+    description: str,
+    table: DataTable,
+    extra_components: list[Component] | None = None,
 ) -> Div:
     """
     Build app layout.
@@ -17,6 +20,8 @@ def layout_builder(
     ----------
     title
         Title for app tab.
+    description
+        Description of benchmark.
     table
         Dash Table with metric results.
     extra_components
@@ -27,7 +32,11 @@ def layout_builder(
     Div
         App tab layout.
     """
-    layout_contents = [H1(title, style={"color": "black"}), Div(table)]
+    layout_contents = [
+        H1(title, style={"color": "black"}),
+        H2(description),
+        Div(table),
+    ]
     if extra_components:
         layout_contents.extend(extra_components)
 
