@@ -1,0 +1,1 @@
+"""Dash application for benchmarks."""
