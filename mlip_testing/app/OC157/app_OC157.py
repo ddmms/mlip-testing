@@ -27,24 +27,15 @@ class OC157App(BaseApp):
     """OC157 benchmark app layout and callbacks."""
 
     @staticmethod
-    def register_callbacks(app: Dash) -> None:
-        """
-        Register callbacks to app.
-
-        Parameters
-        ----------
-        app
-            Dash application to register callbacks to.
-        """
+    def register_callbacks() -> None:
+        """Register callbacks to app."""
         plot_from_table_column(
-            app=app,
             table_id="table",
             plot_id="figure-placeholder",
             column_to_plot={"MAE (meV)": SCATTER, "Ranking Error": SCATTER},
         )
 
         struct_from_scatter(
-            app=app,
             scatter_id="figure",
             struct_id="struct-placeholder",
             structs=STRUCTS,
@@ -61,7 +52,11 @@ def get_app() -> OC157App:
         Benchmark layout and callback registration.
     """
     return OC157App(
-        title="OC157 benchmark",
+        title="OC157",
+        description=(
+            "Performance in predicting relative energies between 3 structures for 157 "
+            "molecule-surface combinations."
+        ),
         table=rebuild_table(DATA_PATH / "oc157_metrics_table.json", id="table"),
         extra_components=[Div(id="figure-placeholder"), Div(id="struct-placeholder")],
     )
@@ -74,7 +69,7 @@ if __name__ == "__main__":
     # Construct layout and register callbacks
     oc157_app = get_app()
     full_app.layout = oc157_app.layout
-    oc157_app.register_callbacks(full_app)
+    oc157_app.register_callbacks()
 
     # Run app
     full_app.run(port=8051, debug=True)
