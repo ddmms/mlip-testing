@@ -43,7 +43,9 @@ def rmse(ref: list, prediction: list) -> float:
     return mean_squared_error(ref, prediction)
 
 
-def calc_scores(metrics_data: list[dict]) -> list[dict]:
+def calc_scores(
+    metrics_data: list[dict], weights: dict[str, float] | None = None
+) -> list[dict]:
     """
     Calculate score for each model and add to table data.
 
@@ -51,18 +53,23 @@ def calc_scores(metrics_data: list[dict]) -> list[dict]:
     ----------
     metrics_data
         Rows data containing model name and metric values.
+    weights
+        Weight for each metric. Default is 1.0 for each metric.
 
     Returns
     -------
     list[dict]
         Rows of data with combined score for each model added.
     """
+    weights = weights if weights else {}
+
     for row in metrics_data:
         score = 0
         for key, value in row.items():
-            if key == "MLIP":
+            weight = weights.get(key, 1.0)
+            if key in ("MLIP", "Score", "Rank"):
                 continue
-            score += value
+            score += value * weight
         row["Score"] = score
 
     return metrics_data
