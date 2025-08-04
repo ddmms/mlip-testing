@@ -9,7 +9,7 @@ from dash.html import Div
 
 from mlip_testing.app.base_app import BaseApp
 from mlip_testing.app.utils.callbacks import plot_from_table_column, struct_from_scatter
-from mlip_testing.app.utils.load import read_plot, rebuild_table
+from mlip_testing.app.utils.load import read_plot
 from mlip_testing.calcs.models.models import MODELS
 
 DATA_PATH = Path(__file__).parent.parent / "data" / "OC157"
@@ -26,11 +26,10 @@ STRUCTS = [
 class OC157App(BaseApp):
     """OC157 benchmark app layout and callbacks."""
 
-    @staticmethod
-    def register_callbacks() -> None:
+    def register_callbacks(self) -> None:
         """Register callbacks to app."""
         plot_from_table_column(
-            table_id="table",
+            table_id=self.table_id,
             plot_id="figure-placeholder",
             column_to_plot={"MAE (meV)": SCATTER, "Ranking Error": SCATTER},
         )
@@ -52,12 +51,13 @@ def get_app() -> OC157App:
         Benchmark layout and callback registration.
     """
     return OC157App(
+        name="OC157",
         title="OC157",
         description=(
             "Performance in predicting relative energies between 3 structures for 157 "
             "molecule-surface combinations."
         ),
-        table=rebuild_table(DATA_PATH / "oc157_metrics_table.json", id="table"),
+        table_path=DATA_PATH / "oc157_metrics_table.json",
         extra_components=[Div(id="figure-placeholder"), Div(id="struct-placeholder")],
     )
 
