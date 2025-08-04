@@ -3,12 +3,13 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
+from pathlib import Path
 
-from dash.dash_table import DataTable
 from dash.development.base_component import Component
 from dash.html import Div
 
 from mlip_testing.app.utils.build import layout_builder
+from mlip_testing.app.utils.load import rebuild_table
 
 
 class BaseApp(ABC):
@@ -17,21 +18,24 @@ class BaseApp(ABC):
 
     Parameters
     ----------
+    name
+        Name for application tab.
     title
         Title for application.
     description
         Description of benchmark.
-    table
-        Dash table for application metrics.
+    table_path
+        Path to json file containing Dash table data for application metrics.
     extra_components
         List of other Dash components to add to app.
     """
 
     def __init__(
         self,
+        name: str,
         title: str,
         description: str,
-        table: DataTable,
+        table_path: Path,
         extra_components: list[Component],
     ):
         """
@@ -39,19 +43,25 @@ class BaseApp(ABC):
 
         Parameters
         ----------
+        name
+            Name for application tab.
         title
             Title for benchmark.
         description
             Description of benchmark.
-        table
-            Dash table for application metrics.
+        table_path
+            Path to json file containing Dash table data for application metrics.
         extra_components
             List of other Dash components to add to app.
         """
+        self.name = name
         self.title = title
         self.description = description
-        self.table = table
+        self.table_path = table_path
         self.extra_components = extra_components
+
+        self.table_id = f"{self.name}-table"
+        self.table = rebuild_table(self.table_path, id=self.table_id)
         self.layout = self.build_layout()
 
     def build_layout(self) -> Div:
@@ -64,6 +74,7 @@ class BaseApp(ABC):
             Div component with list all components for app.
         """
         # Define all components/placeholders
+
         return layout_builder(
             title=self.title,
             description=self.description,
