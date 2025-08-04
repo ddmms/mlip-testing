@@ -177,7 +177,7 @@ def register_weight_callbacks(tab_name: str) -> None:
         """
         trigger_id = ctx.triggered_id
 
-        if trigger_id == f"{tab_name}-weight-store":
+        if trigger_id == f"{tab_name}-weight-store" or trigger_id is None:
             weight = store
         elif trigger_id == f"{tab_name}-input":
             weight = input_value
