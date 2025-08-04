@@ -37,8 +37,8 @@ def get_tabs() -> tuple[dict[str, list[Div]], dict[str, DataTable]]:
         tab_app = tab_module.get_app()
 
         # Get layouts and tables for each tab
-        layouts[tab_name] = tab_app.layout
-        tables[tab_name] = tab_app.table
+        layouts[tab_app.name] = tab_app.layout
+        tables[tab_app.name] = tab_app.table
 
         # Register tab callbacks
         tab_app.register_callbacks()
