@@ -8,7 +8,7 @@ from pathlib import Path
 from dash.development.base_component import Component
 from dash.html import Div
 
-from mlip_testing.app.utils.build import layout_builder
+from mlip_testing.app.utils.build import build_tab
 from mlip_testing.app.utils.load import rebuild_table
 
 
@@ -74,8 +74,8 @@ class BaseApp(ABC):
             Div component with list all components for app.
         """
         # Define all components/placeholders
-
-        return layout_builder(
+        return build_tab(
+            name=self.name,
             title=self.title,
             description=self.description,
             table=self.table,

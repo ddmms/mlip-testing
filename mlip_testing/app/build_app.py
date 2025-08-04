@@ -5,14 +5,14 @@ from __future__ import annotations
 from importlib import import_module
 from pathlib import Path
 
-from dash import Dash, Input, Output, callback, ctx
+from dash import Dash, Input, Output, callback
 from dash.dash_table import DataTable
-from dash.dcc import Input as DCC_Input
-from dash.dcc import Slider, Store, Tab, Tabs
-from dash.html import H1, Button, Div, Label
+from dash.dcc import Tab, Tabs
+from dash.html import H1, Div
 
 from mlip_testing import app
 from mlip_testing.analysis.utils.utils import calc_ranks, calc_scores
+from mlip_testing.app.utils.build import build_weight_components
 
 
 def get_tabs() -> tuple[dict[str, list[Div]], dict[str, DataTable]]:
@@ -77,162 +77,6 @@ def build_summary_table(tables: dict[str, DataTable]) -> DataTable:
     columns = [{"name": headers, "id": headers} for headers in columns_headers]
 
     return DataTable(data=data, columns=columns)
-
-
-def build_slider(
-    label: str, slider_id: str, input_id: str, default_value: float | None
-) -> Div:
-    """
-    Build slider and input box.
-
-    Parameters
-    ----------
-    label
-        Slider label.
-    slider_id
-        ID for slider component.
-    input_id
-        ID for text box input component.
-    default_value
-        Default value for slider/text box input.
-
-    Returns
-    -------
-    Div
-        Slider and input text box.
-    """
-    return Div(
-        [
-            Label(label),
-            Div(
-                [
-                    Div(
-                        Slider(
-                            id=slider_id,
-                            min=0,
-                            max=5,
-                            step=0.1,
-                            value=default_value,
-                            tooltip={"always_visible": False},
-                            marks=None,
-                        ),
-                        style={"flex": "1 1 80%"},
-                    ),
-                    DCC_Input(
-                        id=input_id,
-                        type="number",
-                        value=default_value,
-                        step=0.1,
-                        style={"width": "80px"},
-                    ),
-                ],
-                style={"display": "flex", "gap": "10px", "alignItems": "center"},
-            ),
-        ]
-    )
-
-
-def register_weight_callbacks(tab_name: str) -> None:
-    """
-    Register all callbacks for weight inputs.
-
-    Parameters
-    ----------
-    tab_name
-        Name of tab.
-    """
-
-    # Callback to sync weights between slider, text, reset, and Store
-    @callback(
-        Output(f"{tab_name}-input", "value"),
-        Output(f"{tab_name}-slider", "value"),
-        Output(f"{tab_name}-weight-store", "data"),
-        Input(f"{tab_name}-input", "value"),
-        Input(f"{tab_name}-slider", "value"),
-        Input(f"{tab_name}-weight-store", "data"),
-        Input("reset-weights-button", "n_clicks"),
-        prevent_initial_call=False,
-    )
-    def store_slider_value(
-        input_value, slider_value, store, reset
-    ) -> tuple[float, float, float]:
-        """
-        Store, reset, and sync weight values between slider and text input.
-
-        Parameters
-        ----------
-        input_value
-            Value from text box input.
-        slider_value
-            Value from slider.
-        store
-            Stored value.
-        reset
-            Number of clicks of reset button.
-
-        Returns
-        -------
-        tuple[float, float, float]
-            Weights to set slider value, text input value and stored value.
-        """
-        trigger_id = ctx.triggered_id
-
-        if trigger_id == f"{tab_name}-weight-store" or trigger_id is None:
-            weight = store
-        elif trigger_id == f"{tab_name}-input":
-            weight = input_value
-        elif trigger_id == f"{tab_name}-slider":
-            weight = slider_value
-        elif trigger_id == "reset-weights-button":
-            weight = 1
-        else:
-            raise ValueError("Invalid trigger. trigger_id: ", trigger_id)
-        return weight, weight, weight
-
-
-def build_weight_components(tables: dict[str, DataTable]) -> Div:
-    """
-    Build weight sliders, text boxes and reset button.
-
-    Parameters
-    ----------
-    tables
-        Table from each tab.
-
-    Returns
-    -------
-    Div
-        Div containing weight sliders, text boxes and reset button.
-    """
-    layout = [Div("Benchmark Weights")]
-
-    for tab_name in tables:
-        layout.append(
-            build_slider(
-                label=tab_name,
-                slider_id=f"{tab_name}-slider",
-                input_id=f"{tab_name}-input",
-                default_value=None,  # Set by stored value/default
-            )
-        )
-
-    layout.append(
-        Button(
-            "Reset Weights",
-            id="reset-weights-button",
-            n_clicks=0,
-            style={"marginTop": "20px"},
-        ),
-    )
-
-    layout.append(
-        Store(id=f"{tab_name}-weight-store", storage_type="session", data=1.0)
-    )
-
-    for tab_name in tables:
-        register_weight_callbacks(tab_name)
-
-    return Div(layout)
 
 
 def build_tabs(
@@ -304,5 +148,10 @@ def build_full_app(full_app: Dash) -> None:
     """
     layouts, tables = get_tabs()
     summary_table = build_summary_table(tables)
-    weight_components = build_weight_components(tables)
+    weight_components = build_weight_components(
+        header="Benchmark weights",
+        labels=tables.keys(),
+        ids=tables.keys(),
+        reset_prefix="summary",
+    )
     build_tabs(full_app, layouts, summary_table, weight_components)
