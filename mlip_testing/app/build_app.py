@@ -76,7 +76,7 @@ def build_summary_table(tables: dict[str, DataTable]) -> DataTable:
     columns_headers = ("MLIP",) + tuple(tables.keys()) + ("Score", "Rank")
     columns = [{"name": headers, "id": headers} for headers in columns_headers]
 
-    return DataTable(data=data, columns=columns)
+    return DataTable(data=data, columns=columns, id="summary-table")
 
 
 def build_tabs(
@@ -152,6 +152,6 @@ def build_full_app(full_app: Dash) -> None:
         header="Benchmark weights",
         labels=tables.keys(),
         ids=tables.keys(),
-        reset_prefix="summary",
+        table_prefix="summary",
     )
     build_tabs(full_app, layouts, summary_table, weight_components)
