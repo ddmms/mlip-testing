@@ -63,7 +63,7 @@ def build_slider(
     )
 
 
-def register_weight_callbacks(weight_prefix: str, reset_prefix: str) -> None:
+def register_weight_callbacks(weight_prefix: str, table_prefix: str) -> None:
     """
     Register all callbacks for weight inputs.
 
@@ -71,8 +71,8 @@ def register_weight_callbacks(weight_prefix: str, reset_prefix: str) -> None:
     ----------
     weight_prefix
         Prefix for weight component IDs.
-    reset_prefix
-        Prefix for reset component ID.
+    table_prefix
+        Prefix for table and reset component ID.
     """
 
     # Callback to sync weights between slider, text, reset, and Store
@@ -83,7 +83,7 @@ def register_weight_callbacks(weight_prefix: str, reset_prefix: str) -> None:
         Input(f"{weight_prefix}-input", "value"),
         Input(f"{weight_prefix}-slider", "value"),
         Input(f"{weight_prefix}-weight-store", "data"),
-        Input(f"{reset_prefix}-reset-weights-button", "n_clicks"),
+        Input(f"{table_prefix}-reset-weights-button", "n_clicks"),
         prevent_initial_call=False,
     )
     def store_slider_value(
@@ -116,7 +116,7 @@ def register_weight_callbacks(weight_prefix: str, reset_prefix: str) -> None:
             weight = input_value
         elif trigger_id == f"{weight_prefix}-slider":
             weight = slider_value
-        elif trigger_id == f"{reset_prefix}-reset-weights-button":
+        elif trigger_id == f"{table_prefix}-reset-weights-button":
             weight = 1
         else:
             raise ValueError("Invalid trigger. trigger_id: ", trigger_id)
@@ -124,7 +124,7 @@ def register_weight_callbacks(weight_prefix: str, reset_prefix: str) -> None:
 
 
 def build_weight_components(
-    header: str, labels: list[str], ids: list[str], reset_prefix: str
+    header: str, labels: list[str], ids: list[str], table_prefix: str
 ) -> Div:
     """
     Build weight sliders, text boxes and reset button.
@@ -137,8 +137,8 @@ def build_weight_components(
         Names for each weight slider.
     ids
         Prefix for slider and input box IDs.
-    reset_prefix
-        Label for reset button used for all weights.
+    table_prefix
+        Label for table and reset button used for all weights.
 
     Returns
     -------
@@ -160,7 +160,7 @@ def build_weight_components(
     layout.append(
         Button(
             "Reset Weights",
-            id=f"{reset_prefix}-reset-weights-button",
+            id=f"{table_prefix}-reset-weights-button",
             n_clicks=0,
             style={"marginTop": "20px"},
         ),
@@ -170,7 +170,7 @@ def build_weight_components(
         layout.append(
             Store(id=f"{weight_prefix}-weight-store", storage_type="session", data=1.0)
         )
-        register_weight_callbacks(weight_prefix, reset_prefix)
+        register_weight_callbacks(weight_prefix, table_prefix)
 
     return Div(layout)
 
