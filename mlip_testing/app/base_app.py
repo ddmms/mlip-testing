@@ -79,6 +79,7 @@ class BaseApp(ABC):
             title=self.title,
             description=self.description,
             table=self.table,
+            table_id=self.table_id,
             extra_components=self.extra_components,
         )
 
