@@ -31,7 +31,7 @@ class OC157App(BaseApp):
         plot_from_table_column(
             table_id=self.table_id,
             plot_id="figure-placeholder",
-            column_to_plot={"MAE (meV)": SCATTER, "Ranking Error": SCATTER},
+            column_to_plot={"MAE": SCATTER, "Ranking Error": SCATTER},
         )
 
         struct_from_scatter(

@@ -170,7 +170,7 @@ def ranking_error(relative_energies: dict[str, list]) -> dict[str, float]:
     filename=OUT_PATH / "oc157_metrics_table.json",
     metric_tooltips={
         "Model": "Name of the model",
-        "MAE (meV)": "Mean Absolute Error (meV)",
+        "MAE": "Mean Absolute Error (meV)",
         "Ranking Error": "Error in ranking stability across triplets",
     },
 )
@@ -194,7 +194,7 @@ def metrics(
     """
     print(oc157_mae, ranking_error)
     return {
-        "MAE (meV)": oc157_mae,
+        "MAE": oc157_mae,
         "Ranking Error": ranking_error,
     }
 
