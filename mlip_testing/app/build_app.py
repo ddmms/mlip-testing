@@ -150,8 +150,8 @@ def build_full_app(full_app: Dash) -> None:
     summary_table = build_summary_table(tables)
     weight_components = build_weight_components(
         header="Benchmark weights",
-        labels=tables.keys(),
-        ids=tables.keys(),
-        table_prefix="summary",
+        columns=list(tables.keys()),
+        input_ids=list(tables.keys()),
+        table_id="summary-table",
     )
     build_tabs(full_app, layouts, summary_table, weight_components)
