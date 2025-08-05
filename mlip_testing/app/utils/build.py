@@ -7,7 +7,10 @@ from dash.dash_table import DataTable
 from dash.dcc import Input as DCC_Input
 from dash.dcc import Slider, Store
 from dash.development.base_component import Component
+from dash.exceptions import PreventUpdate
 from dash.html import H1, H2, Button, Div, Label
+
+from mlip_testing.analysis.utils.utils import calc_ranks, calc_scores
 
 
 def build_slider(
@@ -63,34 +66,161 @@ def build_slider(
     )
 
 
-def register_weight_callbacks(weight_prefix: str, table_prefix: str) -> None:
+def register_table_callback(table_id) -> None:
+    """
+    Register callback to update table data.
+
+    Parameters
+    ----------
+    table_id
+        ID for table to update.
+    """
+
+    # Callback update table when store changes.
+    @callback(
+        Output(f"{table_id}", "data"),
+        Input(f"{table_id}-weight-store", "data"),
+        Input(f"{table_id}", "data"),
+        prevent_initial_call=False,
+    )
+    def update_table(stored_values: dict[str:float], table_data: list[dict]) -> dict:
+        """
+        Update table contents from data store.
+
+        Parameters
+        ----------
+        stored_values
+            Stored value.
+        table_data
+            Data from table to be updated.
+
+        Returns
+        -------
+        list[dict]
+            Updated table data.
+        """
+        trigger_id = ctx.triggered_id
+
+        if trigger_id != f"{table_id}-weight-store" and trigger_id is not None:
+            raise ValueError("Invalid trigger. trigger_id: ", trigger_id)
+
+        # Update table contents
+        table_data = calc_scores(table_data, stored_values)
+        return calc_ranks(table_data)
+
+
+def register_weight_callbacks(input_id: str, table_id: str, column: str) -> None:
     """
     Register all callbacks for weight inputs.
 
     Parameters
     ----------
-    weight_prefix
-        Prefix for weight component IDs.
-    table_prefix
-        Prefix for table and reset component ID.
+    input_id
+        ID prefix for slider and input box.
+    table_id
+        ID for table. Also used to identify reset button and weight store.
+    column
+        Column header corresponding to slider and input box.
     """
+    default_value = 1.0
 
-    # Callback to sync weights between slider, text, reset, and Store
     @callback(
-        Output(f"{weight_prefix}-input", "value"),
-        Output(f"{weight_prefix}-slider", "value"),
-        Output(f"{weight_prefix}-weight-store", "data"),
-        Input(f"{weight_prefix}-input", "value"),
-        Input(f"{weight_prefix}-slider", "value"),
-        Input(f"{weight_prefix}-weight-store", "data"),
-        Input(f"{table_prefix}-reset-weights-button", "n_clicks"),
-        prevent_initial_call=False,
+        Output(
+            f"{table_id}-weight-store",
+            "data",
+            allow_duplicate=True,
+        ),
+        Input(f"{input_id}-slider", "value"),
+        Input(f"{table_id}-weight-store", "data"),
+        prevent_initial_call=True,
     )
     def store_slider_value(
-        input_value, slider_value, store, reset
-    ) -> tuple[float, float, float]:
+        slider_value: float, stored_values: dict[str:float]
+    ) -> dict[str, float]:
         """
-        Store, reset, and sync weight values between slider and text input.
+        Store weight values from slider and text input.
+
+        Parameters
+        ----------
+        slider_value
+            Value from slider.
+        stored_values
+            Stored values dictionary.
+
+        Returns
+        -------
+        dict[str, float]
+            Stored weights for each slider.
+        """
+        trigger_id = ctx.triggered_id
+
+        if trigger_id == f"{input_id}-slider":
+            weight = slider_value
+        else:
+            raise PreventUpdate
+        stored_values[column] = weight
+
+        return stored_values
+
+    @callback(
+        Output(f"{input_id}-slider", "value", allow_duplicate=True),
+        Output(f"{input_id}-input", "value", allow_duplicate=True),
+        Input(f"{table_id}-reset-button", "n_clicks"),
+        prevent_initial_call=True,
+    )
+    def reset_slider(n_clicks) -> tuple[float, float]:
+        """
+        Reset slider value on click.
+
+        Parameters
+        ----------
+        n_clicks
+            Number of clicks of reset button.
+
+        Returns
+        -------
+        tuple[float, float]
+            Weight to set slider and input box value.
+        """
+        return default_value, default_value
+
+    @callback(
+        Output(f"{input_id}-slider", "value", allow_duplicate=True),
+        Output(f"{input_id}-input", "value", allow_duplicate=True),
+        Input(f"{table_id}-weight-store", "data"),
+        Input("all-tabs", "value"),
+        prevent_initial_call="initial_duplicate",
+    )
+    def load_store(
+        stored_values: dict[str, float], tabs_value: str
+    ) -> tuple[float, float]:
+        """
+        Load stored values.
+
+        Parameters
+        ----------
+        stored_values
+            Number of clicks of reset button.
+        tabs_value
+            Tab name.
+
+        Returns
+        -------
+        tuple[float, float]
+            Weight to set slider and input box value.
+        """
+        return stored_values[column], stored_values[column]
+
+    @callback(
+        Output(f"{input_id}-input", "value", allow_duplicate=True),
+        Output(f"{input_id}-slider", "value", allow_duplicate=True),
+        Input(f"{input_id}-input", "value"),
+        Input(f"{input_id}-slider", "value"),
+        prevent_initial_call=True,
+    )
+    def sync_slider_input(input_value, slider_value) -> tuple[float, float, float]:
+        """
+        Sync weight values between slider and text input.
 
         Parameters
         ----------
@@ -98,33 +228,32 @@ def register_weight_callbacks(weight_prefix: str, table_prefix: str) -> None:
             Value from text box input.
         slider_value
             Value from slider.
-        store
-            Stored value.
-        reset
-            Number of clicks of reset button.
 
         Returns
         -------
-        tuple[float, float, float]
-            Weights to set slider value, text input value and stored value.
+        tuple[float, float]
+            Weights to set slider value and text input value.
         """
         trigger_id = ctx.triggered_id
 
-        if trigger_id == f"{weight_prefix}-weight-store" or trigger_id is None:
-            weight = store
-        elif trigger_id == f"{weight_prefix}-input":
-            weight = input_value
-        elif trigger_id == f"{weight_prefix}-slider":
+        if trigger_id == f"{input_id}-input":
+            if input_value:
+                weight = input_value
+            else:
+                raise PreventUpdate
+        elif trigger_id == f"{input_id}-slider":
             weight = slider_value
-        elif trigger_id == f"{table_prefix}-reset-weights-button":
-            weight = 1
         else:
             raise ValueError("Invalid trigger. trigger_id: ", trigger_id)
-        return weight, weight, weight
+
+        return weight, weight
 
 
 def build_weight_components(
-    header: str, labels: list[str], ids: list[str], table_prefix: str
+    header: str,
+    columns: list[str],
+    input_ids: list[str],
+    table_id: str,
 ) -> Div:
     """
     Build weight sliders, text boxes and reset button.
@@ -133,12 +262,12 @@ def build_weight_components(
     ----------
     header
         Header for above sliders.
-    labels
-        Names for each weight slider.
-    ids
-        Prefix for slider and input box IDs.
-    table_prefix
-        Label for table and reset button used for all weights.
+    columns
+        Column headers to look up stored values, and label sliders and input boxes.
+    input_ids
+        ID prefixes for sliders and input boxes.
+    table_id
+        ID for table. Also used to identify reset button and weight store.
 
     Returns
     -------
@@ -147,30 +276,35 @@ def build_weight_components(
     """
     layout = [Div(header)]
 
-    for label, weight_prefix in zip(labels, ids, strict=True):
+    for column, input_id in zip(columns, input_ids, strict=True):
         layout.append(
             build_slider(
-                label=label,
-                slider_id=f"{weight_prefix}-slider",
-                input_id=f"{weight_prefix}-input",
+                label=column,
+                slider_id=f"{input_id}-slider",
+                input_id=f"{input_id}-input",
                 default_value=None,  # Set by stored value/default
             )
         )
 
-    layout.append(
-        Button(
-            "Reset Weights",
-            id=f"{table_prefix}-reset-weights-button",
-            n_clicks=0,
-            style={"marginTop": "20px"},
-        ),
+    layout.extend(
+        [
+            Button(
+                "Reset Weights",
+                id=f"{table_id}-reset-button",
+                n_clicks=0,
+                style={"marginTop": "20px"},
+            ),
+            Store(
+                id=f"{table_id}-weight-store",
+                storage_type="session",
+                data=dict.fromkeys(columns, 1.0),
+            ),
+        ]
     )
 
-    for weight_prefix in ids:
-        layout.append(
-            Store(id=f"{weight_prefix}-weight-store", storage_type="session", data=1.0)
-        )
-        register_weight_callbacks(weight_prefix, table_prefix)
+    register_table_callback(table_id=table_id)
+    for column, input_id in zip(columns, input_ids, strict=True):
+        register_weight_callbacks(input_id=input_id, table_id=table_id, column=column)
 
     return Div(layout)
 
@@ -180,6 +314,7 @@ def build_tab(
     title: str,
     description: str,
     table: DataTable,
+    table_id: str,
     extra_components: list[Component] | None = None,
 ) -> Div:
     """
@@ -195,6 +330,8 @@ def build_tab(
         Description of benchmark.
     table
         Dash Table with metric results.
+    table_id
+        ID of Dash Table.
     extra_components
         List of Dash Components to include after the metrics table.
 
@@ -215,12 +352,13 @@ def build_tab(
         if col["name"] not in ("MLIP", "Score", "Rank")
     ]
     ids = [f"{name}-{metric}" for metric in metrics]
+
     layout_contents.append(
         build_weight_components(
             header="Metric Weights",
-            labels=metrics,
-            ids=ids,
-            reset_prefix=name,
+            columns=metrics,
+            input_ids=ids,
+            table_id=table_id,
         )
     )
 
