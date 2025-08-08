@@ -7,12 +7,12 @@ from pathlib import Path
 
 from dash import Dash, Input, Output, callback
 from dash.dash_table import DataTable
-from dash.dcc import Tab, Tabs
+from dash.dcc import Store, Tab, Tabs
 from dash.html import H1, Div
 
 from mlip_testing import app
 from mlip_testing.analysis.utils.utils import calc_ranks, calc_scores
-from mlip_testing.app.utils.build import build_weight_components
+from mlip_testing.app.utils.build_components import build_weight_components
 
 
 def get_tabs() -> tuple[dict[str, list[Div]], dict[str, DataTable]]:
@@ -99,7 +99,7 @@ def build_tabs(
     weight_components
         Weight sliders, text boxes and reset button.
     """
-    all_tabs = [Tab(label="Summary", value="summary-tab")] + [
+    all_tabs = [Tab(label="Summary", value="summary-tab", id="summary-tab")] + [
         Tab(label=tab_name, value=tab_name) for tab_name in layouts
     ]
 
@@ -132,6 +132,11 @@ def build_tabs(
                     H1("Benchmarks Summary"),
                     summary_table,
                     weight_components,
+                    Store(
+                        id="summary-table-scores-store",
+                        storage_type="session",
+                        # data=dict.fromkeys(columns, 1.0),
+                    ),
                 ]
             )
         return Div([layouts[tab]])

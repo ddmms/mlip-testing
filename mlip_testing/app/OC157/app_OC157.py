@@ -8,7 +8,10 @@ from dash import Dash
 from dash.html import Div
 
 from mlip_testing.app.base_app import BaseApp
-from mlip_testing.app.utils.callbacks import plot_from_table_column, struct_from_scatter
+from mlip_testing.app.utils.build_callbacks import (
+    plot_from_table_column,
+    struct_from_scatter,
+)
 from mlip_testing.app.utils.load import read_plot
 from mlip_testing.calcs.models.models import MODELS
 
