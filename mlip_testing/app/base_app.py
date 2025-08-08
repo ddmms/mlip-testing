@@ -8,7 +8,7 @@ from pathlib import Path
 from dash.development.base_component import Component
 from dash.html import Div
 
-from mlip_testing.app.utils.build import build_tab
+from mlip_testing.app.utils.build_components import build_tab
 from mlip_testing.app.utils.load import rebuild_table
 
 

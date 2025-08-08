@@ -1,0 +1,199 @@
+"""Utility functions for building app components."""
+
+from __future__ import annotations
+
+from dash.dash_table import DataTable
+from dash.dcc import Input as DCC_Input
+from dash.dcc import Slider, Store
+from dash.development.base_component import Component
+from dash.html import H1, H2, Button, Div, Label
+
+from mlip_testing.app.utils.register_callbacks import (
+    register_table_callbacks,
+    register_weight_callbacks,
+)
+
+
+def build_slider(
+    label: str, slider_id: str, input_id: str, default_value: float | None
+) -> Div:
+    """
+    Build slider and input box.
+
+    Parameters
+    ----------
+    label
+        Slider label.
+    slider_id
+        ID for slider component.
+    input_id
+        ID for text box input component.
+    default_value
+        Default value for slider/text box input.
+
+    Returns
+    -------
+    Div
+        Slider and input text box.
+    """
+    return Div(
+        [
+            Label(label),
+            Div(
+                [
+                    Div(
+                        Slider(
+                            id=slider_id,
+                            min=0,
+                            max=5,
+                            step=0.1,
+                            value=default_value,
+                            tooltip={"always_visible": False},
+                            marks=None,
+                        ),
+                        style={"flex": "1 1 80%"},
+                    ),
+                    DCC_Input(
+                        id=input_id,
+                        type="number",
+                        value=default_value,
+                        step=0.1,
+                        style={"width": "80px"},
+                    ),
+                ],
+                style={"display": "flex", "gap": "10px", "alignItems": "center"},
+            ),
+        ]
+    )
+
+
+def build_weight_components(
+    header: str,
+    columns: list[str],
+    input_ids: list[str],
+    table_id: str,
+) -> Div:
+    """
+    Build weight sliders, text boxes and reset button.
+
+    Parameters
+    ----------
+    header
+        Header for above sliders.
+    columns
+        Column headers to look up stored values, and label sliders and input boxes.
+    input_ids
+        ID prefixes for sliders and input boxes.
+    table_id
+        ID for table. Also used to identify reset button and weight store.
+
+    Returns
+    -------
+    Div
+        Div containing header, weight sliders, text boxes and reset button.
+    """
+    layout = [Div(header)]
+
+    for column, input_id in zip(columns, input_ids, strict=True):
+        layout.append(
+            build_slider(
+                label=column,
+                slider_id=f"{input_id}-slider",
+                input_id=f"{input_id}-input",
+                default_value=None,  # Set by stored value/default
+            )
+        )
+
+    layout.extend(
+        [
+            Button(
+                "Reset Weights",
+                id=f"{table_id}-reset-button",
+                n_clicks=0,
+                style={"marginTop": "20px"},
+            ),
+            Store(
+                id=f"{table_id}-weight-store",
+                storage_type="session",
+                data=dict.fromkeys(columns, 1.0),
+            ),
+        ]
+    )
+
+    # Callback to update table scores when table weight dict changes
+
+    if table_id != "summary-table":
+        register_table_callbacks(table_id=table_id)
+
+    # Callbacks to sync sliders, text boxes, and stored table weights
+    for column, input_id in zip(columns, input_ids, strict=True):
+        register_weight_callbacks(input_id=input_id, table_id=table_id, column=column)
+
+    return Div(layout)
+
+
+def build_tab(
+    name: str,
+    title: str,
+    description: str,
+    table: DataTable,
+    table_id: str,
+    extra_components: list[Component] | None = None,
+) -> Div:
+    """
+    Build app tab layout.
+
+    Parameters
+    ----------
+    name
+        Name for application tab.
+    title
+        Title for app tab.
+    description
+        Description of benchmark.
+    table
+        Dash Table with metric results.
+    table_id
+        ID of Dash Table.
+    extra_components
+        List of Dash Components to include after the metrics table.
+
+    Returns
+    -------
+    Div
+        App tab layout.
+    """
+    layout_contents = [
+        H1(title, style={"color": "black"}),
+        H2(description),
+        Div(table),
+    ]
+
+    layout_contents.append(
+        Store(
+            id="summary-table-scores-store",
+            storage_type="session",
+            # data=dict.fromkeys(columns, 1.0),
+        ),
+    )
+
+    metrics = [
+        col["name"]
+        for col in table.columns
+        if col["name"] not in ("MLIP", "Score", "Rank")
+    ]
+    ids = [f"{name}-{metric}" for metric in metrics]
+
+    layout_contents.append(
+        build_weight_components(
+            header="Metric Weights",
+            columns=metrics,
+            input_ids=ids,
+            table_id=table_id,
+        )
+    )
+
+    if extra_components:
+        layout_contents.extend(extra_components)
+
+    return Div(layout_contents)
