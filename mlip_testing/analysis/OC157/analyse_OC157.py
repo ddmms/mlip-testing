@@ -149,18 +149,26 @@ def ranking_error(relative_energies: dict[str, list]) -> dict[str, float]:
         Dictionary of predicted ranking errors for all models.
     """
     results = {}
-    ref_ranks = []
-    for i in range(len(relative_energies) // 3):
+    ref_min = []
+    ref_max = []
+    for i in range(len(relative_energies["ref"]) // 3):
         ref_energies = relative_energies["ref"][3 * i : 3 * i + 3]
-        ref_ranks.append(np.argmin(ref_energies))
+        ref_min.append(np.argmin(ref_energies))
+        ref_max.append(np.argmax(ref_energies))
 
     for model_name in MODELS:
-        pred_ranks = []
-        for i in range(len(relative_energies) // 3):
+        pred_min = []
+        pred_max = []
+        for i in range(len(relative_energies[model_name]) // 3):
             pred_energies = relative_energies[model_name][3 * i : 3 * i + 3]
-            pred_ranks.append(np.argmin(pred_energies))
+            pred_min.append(np.argmin(pred_energies))
+            pred_max.append(np.argmax(pred_energies))
 
-        results[model_name] = 1 - float(np.mean(ref_ranks == pred_ranks))
+        results[model_name] = (
+            1
+            - 0.5 * np.mean(np.array(ref_min) == np.array(pred_min))
+            - 0.5 * np.mean(np.array(ref_max) == np.array(pred_max))
+        )
 
     return results
 
@@ -192,7 +200,6 @@ def metrics(
     dict[str, dict]
         Metric names and values for all models.
     """
-    print(oc157_mae, ranking_error)
     return {
         "MAE": oc157_mae,
         "Ranking Error": ranking_error,
