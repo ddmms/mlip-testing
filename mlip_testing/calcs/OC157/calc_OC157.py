@@ -17,6 +17,7 @@ from tqdm import tqdm
 import zntrack
 
 from mlip_testing.calcs.models.models import MODELS
+from mlip_testing.calcs.utils.utils import chdir
 
 # Local directory to store output data
 OUT_PATH = Path(__file__).parent / "outputs"
@@ -213,15 +214,37 @@ class OC157Benchmark(zntrack.Node):
             write(write_dir / f"{trio[-1].info['sys_id']}.xyz", trio)
 
 
-project = mlipx.Project()
-benchmark_node_dict = {}
+def build_project(repro: bool = False) -> None:
+    """
+    Build mlipx project.
 
-for model_name, model in MODELS.items():
-    with project.group(model_name):
-        benchmark = OC157Benchmark(
-            model=model,
-            model_name=model_name,
-        )
-        benchmark_node_dict[model_name] = benchmark
+    Parameters
+    ----------
+    repro
+        Whether to call dvc repro -f after building.
+    """
+    project = mlipx.Project()
+    benchmark_node_dict = {}
 
-project.build()
+    for model_name, model in MODELS.items():
+        with project.group(model_name):
+            benchmark = OC157Benchmark(
+                model=model,
+                model_name=model_name,
+            )
+            benchmark_node_dict[model_name] = benchmark
+
+    if repro:
+        with chdir(Path(__file__).parent):
+            project.repro(build=True, force=True)
+    else:
+        project.build()
+
+
+def test_oc157():
+    """Run OC157 benchmark via pytest."""
+    build_project(repro=True)
+
+
+if __name__ == "__main__":
+    build_project()
