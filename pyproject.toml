@@ -42,6 +42,10 @@ mace = [
     "torch-dftd==0.4.0",
 ]
 
+orb = [
+    "orb-models == 0.5.4; sys_platform != 'win32'",
+]
+
 [project.urls]
 Repository = "https://github.com/ddmms/mlip-testing/"
 Documentation = "https://ddmms.github.io/mlip-testing/"
