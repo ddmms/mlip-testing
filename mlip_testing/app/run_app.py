@@ -12,7 +12,8 @@ from mlip_testing.app.build_app import build_full_app
 DATA_PATH = Path(__file__).parent / "data"
 
 
-if __name__ == "__main__":
+def run_app():
+    """Set port and run Dash application."""
     port = int(os.environ.get("PORT", 8050))
 
     full_app = Dash(__name__, assets_folder=DATA_PATH)
@@ -20,3 +21,7 @@ if __name__ == "__main__":
 
     print(f"Starting Dash app on port {port}...")
     full_app.run(host="0.0.0.0", port=port, debug=True)
+
+
+if __name__ == "__main__":
+    run_app()
