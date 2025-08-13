@@ -48,6 +48,45 @@ def plot_from_table_column(
         raise ValueError("Invalid column_id")
 
 
+def struct_from_table_cell(
+    table_id: str, plot_id: str, column_to_plot: dict[str, Graph]
+) -> None:
+    """
+    Attach callback to show plot when a table column is clicked.
+
+    Parameters
+    ----------
+    table_id
+        ID for Dash table being clicked.
+    plot_id
+        ID for Dash plot placeholder Div.
+    column_to_plot
+        Dictionary relating table headers (keys.) and plot to show (values).
+    """
+
+    @callback(Output(plot_id, "children"), Input(table_id, "active_cell"))
+    def show_plot(active_cell) -> Div:
+        """
+        Register callback to show plot when a table column is clicked.
+
+        Parameters
+        ----------
+        active_cell
+            Clicked cell in Dash table.
+
+        Returns
+        -------
+        Div
+            Message explaining interactivity, or plot on table click.
+        """
+        if not active_cell:
+            return Div("Click on a metric to view plot.")
+        column_id = active_cell.get("column_id", None)
+        if column_id:
+            return Div(column_to_plot[column_id])
+        raise ValueError("Invalid column_id")
+
+
 def struct_from_scatter(scatter_id: str, struct_id: str, structs: list[str]) -> None:
     """
     Attach callback to show a structure when a scatter point is clicked.
