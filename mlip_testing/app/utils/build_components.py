@@ -9,7 +9,8 @@ from dash.development.base_component import Component
 from dash.html import H1, H2, Button, Div, Label
 
 from mlip_testing.app.utils.register_callbacks import (
-    register_table_callbacks,
+    register_summary_table_callbacks,
+    register_tab_table_callbacks,
     register_weight_callbacks,
 )
 
@@ -120,10 +121,11 @@ def build_weight_components(
         ]
     )
 
-    # Callback to update table scores when table weight dict changes
-
+    # Callbacks to update table scores when table weight dicts change
     if table_id != "summary-table":
-        register_table_callbacks(table_id=table_id)
+        register_tab_table_callbacks(table_id=table_id)
+    else:
+        register_summary_table_callbacks()
 
     # Callbacks to sync sliders, text boxes, and stored table weights
     for column, input_id in zip(columns, input_ids, strict=True):

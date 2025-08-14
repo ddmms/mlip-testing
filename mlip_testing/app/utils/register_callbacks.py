@@ -8,7 +8,54 @@ from dash.exceptions import PreventUpdate
 from mlip_testing.analysis.utils.utils import calc_ranks, calc_scores
 
 
-def register_table_callbacks(table_id) -> None:
+def register_summary_table_callbacks() -> None:
+    """Register callbacks to update summary table."""
+
+    @callback(
+        Output("summary-table", "data"),
+        Input("all-tabs", "value"),
+        Input("summary-table-weight-store", "data"),
+        State("summary-table-scores-store", "data"),
+        State("summary-table", "data"),
+        prevent_initial_call=False,
+    )
+    def update_summary_table(
+        tabs_value: str,
+        stored_weights: dict[str, float],
+        stored_scores: dict[str, list[float]],
+        summary_data: list[dict],
+    ) -> list[dict]:
+        """
+        Update summary table when scores change.
+
+        Parameters
+        ----------
+        tabs_value
+            Value of selected tab. Parameter unused, but required to register Input.
+        stored_weights
+            Stored summary weights dictionary.
+        stored_scores
+            Stored scores for table scores.
+        summary_data
+            Data from summary table to be updated.
+
+        Returns
+        -------
+        list[dict]
+            Updated summary table data.
+        """
+        # Update table from stored scores
+        if stored_scores:
+            for key, values in stored_scores.items():
+                for row, value in zip(summary_data, values, strict=True):
+                    row[key] = value
+
+        # Update table contents
+        summary_data = calc_scores(summary_data, stored_weights)
+        return calc_ranks(summary_data)
+
+
+def register_tab_table_callbacks(table_id) -> None:
     """
     Register callback to update table scores/rankings when stored values change.
 
@@ -76,49 +123,6 @@ def register_table_callbacks(table_id) -> None:
         """
         # Update scores store
         return {table_id.removesuffix("-table"): [row["Score"] for row in table_data]}
-
-    @callback(
-        Output("summary-table", "data"),
-        Input("all-tabs", "value"),
-        Input("summary-table-weight-store", "data"),
-        State("summary-table-scores-store", "data"),
-        State("summary-table", "data"),
-        prevent_initial_call=False,
-    )
-    def update_summary_table(
-        tabs_value: str,
-        stored_weights: dict[str, float],
-        stored_scores: dict[str, list[float]],
-        summary_data: list[dict],
-    ) -> list[dict]:
-        """
-        Update summary table when scores change.
-
-        Parameters
-        ----------
-        tabs_value
-            Value of selected tab. Parameter unused, but required to register Input.
-        stored_weights
-            Stored summary weights dictionary.
-        stored_scores
-            Stored scores for table scores.
-        summary_data
-            Data from summary table to be updated.
-
-        Returns
-        -------
-        list[dict]
-            Updated summary table data.
-        """
-        # Update table from stored scores
-        if stored_scores:
-            for key, values in stored_scores.items():
-                for row, value in zip(summary_data, values, strict=True):
-                    row[key] = value
-
-        # Update table contents
-        summary_data = calc_scores(summary_data, stored_weights)
-        return calc_ranks(summary_data)
 
 
 def register_weight_callbacks(input_id: str, table_id: str, column: str) -> None:
