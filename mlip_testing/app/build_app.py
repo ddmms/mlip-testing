@@ -62,7 +62,8 @@ def build_summary_table(tables: dict[str, DataTable]) -> DataTable:
     """
     summary_data = {}
     for tab_name, table in tables.items():
-        summary_data = {row["MLIP"]: {} for row in table.data}
+        if not summary_data:
+            summary_data = {row["MLIP"]: {} for row in table.data}
         for row in table.data:
             summary_data[row["MLIP"]][tab_name] = row["Score"]
 
