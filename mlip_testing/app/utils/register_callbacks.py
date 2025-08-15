@@ -121,8 +121,13 @@ def register_tab_table_callbacks(table_id) -> None:
         dict[str, list[float]]
             List of scoress indexed by table_id.
         """
+        if not scores_data:
+            scores_data = {}
         # Update scores store
-        return {table_id.removesuffix("-table"): [row["Score"] for row in table_data]}
+        scores_data[table_id.removesuffix("-table")] = [
+            row["Score"] for row in table_data
+        ]
+        return scores_data
 
 
 def register_weight_callbacks(input_id: str, table_id: str, column: str) -> None:
