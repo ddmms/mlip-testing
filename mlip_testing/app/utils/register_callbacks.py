@@ -93,11 +93,11 @@ def register_tab_table_callbacks(table_id) -> None:
         return calc_ranks(table_data)
 
     @callback(
-        Output("summary-table-scores-store", "data"),
+        Output("summary-table-scores-store", "data", allow_duplicate=True),
         Input(f"{table_id}-weight-store", "data"),
         State(table_id, "data"),
         State("summary-table-scores-store", "data"),
-        prevent_initial_call=False,
+        prevent_initial_call="initial_duplicate",
     )
     def update_scores_store(
         stored_weights: dict[str, float],
