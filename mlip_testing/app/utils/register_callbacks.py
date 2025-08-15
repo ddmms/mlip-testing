@@ -178,7 +178,7 @@ def register_weight_callbacks(input_id: str, table_id: str, column: str) -> None
         if trigger_id == f"{input_id}-slider":
             stored_weights[column] = slider_weight
         elif trigger_id == f"{input_id}-input":
-            if input_weight:
+            if input_weight is not None:
                 stored_weights[column] = input_weight
             else:
                 raise PreventUpdate
