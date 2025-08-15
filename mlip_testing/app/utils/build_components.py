@@ -6,7 +6,7 @@ from dash.dash_table import DataTable
 from dash.dcc import Input as DCC_Input
 from dash.dcc import Slider, Store
 from dash.development.base_component import Component
-from dash.html import H1, H2, Button, Div, Label
+from dash.html import H1, H2, Br, Button, Div, Label
 
 from mlip_testing.app.utils.register_callbacks import (
     register_summary_table_callbacks,
@@ -93,7 +93,7 @@ def build_weight_components(
     Div
         Div containing header, weight sliders, text boxes and reset button.
     """
-    layout = [Div(header)]
+    layout = [Br(), Div(header), Br()]
 
     for column, input_id in zip(columns, input_ids, strict=True):
         layout.append(
