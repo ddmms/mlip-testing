@@ -82,7 +82,7 @@ def struct_from_scatter(scatter_id: str, struct_id: str, structs: list[str]) -> 
         idx = clickData["points"][0]["pointNumber"]
         return Div(
             Iframe(
-                srcDoc=generate_weas_html(structs[idx // 3]),
+                srcDoc=generate_weas_html(structs[idx]),
                 style={
                     "height": "550px",
                     "width": "100%",
