@@ -6,6 +6,7 @@ from pathlib import Path
 
 from dash import Dash
 from dash.html import Div
+import numpy as np
 
 from mlip_testing.app.base_app import BaseApp
 from mlip_testing.app.utils.build_callbacks import (
@@ -20,10 +21,15 @@ DATA_PATH = Path(__file__).parent.parent / "data" / "OC157"
 SCATTER = read_plot(DATA_PATH / "figure_rel_energies.json", id="figure")
 STRUCTS_DIR = DATA_PATH / list(MODELS.keys())[0]
 # Assets dir will be parent directory
-STRUCTS = [
-    f"assets/OC157/{list(MODELS.keys())[0]}/{i}.xyz"
-    for i in range(len(list(STRUCTS_DIR.glob("*.xyz"))))
-]
+STRUCTS = list(
+    np.repeat(
+        [
+            f"assets/OC157/{list(MODELS.keys())[0]}/{i}.xyz"
+            for i in range(len(list(STRUCTS_DIR.glob("*.xyz"))))
+        ],
+        3,
+    )
+)
 
 
 class OC157App(BaseApp):
