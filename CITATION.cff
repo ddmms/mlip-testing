@@ -1,0 +1,16 @@
+cff-version: 1.2.0
+title: "mlip-testing"
+message: "If you use this software, please cite it as below."
+type: software
+authors:
+  - family-names: Kasoar
+    given-names: Elliott
+    orcid: "https://orcid.org/0009-0005-2015-9478"
+  - family-names: Hart
+    given-names: Joe
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.16904444
+repository-code: 'https://github.com/ddmms/mlip-testing'
+abstract: Testing framework for machine learnt interatomic potentials
+license: BSD-3-Clause
