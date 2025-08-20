@@ -77,7 +77,9 @@ def build_summary_table(tables: dict[str, DataTable]) -> DataTable:
     columns_headers = ("MLIP",) + tuple(tables.keys()) + ("Score", "Rank")
     columns = [{"name": headers, "id": headers} for headers in columns_headers]
 
-    return DataTable(data=data, columns=columns, id="summary-table")
+    return DataTable(
+        data=data, columns=columns, id="summary-table", sort_action="native"
+    )
 
 
 def build_tabs(
