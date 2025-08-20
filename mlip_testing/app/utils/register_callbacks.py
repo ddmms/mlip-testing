@@ -22,7 +22,7 @@ def register_summary_table_callbacks() -> None:
     def update_summary_table(
         tabs_value: str,
         stored_weights: dict[str, float],
-        stored_scores: dict[str, list[float]],
+        stored_scores: dict[str, dict[str, float]],
         summary_data: list[dict],
     ) -> list[dict]:
         """
@@ -46,9 +46,9 @@ def register_summary_table_callbacks() -> None:
         """
         # Update table from stored scores
         if stored_scores:
-            for key, values in stored_scores.items():
-                for row, value in zip(summary_data, values, strict=True):
-                    row[key] = value
+            for row in summary_data:
+                for tab, values in stored_scores.items():
+                    row[tab] = values[row["MLIP"]]
 
         # Update table contents
         summary_data = calc_scores(summary_data, stored_weights)
@@ -102,8 +102,8 @@ def register_tab_table_callbacks(table_id) -> None:
     def update_scores_store(
         stored_weights: dict[str, float],
         table_data: list[dict],
-        scores_data: dict[str, list[float]],
-    ) -> dict[str, list[float]]:
+        scores_data: dict[str, dict[str, float]],
+    ) -> dict[str, dict[str, float]]:
         """
         Update stored scores values when weights update.
 
@@ -118,15 +118,15 @@ def register_tab_table_callbacks(table_id) -> None:
 
         Returns
         -------
-        dict[str, list[float]]
+        dict[str, dict[str, float]]
             List of scoress indexed by table_id.
         """
         if not scores_data:
             scores_data = {}
         # Update scores store
-        scores_data[table_id.removesuffix("-table")] = [
-            row["Score"] for row in table_data
-        ]
+        scores_data[table_id.removesuffix("-table")] = {
+            row["MLIP"]: row["Score"] for row in table_data
+        }
         return scores_data
 
 
