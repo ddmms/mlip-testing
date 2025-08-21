@@ -92,5 +92,7 @@ def calc_ranks(metrics_data: list[dict]) -> list[dict]:
     """
     ranked_scores = np.argsort([x["Score"] for x in metrics_data]) + 1
     for i, row in enumerate(metrics_data):
-        row["Rank"] = ranked_scores[i]
+        row["Rank"] = int(
+            ranked_scores[i]
+        )  # Convert numpy int64 to Python int, can't json serialise numpy types
     return metrics_data

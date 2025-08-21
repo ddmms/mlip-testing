@@ -1,0 +1,76 @@
+schema: '2.0'
+stages:
+  mace_mp_0a_S24Benchmark:
+    cmd: zntrack run calc_S24.S24Benchmark --name mace_mp_0a_S24Benchmark
+    params:
+      params.yaml:
+        mace_mp_0a_S24Benchmark:
+          model:
+            _cls: mlipx.nodes.generic_ase.GenericASECalculator
+            class_name: mace_mp
+            device: auto
+            kwargs:
+              model: medium
+            module: mace.calculators
+            spec:
+          model_name: mace_mp_0a
+    outs:
+    - path: nodes/mace_mp_0a/S24Benchmark/node-meta.json
+      hash: md5
+      md5: 850718e16d2519d3ee2705302d7222f9
+      size: 669
+  mace_mp_0b3_S24Benchmark:
+    cmd: zntrack run calc_S24.S24Benchmark --name mace_mp_0b3_S24Benchmark
+    params:
+      params.yaml:
+        mace_mp_0b3_S24Benchmark:
+          model:
+            _cls: mlipx.nodes.generic_ase.GenericASECalculator
+            class_name: mace_mp
+            device: auto
+            kwargs:
+              model: medium-0b3
+            module: mace.calculators
+            spec:
+          model_name: mace_mp_0b3
+    outs:
+    - path: nodes/mace_mp_0b3/S24Benchmark/node-meta.json
+      hash: md5
+      md5: ee9ecd0ef7987b91435ae7892fc96ce4
+      size: 676
+  mace_mpa_0_S24Benchmark:
+    cmd: zntrack run calc_S24.S24Benchmark --name mace_mpa_0_S24Benchmark
+    params:
+      params.yaml:
+        mace_mpa_0_S24Benchmark:
+          model:
+            _cls: mlipx.nodes.generic_ase.GenericASECalculator
+            class_name: mace_mp
+            device: auto
+            kwargs:
+              model: medium-mpa-0
+            module: mace.calculators
+            spec:
+          model_name: mace_mpa_0
+    outs:
+    - path: nodes/mace_mpa_0/S24Benchmark/node-meta.json
+      hash: md5
+      md5: e617792ee703e64b1a59afda330e893b
+      size: 675
+  orb_v3_conservative_inf_omat___S24Benchmark:
+    cmd: zntrack run calc_S24.S24Benchmark --name
+      orb_v3_conservative_inf_omat___S24Benchmark
+    params:
+      params.yaml:
+        orb_v3_conservative_inf_omat___S24Benchmark:
+          model:
+            _cls: mlip_testing.calcs.models.models.OrbCalc
+            device: cpu
+            kwargs: {}
+            name: orb_v3_conservative_inf_omat
+          model_name: orb_v3_conservative_inf_omat__
+    outs:
+    - path: nodes/orb_v3_conservative_inf_omat__/S24Benchmark/node-meta.json
+      hash: md5
+      md5: 758a17acdc9eb97146bc8a943a24dd91
+      size: 626
