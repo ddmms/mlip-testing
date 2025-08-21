@@ -12,8 +12,16 @@ from mlip_testing.analysis.utils.decorators import build_table, plot_parity
 from mlip_testing.analysis.utils.utils import mae
 from mlip_testing.calcs.models.models import MODELS
 
-CALC_PATH = Path(__file__).parent.parent.parent / "calcs" / "OC157" / "outputs"
-OUT_PATH = Path(__file__).parent.parent.parent / "app" / "data" / "OC157"
+CALC_PATH = (
+    Path(__file__).parent.parent.parent.parent
+    / "calcs"
+    / "surfaces"
+    / "OC157"
+    / "outputs"
+)
+OUT_PATH = (
+    Path(__file__).parent.parent.parent.parent / "app" / "data" / "surfaces" / "OC157"
+)
 
 
 def get_relative_energies(energies: list) -> list:
