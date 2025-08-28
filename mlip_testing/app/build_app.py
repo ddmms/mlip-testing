@@ -11,7 +11,7 @@ from dash.dcc import Store, Tab, Tabs
 from dash.html import H1, Div
 
 from mlip_testing import app
-from mlip_testing.analysis.utils.utils import calc_ranks, calc_scores
+from mlip_testing.analysis.utils.utils import calc_ranks, calc_scores, get_table_style
 from mlip_testing.app.utils.build_components import build_weight_components
 
 
@@ -77,8 +77,14 @@ def build_summary_table(tables: dict[str, DataTable]) -> DataTable:
     columns_headers = ("MLIP",) + tuple(tables.keys()) + ("Score", "Rank")
     columns = [{"name": headers, "id": headers} for headers in columns_headers]
 
+    style = get_table_style(data)
+
     return DataTable(
-        data=data, columns=columns, id="summary-table", sort_action="native"
+        data=data,
+        columns=columns,
+        id="summary-table",
+        sort_action="native",
+        style_data_conditional=style,
     )
 
 
