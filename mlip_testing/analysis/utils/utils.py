@@ -2,6 +2,10 @@
 
 from __future__ import annotations
 
+from typing import Any
+
+from matplotlib import cm
+from matplotlib.colors import Colormap
 import numpy as np
 from sklearn.metrics import mean_absolute_error, mean_squared_error
 
@@ -96,3 +100,84 @@ def calc_ranks(metrics_data: list[dict]) -> list[dict]:
             ranked_scores[i]
         )  # Convert numpy int64 to Python int, can't json serialise numpy types
     return metrics_data
+
+
+def get_table_style(
+    data: list[dict],
+    all_cols: bool = True,
+    col_names: list[str] | str | None = None,
+) -> list[dict[str, Any]]:
+    """
+    Viridis-style colormap for Dash DataTable.
+
+    Parameters
+    ----------
+    data
+        Data from Dash table to be coloured.
+    all_cols
+        Whether to colour all numerical columns.
+    col_names
+        Column name or list of names to be coloured.
+
+    Returns
+    -------
+    list[dict[str, Any]]
+        Conditional style data to apply to table.
+    """
+    cmap = cm.get_cmap("viridis_r")
+
+    def rgba_from_val(val: float, vmin: float, vmax: float, cmap: Colormap) -> str:
+        """
+        Get RGB values for a cell.
+
+        Parameters
+        ----------
+        val
+            Value to colour.
+        vmin
+            Minimum value in column.
+        vmax
+            Maximum value in column.
+        cmap
+            Colour map for cell colours.
+
+        Returns
+        -------
+        str
+            RGB colours in backgroundColor format.
+        """
+        norm = (val - vmin) / (vmax - vmin) if vmax != vmin else 0
+        rgba = cmap(norm)
+        r, g, b = [int(255 * x) for x in rgba[:3]]
+        return f"rgb({r}, {g}, {b})"
+
+    style_data_conditional = []
+
+    if all_cols:
+        cols = data[0].keys() - {
+            "MLIP",
+        }
+    elif col_names:
+        if isinstance(col_names, str):
+            cols = [col_names]
+    else:
+        raise ValueError("Specify either all_cols=True or provide col_name.")
+
+    for col in cols:
+        if col not in data[0]:
+            raise ValueError(f"Column '{col}' not found in data.")
+
+    for col in cols:
+        min_value = min([row[col] for row in data])
+        max_value = max([row[col] for row in data])
+
+        for val in [row[col] for row in data]:
+            style_data_conditional.append(
+                {
+                    "if": {"filter_query": f"{{{col}}} = {val}", "column_id": col},
+                    "backgroundColor": rgba_from_val(val, min_value, max_value, cmap),
+                    "color": "white" if val > (min_value + max_value) / 2 else "black",
+                }
+            )
+
+    return style_data_conditional
