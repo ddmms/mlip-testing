@@ -9,6 +9,8 @@ from dash.dash_table import DataTable
 from dash.dcc import Graph
 from plotly.io import read_json
 
+from mlip_testing.analysis.utils.utils import get_table_style
+
 
 def rebuild_table(filename: str | Path, id="table-1") -> DataTable:
     """
@@ -34,6 +36,8 @@ def rebuild_table(filename: str | Path, id="table-1") -> DataTable:
     columns = table_json["columns"]
     tooltip_header = table_json["tooltip_header"]
 
+    style = get_table_style(data)
+
     return DataTable(
         data=data,
         columns=columns,
@@ -42,6 +46,8 @@ def rebuild_table(filename: str | Path, id="table-1") -> DataTable:
         tooltip_duration=None,
         editable=True,
         id=id,
+        style_data_conditional=style,
+        sort_action="native",
     )
 
 
