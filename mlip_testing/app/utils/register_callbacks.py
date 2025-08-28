@@ -5,7 +5,7 @@ from __future__ import annotations
 from dash import Input, Output, State, callback, ctx
 from dash.exceptions import PreventUpdate
 
-from mlip_testing.analysis.utils.utils import calc_ranks, calc_scores
+from mlip_testing.analysis.utils.utils import calc_ranks, calc_scores, get_table_style
 
 
 def register_summary_table_callbacks() -> None:
@@ -13,6 +13,7 @@ def register_summary_table_callbacks() -> None:
 
     @callback(
         Output("summary-table", "data"),
+        Output("summary-table", "style_data_conditional"),
         Input("all-tabs", "value"),
         Input("summary-table-weight-store", "data"),
         State("summary-table-scores-store", "data"),
@@ -52,7 +53,10 @@ def register_summary_table_callbacks() -> None:
 
         # Update table contents
         summary_data = calc_scores(summary_data, stored_weights)
-        return calc_ranks(summary_data)
+        summary_data = calc_ranks(summary_data)
+        style = get_table_style(summary_data)
+
+        return summary_data, style
 
 
 def register_tab_table_callbacks(table_id) -> None:
@@ -67,6 +71,7 @@ def register_tab_table_callbacks(table_id) -> None:
 
     @callback(
         Output(table_id, "data"),
+        Output(table_id, "style_data_conditional"),
         Input(f"{table_id}-weight-store", "data"),
         State(table_id, "data"),
         prevent_initial_call=True,
@@ -90,7 +95,10 @@ def register_tab_table_callbacks(table_id) -> None:
             Updated table data.
         """
         table_data = calc_scores(table_data, stored_weights)
-        return calc_ranks(table_data)
+        table_data = calc_ranks(table_data)
+        style = get_table_style(table_data)
+
+        return table_data, style
 
     @callback(
         Output("summary-table-scores-store", "data", allow_duplicate=True),
