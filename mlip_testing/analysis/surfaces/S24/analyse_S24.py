@@ -88,7 +88,7 @@ def adsorption_energies() -> dict[str, list]:
     ref_stored = False
 
     for model_name in MODELS:
-        for i, system_path in enumerate(sorted((CALC_PATH / model_name).glob("*.xyz"))):
+        for system_path in sorted((CALC_PATH / model_name).glob("*.xyz")):
             if system_path.name == "s24_mol_surface_atoms.xyz":
                 continue
 
