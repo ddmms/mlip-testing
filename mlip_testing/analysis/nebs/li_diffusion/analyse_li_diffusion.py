@@ -10,8 +10,14 @@ import pytest
 from mlip_testing.analysis.utils.decorators import build_table
 from mlip_testing.calcs.models.models import MODELS
 
-CALC_PATH = Path(__file__).parent.parent.parent / "calcs" / "li_diffusion" / "outputs"
-OUT_PATH = Path(__file__).parent.parent.parent / "app" / "data" / "li_diffusion"
+CALC_PATH = (
+    Path(__file__).parent.parent.parent.parent
+    / "calcs"
+    / "nebs"
+    / "li_diffusion"
+    / "outputs"
+)
+OUT_PATH = Path(__file__).parent.parent.parent.parent / "app" / "data" / "li_diffusion"
 
 REF_VALUES = {"path_b": 0.27, "path_c": 2.5}
 
