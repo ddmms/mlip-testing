@@ -6,8 +6,8 @@ from pathlib import Path
 
 import zntrack
 
-from mlip_testing.calcs.OC157.calc_OC157 import OC157Benchmark
-from mlip_testing.calcs.S24.calc_S24 import S24Benchmark
+from mlip_testing.calcs.surfaces.OC157.calc_OC157 import OC157Benchmark
+from mlip_testing.calcs.surfaces.S24.calc_S24 import S24Benchmark
 
 
 class SurfaceCategory(zntrack.Node):
@@ -21,7 +21,7 @@ class SurfaceCategory(zntrack.Node):
     s24_benchmarks: list[S24Benchmark] = zntrack.deps()
 
     def run(self):
-        """Categories don't run calculations - they just organize the DAG."""
+        """Organise the DAG (categories don't run calculations)."""
         pass
 
 
@@ -60,7 +60,7 @@ def build_surface_category_project(repro: bool = False) -> None:
 
     # Create surface category
     with project.group("surface"):
-        surface_category = SurfaceCategory(
+        SurfaceCategory(
             oc157_benchmarks=oc157_benchmarks,
             s24_benchmarks=s24_benchmarks,
         )
