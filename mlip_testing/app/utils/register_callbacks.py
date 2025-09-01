@@ -131,8 +131,8 @@ def register_tab_table_callbacks(table_id) -> None:
         """
         if not scores_data:
             scores_data = {}
-        # Update scores store
-        scores_data[table_id.removesuffix("-table")] = {
+        # Update scores store. Category table IDs are of form [category]-summary-table
+        scores_data[table_id.removesuffix("-summary-table")] = {
             row["MLIP"]: row["Score"] for row in table_data
         }
         return scores_data

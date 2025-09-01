@@ -15,57 +15,127 @@ from mlip_testing.analysis.utils.utils import calc_ranks, calc_scores, get_table
 from mlip_testing.app.utils.build_components import build_weight_components
 
 
-def get_tabs() -> tuple[dict[str, list[Div]], dict[str, DataTable]]:
+def get_all_tests(
+    category: str = "*",
+) -> tuple[dict[str, dict[str, list[Div]]], dict[str, dict[str, DataTable]]]:
     """
-    Get layout and register callbacks for all tab applications.
+    Get layout and register callbacks for all categories.
+
+    Parameters
+    ----------
+    category
+        Name of category directory to search for tests. Default is '*'.
 
     Returns
     -------
-    tuple[dict[str, list[Div]], dict[str, DataTable]]
-        Layouts and tables for all tabs.
+    tuple[dict[str, dict[str, list[Div]]], dict[str, dict[str, DataTable]]]
+        Layouts and tables for all categories.
     """
     # Find Python files e.g. app_OC157.py in mlip_tesing.app module.
-    tabs = Path(app.__file__).parent.glob("*/app*.py")
+    # We will get the category from the parent's parent directory
+    # E.g. mlip_testing/app/surfaces/OC157/app_OC157.py -> surfaces
+    tests = Path(app.__file__).parent.glob(f"{category}/*/app*.py")
     layouts = {}
     tables = {}
 
     # Build all layouts, and register all callbacks to main app.
-    for tab in tabs:
+    for test in tests:
         # Import tab application layout/callbacks
-        tab_name = tab.parent.name
-        tab_module = import_module(f"mlip_testing.app.{tab_name}.app_{tab_name}")
-        tab_app = tab_module.get_app()
+        test_name = test.parent.name
+        category_name = test.parent.parent.name
+        test_module = import_module(
+            f"mlip_testing.app.{category_name}.{test_name}.app_{test_name}"
+        )
+        test_app = test_module.get_app()
 
-        # Get layouts and tables for each tab
-        layouts[tab_app.name] = tab_app.layout
-        tables[tab_app.name] = tab_app.table
+        # Get layouts and tables for each category/test
+        if category_name not in layouts:
+            layouts[category_name] = {}
+            tables[category_name] = {}
+        layouts[category_name][test_app.name] = test_app.layout
+        tables[category_name][test_app.name] = test_app.table
 
         # Register tab callbacks
-        tab_app.register_callbacks()
+        test_app.register_callbacks()
 
     return layouts, tables
 
 
-def build_summary_table(tables: dict[str, DataTable]) -> DataTable:
+def build_category(
+    all_layouts: dict[str, dict[str, list[Div]]],
+    all_tables: dict[str, dict[str, DataTable]],
+) -> tuple[dict[str, list[Div]], dict[str, DataTable]]:
     """
-    Build summary table.
+    Build category layouts and summary tables.
+
+    Parameters
+    ----------
+    all_layouts
+        Layouts of all tests, grouped by category.
+    all_tables
+        Tables for all tests, grouped by category.
+
+    Returns
+    -------
+    ...
+        ...
+    """
+    # Take all tables in category, build new table, and set layout
+    category_layouts = {}
+    category_tables = {}
+
+    for category in all_layouts:
+        # Build summary table
+        summary_table = build_summary_table(
+            all_tables[category], table_id=f"{category}-summary-table"
+        )
+        category_tables[category] = summary_table
+
+        # Build weight components for summary table
+        weight_components = build_weight_components(
+            header="Benchmark weights",
+            columns=list(all_tables[category].keys()),
+            input_ids=list(all_tables[category].keys()),
+            table_id=f"{category}-summary-table",
+        )
+
+        # Build full layout with summary table, weight controls, and test layouts
+        category_layouts[category] = Div(
+            [
+                H1(category),
+                summary_table,
+                weight_components,
+                Div([all_layouts[category][test] for test in all_layouts[category]]),
+            ]
+        )
+
+    return category_layouts, category_tables
+
+
+def build_summary_table(
+    tables: dict[str, DataTable], table_id: str = "summary-table"
+) -> DataTable:
+    """
+    Build summary table from a set of tables.
 
     Parameters
     ----------
     tables
-        Table from each tab.
+        Dictionary of tables to be summarised.
+    table_id
+        ID of table being built. Default is 'summary-table'.
 
     Returns
     -------
     DataTable
-        Summary table with score from each tab.
+        Summary table with score from table being summarised.
     """
     summary_data = {}
-    for tab_name, table in tables.items():
+    for category_name, table in tables.items():
         if not summary_data:
             summary_data = {row["MLIP"]: {} for row in table.data}
         for row in table.data:
-            summary_data[row["MLIP"]][tab_name] = row["Score"]
+            summary_data[row["MLIP"]][category_name] = row["Score"]
 
     data = []
     for mlip in summary_data:
@@ -82,7 +152,7 @@ def build_summary_table(tables: dict[str, DataTable]) -> DataTable:
     return DataTable(
         data=data,
         columns=columns,
-        id="summary-table",
+        id=table_id,
         sort_action="native",
         style_data_conditional=style,
     )
@@ -104,12 +174,12 @@ def build_tabs(
     layouts
         Layouts for all tabs.
     summary_table
-        Summary table with score from each tab.
+        Summary table with score from each category.
     weight_components
         Weight sliders, text boxes and reset button.
     """
     all_tabs = [Tab(label="Summary", value="summary-tab", id="summary-tab")] + [
-        Tab(label=tab_name, value=tab_name) for tab_name in layouts
+        Tab(label=category_name, value=category_name) for category_name in layouts
     ]
 
     tabs_layout = [
@@ -144,7 +214,6 @@ def build_tabs(
                     Store(
                         id="summary-table-scores-store",
                         storage_type="session",
-                        # data=dict.fromkeys(columns, 1.0),
                     ),
                 ]
             )
@@ -160,12 +229,17 @@ def build_full_app(full_app: Dash) -> None:
     full_app
         Full application with all sub-apps.
     """
-    layouts, tables = get_tabs()
-    summary_table = build_summary_table(tables)
+    # Get layouts and tables for each test, grouped by categories
+    all_layouts, all_tables = get_all_tests()
+    # Combine tests into categories and create category summary
+    category_layouts, category_tables = build_category(all_layouts, all_tables)
+    # Build overall summary table
+    summary_table = build_summary_table(category_tables)
     weight_components = build_weight_components(
         header="Benchmark weights",
-        columns=list(tables.keys()),
-        input_ids=list(tables.keys()),
+        columns=list(category_tables.keys()),
+        input_ids=list(category_tables.keys()),
         table_id="summary-table",
     )
-    build_tabs(full_app, layouts, summary_table, weight_components)
+    # Build summary and category tabs
+    build_tabs(full_app, category_layouts, summary_table, weight_components)
