@@ -34,13 +34,13 @@ class S24App(BaseApp):
         """Register callbacks to app."""
         plot_from_table_column(
             table_id=self.table_id,
-            plot_id="figure-placeholder",
+            plot_id="s24-figure-placeholder",
             column_to_plot={"MAE": SCATTER},
         )
 
         struct_from_scatter(
             scatter_id="figure",
-            struct_id="struct-placeholder",
+            struct_id="s24-struct-placeholder",
             structs=STRUCTS,
         )
 
@@ -62,7 +62,10 @@ def get_app() -> S24App:
             "molecule-surface combinations."
         ),
         table_path=DATA_PATH / "s24_metrics_table.json",
-        extra_components=[Div(id="figure-placeholder"), Div(id="struct-placeholder")],
+        extra_components=[
+            Div(id="s24-figure-placeholder"),
+            Div(id="s24-struct-placeholder"),
+        ],
     )
 
 
