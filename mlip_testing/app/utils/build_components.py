@@ -6,7 +6,7 @@ from dash.dash_table import DataTable
 from dash.dcc import Input as DCC_Input
 from dash.dcc import Slider, Store
 from dash.development.base_component import Component
-from dash.html import H1, H2, Br, Button, Div, Label
+from dash.html import H2, H3, Br, Button, Div, Label
 
 from mlip_testing.app.utils.register_callbacks import (
     register_summary_table_callbacks,
@@ -134,40 +134,34 @@ def build_weight_components(
     return Div(layout)
 
 
-def build_tab(
-    name: str,
+def build_test_layout(
     title: str,
     description: str,
     table: DataTable,
-    table_id: str,
     extra_components: list[Component] | None = None,
 ) -> Div:
     """
-    Build app tab layout.
+    Build app layout for a test.
 
     Parameters
     ----------
-    name
-        Name for application tab.
     title
-        Title for app tab.
+        Title of test.
     description
-        Description of benchmark.
+        Description of test.
     table
         Dash Table with metric results.
-    table_id
-        ID of Dash Table.
     extra_components
         List of Dash Components to include after the metrics table.
 
     Returns
     -------
     Div
-        App tab layout.
+        Layout for test layout.
     """
     layout_contents = [
-        H1(title, style={"color": "black"}),
-        H2(description),
+        H2(title, style={"color": "black"}),
+        H3(description),
         Div(table),
     ]
 
@@ -175,24 +169,7 @@ def build_tab(
         Store(
             id="summary-table-scores-store",
             storage_type="session",
-            # data=dict.fromkeys(columns, 1.0),
         ),
-    )
-
-    metrics = [
-        col["name"]
-        for col in table.columns
-        if col["name"] not in ("MLIP", "Score", "Rank")
-    ]
-    ids = [f"{name}-{metric}" for metric in metrics]
-
-    layout_contents.append(
-        build_weight_components(
-            header="Metric Weights",
-            columns=metrics,
-            input_ids=ids,
-            table_id=table_id,
-        )
     )
 
     if extra_components:
