@@ -8,7 +8,7 @@ from pathlib import Path
 from dash.development.base_component import Component
 from dash.html import Div
 
-from mlip_testing.app.utils.build_components import build_tab
+from mlip_testing.app.utils.build_components import build_test_layout
 from mlip_testing.app.utils.load import rebuild_table
 
 
@@ -44,7 +44,7 @@ class BaseApp(ABC):
         Parameters
         ----------
         name
-            Name for application tab.
+            Name for application test.
         title
             Title for benchmark.
         description
@@ -66,7 +66,7 @@ class BaseApp(ABC):
 
     def build_layout(self) -> Div:
         """
-        Build app layout.
+        Build layout for application.
 
         Returns
         -------
@@ -74,12 +74,10 @@ class BaseApp(ABC):
             Div component with list all components for app.
         """
         # Define all components/placeholders
-        return build_tab(
-            name=self.name,
+        return build_test_layout(
             title=self.title,
             description=self.description,
             table=self.table,
-            table_id=self.table_id,
             extra_components=self.extra_components,
         )
 
