@@ -39,13 +39,13 @@ class OC157App(BaseApp):
         """Register callbacks to app."""
         plot_from_table_column(
             table_id=self.table_id,
-            plot_id="figure-placeholder",
+            plot_id="oc157-figure-placeholder",
             column_to_plot={"MAE": SCATTER, "Ranking Error": SCATTER},
         )
 
         struct_from_scatter(
             scatter_id="figure",
-            struct_id="struct-placeholder",
+            struct_id="oc157-struct-placeholder",
             structs=STRUCTS,
         )
 
@@ -67,7 +67,10 @@ def get_app() -> OC157App:
             "molecule-surface combinations."
         ),
         table_path=DATA_PATH / "oc157_metrics_table.json",
-        extra_components=[Div(id="figure-placeholder"), Div(id="struct-placeholder")],
+        extra_components=[
+            Div(id="oc157-figure-placeholder"),
+            Div(id="oc157-struct-placeholder"),
+        ],
     )
 
 
