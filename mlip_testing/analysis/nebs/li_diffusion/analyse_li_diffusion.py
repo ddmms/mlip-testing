@@ -17,7 +17,13 @@ CALC_PATH = (
     / "li_diffusion"
     / "outputs"
 )
-OUT_PATH = Path(__file__).parent.parent.parent.parent / "app" / "data" / "li_diffusion"
+OUT_PATH = (
+    Path(__file__).parent.parent.parent.parent
+    / "app"
+    / "data"
+    / "nebs"
+    / "li_diffusion"
+)
 
 REF_VALUES = {"path_b": 0.27, "path_c": 2.5}
 
