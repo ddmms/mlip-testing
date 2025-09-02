@@ -32,6 +32,7 @@ def path_b_error() -> dict[str, float]:
     dict[str, float]
         Dictionary of predicted barrier errors for all models.
     """
+    OUT_PATH.mkdir(parents=True, exist_ok=True)
     results = {}
     for model_name in MODELS:
         structs = read(
@@ -58,6 +59,7 @@ def path_c_error() -> dict[str, float]:
     dict[str, float]
         Dictionary of predicted barrier errors for all models.
     """
+    OUT_PATH.mkdir(parents=True, exist_ok=True)
     results = {}
     for model_name in MODELS:
         structs = read(
