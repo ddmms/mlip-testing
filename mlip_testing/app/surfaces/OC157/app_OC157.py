@@ -24,7 +24,7 @@ STRUCTS_DIR = DATA_PATH / list(MODELS.keys())[0]
 STRUCTS = list(
     np.repeat(
         [
-            f"assets/OC157/{list(MODELS.keys())[0]}/{i}.xyz"
+            f"assets/surfaces/OC157/{list(MODELS.keys())[0]}/{i}.xyz"
             for i in range(len(list(STRUCTS_DIR.glob("*.xyz"))))
         ],
         3,
