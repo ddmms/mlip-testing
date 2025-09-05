@@ -15,9 +15,12 @@ from mlip_testing.app.utils.build_callbacks import (
 from mlip_testing.app.utils.load import read_plot
 from mlip_testing.calcs.models.models import MODELS
 
+BENCHMARK_NAME = "s24"
 DATA_PATH = Path(__file__).parent.parent.parent / "data" / "surfaces" / "S24"
 
-SCATTER = read_plot(DATA_PATH / "figure_adsorption_energies.json", id="figure")
+SCATTER = read_plot(
+    DATA_PATH / "figure_adsorption_energies.json", id=f"{BENCHMARK_NAME}-figure"
+)
 STRUCTS_DIR = DATA_PATH / list(MODELS.keys())[0]
 # Assets dir will be parent directory
 STRUCTS = [
@@ -34,13 +37,13 @@ class S24App(BaseApp):
         """Register callbacks to app."""
         plot_from_table_column(
             table_id=self.table_id,
-            plot_id="s24-figure-placeholder",
+            plot_id=f"{BENCHMARK_NAME}-figure-placeholder",
             column_to_plot={"MAE": SCATTER},
         )
 
         struct_from_scatter(
-            scatter_id="figure",
-            struct_id="s24-struct-placeholder",
+            scatter_id=f"{BENCHMARK_NAME}-figure",
+            struct_id=f"{BENCHMARK_NAME}-struct-placeholder",
             structs=STRUCTS,
         )
 
@@ -63,8 +66,8 @@ def get_app() -> S24App:
         ),
         table_path=DATA_PATH / "s24_metrics_table.json",
         extra_components=[
-            Div(id="s24-figure-placeholder"),
-            Div(id="s24-struct-placeholder"),
+            Div(id=f"{BENCHMARK_NAME}-figure-placeholder"),
+            Div(id=f"{BENCHMARK_NAME}-struct-placeholder"),
         ],
     )
 
