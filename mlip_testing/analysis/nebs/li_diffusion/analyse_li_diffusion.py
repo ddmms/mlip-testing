@@ -34,6 +34,7 @@ REF_VALUES = {"path_b": 0.27, "path_c": 2.5}
     title="NEB path B",
     x_label="Image",
     y_label="Energy / eV",
+    show_line=True,
 )
 def plot_neb_b() -> dict[str, tuple[list[float], list[float]]]:
     """
@@ -65,6 +66,7 @@ def plot_neb_b() -> dict[str, tuple[list[float], list[float]]]:
     title="NEB path C",
     x_label="Image",
     y_label="Energy / eV",
+    show_line=True,
 )
 def plot_neb_c() -> dict[str, tuple[list[float], list[float]]]:
     """
