@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+from typing import Literal
 
 from ase.io import read, write
 import pytest
@@ -28,81 +29,55 @@ OUT_PATH = (
 REF_VALUES = {"path_b": 0.27, "path_c": 2.5}
 
 
-@pytest.fixture
-@plot_scatter(
-    filename=OUT_PATH / "figure_neb_b.json",
-    title="NEB path B",
-    x_label="Image",
-    y_label="Energy / eV",
-    show_line=True,
-)
-def plot_neb_b() -> dict[str, tuple[list[float], list[float]]]:
+def plot_nebs(model: str, path: Literal["b", "c"]) -> None:
     """
-    Plot NEB for path B.
-
-    Returns
-    -------
-    dict[str, tuple[list[float], list[float]]]
-        Dictionary of tuples of image/energy for each model.
-    """
-    OUT_PATH.mkdir(parents=True, exist_ok=True)
-    results = {}
-    for model_name in MODELS:
-        structs = read(
-            CALC_PATH / f"li_diffusion_b-{model_name}-neb-band.extxyz", index=":"
-        )
-        results[model_name] = [
-            list(range(len(structs))),
-            [struct.get_potential_energy() for struct in structs],
-        ]
-        write(OUT_PATH / f"{model_name}-b-neb-band.extxyz", structs)
-
-    return results
-
-
-@pytest.fixture
-@plot_scatter(
-    filename=OUT_PATH / "figure_neb_c.json",
-    title="NEB path C",
-    x_label="Image",
-    y_label="Energy / eV",
-    show_line=True,
-)
-def plot_neb_c() -> dict[str, tuple[list[float], list[float]]]:
-    """
-    Plot NEB for path C.
-
-    Returns
-    -------
-    dict[str, tuple[list[float], list[float]]]
-        Dictionary of tuples of image/energy for each model.
-    """
-    OUT_PATH.mkdir(parents=True, exist_ok=True)
-    results = {}
-    for model_name in MODELS:
-        structs = read(
-            CALC_PATH / f"li_diffusion_c-{model_name}-neb-band.extxyz", index=":"
-        )
-        results[model_name] = [
-            list(range(len(structs))),
-            [struct.get_potential_energy() for struct in structs],
-        ]
-        write(OUT_PATH / f"{model_name}-c-neb-band.extxyz", structs)
-
-    return results
-
-
-@pytest.fixture
-def path_b_error(
-    plot_neb_b: dict[str, tuple[list[float], list[float]]],
-) -> dict[str, float]:
-    """
-    Get error in path B energy barrier.
+    Plot NEB paths and save all structure files.
 
     Parameters
     ----------
-    plot_neb_b
-        Unused. Saves plot of NEB band, and structures to be visualised.
+    model
+        Name of MLIP.
+    path
+        Path "b" or "c" for NEB.
+    """
+
+    @plot_scatter(
+        filename=OUT_PATH / f"figure_{model}_neb_{path.lower()}.json",
+        title=f"NEB path {path.upper()}",
+        x_label="Image",
+        y_label="Energy / eV",
+        show_line=True,
+    )
+    def plot_neb() -> dict[str, tuple[list[float], list[float]]]:
+        """
+        Plot a NEB and save the structure file.
+
+        Returns
+        -------
+        dict[str, tuple[list[float], list[float]]]
+            Dictionary of tuples of image/energy for each model.
+        """
+        OUT_PATH.mkdir(parents=True, exist_ok=True)
+        results = {}
+        structs = read(
+            CALC_PATH / f"li_diffusion_{path.lower()}-{model}-neb-band.extxyz",
+            index=":",
+        )
+        results[model] = [
+            list(range(len(structs))),
+            [struct.get_potential_energy() for struct in structs],
+        ]
+        write(OUT_PATH / f"{model}-{path.lower()}-neb-band.extxyz", structs)
+
+        return results
+
+    plot_neb()
+
+
+@pytest.fixture
+def path_b_error() -> dict[str, float]:
+    """
+    Get error in path B energy barrier.
 
     Returns
     -------
@@ -112,6 +87,7 @@ def path_b_error(
     OUT_PATH.mkdir(parents=True, exist_ok=True)
     results = {}
     for model_name in MODELS:
+        plot_nebs(model_name, "b")
         with open(
             CALC_PATH / f"li_diffusion_b-{model_name}-neb-results.dat", encoding="utf8"
         ) as f:
@@ -122,16 +98,9 @@ def path_b_error(
 
 
 @pytest.fixture
-def path_c_error(
-    plot_neb_c: dict[str, tuple[list[float], list[float]]],
-) -> dict[str, float]:
+def path_c_error() -> dict[str, float]:
     """
     Get error in path C energy barrier.
-
-    Parameters
-    ----------
-    plot_neb_c
-        Unused. Saves plot of NEB band, and structures to be visualised.
 
     Returns
     -------
@@ -141,6 +110,7 @@ def path_c_error(
     OUT_PATH.mkdir(parents=True, exist_ok=True)
     results = {}
     for model_name in MODELS:
+        plot_nebs(model_name, "c")
         with open(
             CALC_PATH / f"li_diffusion_c-{model_name}-neb-results.dat", encoding="utf8"
         ) as f:
