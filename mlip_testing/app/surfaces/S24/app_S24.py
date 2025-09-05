@@ -15,7 +15,7 @@ from mlip_testing.app.utils.build_callbacks import (
 from mlip_testing.app.utils.load import read_plot
 from mlip_testing.calcs.models.models import MODELS
 
-BENCHMARK_NAME = "s24"
+BENCHMARK_NAME = Path(__file__).name.removeprefix("app_").removesuffix(".py")
 DATA_PATH = Path(__file__).parent.parent.parent / "data" / "surfaces" / "S24"
 
 SCATTER = read_plot(
@@ -58,7 +58,7 @@ def get_app() -> S24App:
         Benchmark layout and callback registration.
     """
     return S24App(
-        name="S24",
+        name=BENCHMARK_NAME,
         title="S24",
         description=(
             "Performance in predicting adsorption energies for 24 "
