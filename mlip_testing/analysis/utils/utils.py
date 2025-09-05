@@ -72,7 +72,7 @@ def calc_scores(
         score = 0
         for key, value in row.items():
             weight = weights.get(key, 1.0)
-            if key in ("MLIP", "Score", "Rank"):
+            if key in ("MLIP", "Score", "Rank", "id"):
                 continue
             score += value * weight
         row["Score"] = score
@@ -154,9 +154,7 @@ def get_table_style(
     style_data_conditional = []
 
     if all_cols:
-        cols = data[0].keys() - {
-            "MLIP",
-        }
+        cols = data[0].keys() - {"MLIP", "id"}
     elif col_names:
         if isinstance(col_names, str):
             cols = [col_names]
