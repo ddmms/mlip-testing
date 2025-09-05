@@ -21,7 +21,7 @@ SCATTER = read_plot(DATA_PATH / "figure_adsorption_energies.json", id="figure")
 STRUCTS_DIR = DATA_PATH / list(MODELS.keys())[0]
 # Assets dir will be parent directory
 STRUCTS = [
-    f"assets/S24/{list(MODELS.keys())[0]}/{struct_file.stem}.xyz"
+    f"assets/surfaces/S24/{list(MODELS.keys())[0]}/{struct_file.stem}.xyz"
     for struct_file in STRUCTS_DIR.glob("*.xyz")
     if struct_file.name != "s24_mol_surface_atoms.xyz"
 ]
