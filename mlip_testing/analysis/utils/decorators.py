@@ -36,7 +36,7 @@ def plot_parity(
     hoverdata
         Hover data dictionary.
     filename
-        Filename to save table.
+        Filename to save plot as JSON.
 
     Returns
     -------
@@ -79,8 +79,6 @@ def plot_parity(
             results = func(*args, **kwargs)
             ref = results["ref"]
 
-            traces = []
-
             hovertemplate = "<b>Pred: </b>%{x}<br>" + "<b>Ref: </b>%{y}<br>"
 
             customdata = []
@@ -89,10 +87,11 @@ def plot_parity(
                     hovertemplate += f"<b>{key}: </b>%{{customdata[{i}]}}<br>"
                 customdata = list(zip(*hoverdata.values(), strict=True))
 
+            fig = go.Figure()
             for mlip, value in results.items():
                 if mlip == "ref":
                     continue
-                traces.append(
+                fig.add_trace(
                     go.Scatter(
                         x=value,
                         y=ref,
@@ -102,11 +101,6 @@ def plot_parity(
                         hovertemplate=hovertemplate,
                     )
                 )
-
-            fig = go.Figure()
-
-            for trace in traces:
-                fig.add_trace(trace)
 
             full_fig = fig.full_figure_for_development()
             x_range = full_fig.layout.xaxis.range
@@ -143,6 +137,109 @@ def plot_parity(
         return plot_parity_wrapper
 
     return plot_parity_decorator
+
+
+def plot_scatter(
+    title: str | None = None,
+    x_label: str | None = None,
+    y_label: str | None = None,
+    hoverdata: dict | None = None,
+    filename: str = "scatter.json",
+) -> Callable:
+    """
+    Plot scatter plot of MLIP results.
+
+    Parameters
+    ----------
+    title
+        Graph title.
+    x_label
+        Label for x-axis.
+    y_label
+        Label for y-axis.
+    hoverdata
+        Hover data dictionary.
+    filename
+        Filename to save plot as JSON.
+
+    Returns
+    -------
+    Callable
+        Decorator to wrap function.
+    """
+
+    def plot_scatter_decorator(func: Callable) -> Callable:
+        """
+        Decorate function to plot scatter.
+
+        Parameters
+        ----------
+        func
+            Function being wrapped.
+
+        Returns
+        -------
+        Callable
+            Wrapped function.
+        """
+
+        @functools.wraps(func)
+        def plot_scatter_wrapper(*args, **kwargs) -> dict[str, Any]:
+            """
+            Wrap function to plot scatter.
+
+            Parameters
+            ----------
+            *args
+                Arguments to pass to the function being wrapped.
+            **kwargs
+                Key word arguments to pass to the function being wrapped.
+
+            Returns
+            -------
+            dict
+                Results dictionary.
+            """
+            results = func(*args, **kwargs)
+
+            hovertemplate = "<b>Pred: </b>%{x}<br>" + "<b>Ref: </b>%{y}<br>"
+            customdata = []
+            if hoverdata:
+                for i, key in enumerate(hoverdata):
+                    hovertemplate += f"<b>{key}: </b>%{{customdata[{i}]}}<br>"
+                customdata = list(zip(*hoverdata.values(), strict=True))
+
+            fig = go.Figure()
+            for mlip, value in results.items():
+                name = "Reference" if mlip == "ref" else mlip
+                fig.add_trace(
+                    go.Scatter(
+                        x=value[0],
+                        y=value[1],
+                        name=name,
+                        mode="markers",
+                        customdata=customdata,
+                        hovertemplate=hovertemplate,
+                    )
+                )
+
+            fig.update_layout(
+                title={"text": title},
+                xaxis={"title": {"text": x_label}},
+                yaxis={"title": {"text": y_label}},
+            )
+
+            fig.update_traces()
+
+            # Write to file
+            Path(filename).parent.mkdir(parents=True, exist_ok=True)
+            fig.write_json(filename)
+
+            return results
+
+        return plot_scatter_wrapper
+
+    return plot_scatter_decorator
 
 
 def build_table(
