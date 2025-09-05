@@ -314,7 +314,8 @@ def build_table(
             for mlip in mlips:
                 metrics_data.append(
                     {"MLIP": mlip}
-                    | {key: value[mlip] for key, value in results.items()},
+                    | {key: value[mlip] for key, value in results.items()}
+                    | {"id": mlip},
                 )
 
             summary_tooltips = {
@@ -333,7 +334,7 @@ def build_table(
 
             table = dash_table.DataTable(
                 metrics_data,
-                [{"name": i, "id": i} for i in metrics_columns],
+                [{"name": i, "id": i} for i in metrics_columns if i != "id"],
                 id="metrics",
                 tooltip_header=tooltip_header,
             )
