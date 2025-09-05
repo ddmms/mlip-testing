@@ -30,13 +30,13 @@ def plot_parity(
     title
         Graph title.
     x_label
-        Label for x-axis.
+        Label for x-axis. Default is `None`.
     y_label
-        Label for y-axis.
+        Label for y-axis. Default is `None`.
     hoverdata
-        Hover data dictionary.
+        Hover data dictionary. Default is `{}`.
     filename
-        Filename to save plot as JSON.
+        Filename to save plot as JSON. Default is "parity.json".
 
     Returns
     -------
@@ -143,6 +143,7 @@ def plot_scatter(
     title: str | None = None,
     x_label: str | None = None,
     y_label: str | None = None,
+    show_line: bool = False,
     hoverdata: dict | None = None,
     filename: str = "scatter.json",
 ) -> Callable:
@@ -154,13 +155,15 @@ def plot_scatter(
     title
         Graph title.
     x_label
-        Label for x-axis.
+        Label for x-axis. Default is `None`.
     y_label
-        Label for y-axis.
+        Label for y-axis. Default is `None`.
+    show_line
+        Whether to show line between points. Default is False.
     hoverdata
-        Hover data dictionary.
+        Hover data dictionary. Default is `{}`.
     filename
-        Filename to save plot as JSON.
+        Filename to save plot as JSON. Default is "scatter.json".
 
     Returns
     -------
@@ -209,6 +212,8 @@ def plot_scatter(
                     hovertemplate += f"<b>{key}: </b>%{{customdata[{i}]}}<br>"
                 customdata = list(zip(*hoverdata.values(), strict=True))
 
+            mode = "lines+markers" if show_line else "markers"
+
             fig = go.Figure()
             for mlip, value in results.items():
                 name = "Reference" if mlip == "ref" else mlip
@@ -217,7 +222,7 @@ def plot_scatter(
                         x=value[0],
                         y=value[1],
                         name=name,
-                        mode="markers",
+                        mode=mode,
                         customdata=customdata,
                         hovertemplate=hovertemplate,
                     )
