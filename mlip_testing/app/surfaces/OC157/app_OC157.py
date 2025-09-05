@@ -16,9 +16,12 @@ from mlip_testing.app.utils.build_callbacks import (
 from mlip_testing.app.utils.load import read_plot
 from mlip_testing.calcs.models.models import MODELS
 
+BENCHMARK_NAME = "oc157"
 DATA_PATH = Path(__file__).parent.parent.parent / "data" / "surfaces" / "OC157"
 
-SCATTER = read_plot(DATA_PATH / "figure_rel_energies.json", id="figure")
+SCATTER = read_plot(
+    DATA_PATH / "figure_rel_energies.json", id=f"{BENCHMARK_NAME}-figure"
+)
 STRUCTS_DIR = DATA_PATH / list(MODELS.keys())[0]
 # Assets dir will be parent directory
 STRUCTS = list(
@@ -39,13 +42,13 @@ class OC157App(BaseApp):
         """Register callbacks to app."""
         plot_from_table_column(
             table_id=self.table_id,
-            plot_id="oc157-figure-placeholder",
+            plot_id=f"{BENCHMARK_NAME}-figure-placeholder",
             column_to_plot={"MAE": SCATTER, "Ranking Error": SCATTER},
         )
 
         struct_from_scatter(
-            scatter_id="figure",
-            struct_id="oc157-struct-placeholder",
+            scatter_id=f"{BENCHMARK_NAME}-figure",
+            struct_id=f"{BENCHMARK_NAME}-struct-placeholder",
             structs=STRUCTS,
         )
 
@@ -68,8 +71,8 @@ def get_app() -> OC157App:
         ),
         table_path=DATA_PATH / "oc157_metrics_table.json",
         extra_components=[
-            Div(id="oc157-figure-placeholder"),
-            Div(id="oc157-struct-placeholder"),
+            Div(id=f"{BENCHMARK_NAME}-figure-placeholder"),
+            Div(id=f"{BENCHMARK_NAME}-struct-placeholder"),
         ],
     )
 
