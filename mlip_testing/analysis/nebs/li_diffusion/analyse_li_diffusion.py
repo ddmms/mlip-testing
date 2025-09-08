@@ -57,7 +57,6 @@ def plot_nebs(model: str, path: Literal["b", "c"]) -> None:
         dict[str, tuple[list[float], list[float]]]
             Dictionary of tuples of image/energy for each model.
         """
-        OUT_PATH.mkdir(parents=True, exist_ok=True)
         results = {}
         structs = read(
             CALC_PATH / f"li_diffusion_{path.lower()}-{model}-neb-band.extxyz",
@@ -67,7 +66,9 @@ def plot_nebs(model: str, path: Literal["b", "c"]) -> None:
             list(range(len(structs))),
             [struct.get_potential_energy() for struct in structs],
         ]
-        write(OUT_PATH / f"{model}-{path.lower()}-neb-band.extxyz", structs)
+        structs_dir = OUT_PATH / model
+        structs_dir.mkdir(parents=True, exist_ok=True)
+        write(structs_dir / f"{model}-{path.lower()}-neb-band.extxyz", structs)
 
         return results
 
