@@ -50,6 +50,7 @@ class OC157App(BaseApp):
             scatter_id=f"{BENCHMARK_NAME}-figure",
             struct_id=f"{BENCHMARK_NAME}-struct-placeholder",
             structs=STRUCTS,
+            mode="traj",
         )
 
 
