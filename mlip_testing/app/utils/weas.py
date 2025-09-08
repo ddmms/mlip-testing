@@ -3,9 +3,14 @@
 from __future__ import annotations
 
 from pathlib import Path
+from typing import Literal
 
 
-def generate_weas_html(filename: str | Path) -> str:
+def generate_weas_html(
+    filename: str | Path,
+    mode: Literal["struct", "traj"] = "struct",
+    index: int = 0,
+) -> str:
     """
     Generate HTML for WEAS.
 
@@ -13,12 +18,26 @@ def generate_weas_html(filename: str | Path) -> str:
     ----------
     filename
         Path of structure file.
+    mode
+        Whether viewing a single structure (or set of structures) ("struct"), or
+        if different views of the a trajectory are being selected ("traj").
+    index
+        Frame of structure file to load, or of trajectory to view. In "struct" mode,
+        all structures will be loaded by default. In "traj" mode, the first frame will
+        be loaded by default.
 
     Returns
     -------
     str
         HTML for WEAS to visualise structure.
     """
+    if mode == "struct":
+        frame = 0
+        atoms_txt = f"atoms[{index}" if index else "atoms"
+    elif mode == "traj":
+        frame = index
+        atoms_txt = "atoms"
+
     return f"""
     <!doctype html>
     <html lang="en">
@@ -55,44 +74,23 @@ def generate_weas_html(filename: str | Path) -> str:
         if (filename.endsWith(".xyz") || filename.endsWith(".extxyz")) {{
 
             const atoms = parseXYZ(structureData);
-            editor.avr.atoms = atoms;
+            editor.avr.atoms = {atoms_txt};
             editor.avr.modelStyle = 1;
 
         }} else if (filename.endsWith(".cif")) {{
 
             const atoms = parseCIF(structureData);
-            editor.avr.atoms = atoms;
+            editor.avr.atoms = {atoms_txt};
             editor.avr.showBondedAtoms = true;
             editor.avr.colorType = "VESTA";
             editor.avr.boundary = [[-0.01, 1.01], [-0.01, 1.01], [-0.01, 1.01]];
             editor.avr.modelStyle = 2;
 
-        }} else if (filename.endsWith(".cube")) {{
-
-            const data = parseCube(structureData);
-            editor.avr.atoms = data.atoms;
-            editor.avr.volumetricData = data.volumetricData;
-            editor.avr.isosurfaceManager.fromSettings({{
-            positive: {{ isovalue: 0.0002, mode: 1, step_size: 1 }},
-            negative: {{ isovalue: -0.0002, color: "#ff0000", mode: 1 }},
-            }});
-            editor.avr.isosurfaceManager.drawIsosurfaces();
-
-        }} else if (filename.endsWith(".xsf")) {{
-
-            const data = parseXSF(structureData);
-            editor.avr.atoms = data.atoms;
-            editor.avr.volumetricData = data.volumetricData;
-            editor.avr.isosurfaceManager.fromSettings({{
-            positive: {{ isovalue: 0.15, mode: 1 }},
-            negative: {{ isovalue: -0.15, color: "#ff0000", mode: 1 }},
-            }});
-            editor.avr.isosurfaceManager.drawIsosurfaces();
-
         }} else {{
             document.getElementById("viewer").innerText = "Unsupported file format.";
         }}
 
+        editor.avr.currentFrame = {frame};
         editor.render();
 
         </script>

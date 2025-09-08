@@ -2,8 +2,11 @@
 
 from __future__ import annotations
 
+from typing import Literal
+
 from dash import Input, Output, callback
 from dash.dcc import Graph
+from dash.exceptions import PreventUpdate
 from dash.html import Div, Iframe
 
 from mlip_testing.app.utils.weas import generate_weas_html
@@ -44,7 +47,9 @@ def plot_from_table_column(
             return Div("Click on a metric to view plot.")
         column_id = active_cell.get("column_id", None)
         if column_id:
-            return Div(column_to_plot[column_id])
+            if column_id in column_to_plot:
+                return Div(column_to_plot[column_id])
+            raise PreventUpdate
         raise ValueError("Invalid column_id")
 
 
@@ -91,7 +96,12 @@ def plot_from_table_cell(
         return Div("Click on a metric to view plot.")
 
 
-def struct_from_scatter(scatter_id: str, struct_id: str, structs: list[str]) -> None:
+def struct_from_scatter(
+    scatter_id: str,
+    struct_id: str,
+    structs: str | list[str],
+    mode: Literal["struct", "traj"] = "struct",
+) -> None:
     """
     Attach callback to show a structure when a scatter point is clicked.
 
@@ -100,12 +110,19 @@ def struct_from_scatter(scatter_id: str, struct_id: str, structs: list[str]) -> 
     scatter_id
         ID for Dash scatter being clicked.
     struct_id
-        ID for Dash plot placeholder Div.
+        ID for Dash plot placeholder Div where structures will be visualised.
     structs
         List of structure filenames in same order as scatter data to be visualised.
+    mode
+        Whether to display a single structure ("struct"), or trajectory from an initial
+        image ("traj"). Default is "struct".
     """
 
-    @callback(Output(struct_id, "children"), Input(scatter_id, "clickData"))
+    @callback(
+        Output(struct_id, "children", allow_duplicate=True),
+        Input(scatter_id, "clickData"),
+        prevent_initial_call="initial_duplicate",
+    )
     def show_struct(click_data):
         """
         Register callback to show structure when a scatter point is clicked.
@@ -123,9 +140,17 @@ def struct_from_scatter(scatter_id: str, struct_id: str, structs: list[str]) -> 
         if not click_data:
             return None
         idx = click_data["points"][0]["pointNumber"]
+
+        if isinstance(structs, str):
+            struct = structs
+            index = idx
+        else:
+            struct = structs[idx]
+            index = 0
+
         return Div(
             Iframe(
-                srcDoc=generate_weas_html(structs[idx]),
+                srcDoc=generate_weas_html(struct, mode, index),
                 style={
                     "height": "550px",
                     "width": "100%",
