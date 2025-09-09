@@ -114,6 +114,7 @@ class ElementalSlabOxygenAdsorptionBenchmark(zntrack.Node):
 
         # Write all structures organized by system
         write_dir = OUT_PATH / self.model_name
+        write_dir.mkdir(parents=True, exist_ok=True)
         for triplet in triplets_list:
             system_name = triplet[0].info["system_name"]
             write(write_dir / f"{system_name}.xyz", triplet)
