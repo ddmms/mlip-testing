@@ -65,7 +65,7 @@ def get_app() -> S24App:
             "Performance in predicting adsorption energies for oxygen on "
             "elemental slabs."
         ),
-        table_path=DATA_PATH / "s24_metrics_table.json",
+        table_path=DATA_PATH / "elemental_slab_oxygen_adsorption_metrics_table.json",
         extra_components=[
             Div(id="s24-figure-placeholder"),
             Div(id="s24-struct-placeholder"),
