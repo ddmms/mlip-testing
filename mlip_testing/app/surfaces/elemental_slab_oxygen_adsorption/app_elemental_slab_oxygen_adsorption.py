@@ -7,7 +7,11 @@ from pathlib import Path
 from dash import Dash
 from dash.html import Div
 
-from mlip_testing.app.surfaces.S24.app_S24 import S24App
+from mlip_testing.app.base_app import BaseApp
+from mlip_testing.app.utils.build_callbacks import (
+    plot_from_table_column,
+    struct_from_scatter,
+)
 from mlip_testing.app.utils.load import read_plot
 from mlip_testing.calcs.models.models import MODELS
 
@@ -25,6 +29,24 @@ STRUCTS = [
     f"assets/elemental_slab_oxygen_adsorption/{list(MODELS.keys())[0]}/{struct_file.stem}.xyz"
     for struct_file in STRUCTS_DIR.glob("*.xyz")
 ]
+
+
+class S24App(BaseApp):
+    """S24 benchmark app layout and callbacks."""
+
+    def register_callbacks(self) -> None:
+        """Register callbacks to app."""
+        plot_from_table_column(
+            table_id=self.table_id,
+            plot_id="s24-figure-placeholder",
+            column_to_plot={"MAE": SCATTER},
+        )
+
+        struct_from_scatter(
+            scatter_id="figure",
+            struct_id="s24-struct-placeholder",
+            structs=STRUCTS,
+        )
 
 
 def get_app() -> S24App:
