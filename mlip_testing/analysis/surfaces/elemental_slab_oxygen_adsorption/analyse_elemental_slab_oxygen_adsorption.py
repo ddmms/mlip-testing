@@ -59,12 +59,12 @@ def system_names() -> list:
     list
         List of all system names.
     """
-    system_names = []
+    system_names_list = []
     for model_name in MODELS:
-        for system_path in (CALC_PATH / model_name).glob("*.xyz"):
-            system_names.append(system_path.stem)
-        break
-    return system_names
+        for system_path in sorted((CALC_PATH / model_name).glob("*.xyz")):
+            system_names_list.append(system_path.stem)
+        break  # only need the first model to list available systems
+    return system_names_list
 
 
 @pytest.fixture
