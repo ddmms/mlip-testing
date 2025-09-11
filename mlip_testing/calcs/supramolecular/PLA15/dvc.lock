@@ -1,0 +1,22 @@
+schema: '2.0'
+stages:
+  mace_mp_0b3_PLA15_Benchmark:
+    cmd: zntrack run calc_PLA15.PLA15_Benchmark --name
+      mace_mp_0b3_PLA15_Benchmark
+    params:
+      params.yaml:
+        mace_mp_0b3_PLA15_Benchmark:
+          model:
+            _cls: mlipx.nodes.generic_ase.GenericASECalculator
+            class_name: mace_mp
+            device: auto
+            kwargs:
+              model: medium-0b3
+            module: mace.calculators
+            spec:
+          model_name: mace_mp_0b3
+    outs:
+    - path: nodes/mace_mp_0b3/PLA15_Benchmark/node-meta.json
+      hash: md5
+      md5: 952aac0d75bcdbff5b9ce2efe8296d61
+      size: 687
