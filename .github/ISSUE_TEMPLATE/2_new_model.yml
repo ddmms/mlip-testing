@@ -1,5 +1,5 @@
 name: New model
-description: Propose or discuss testing a new model
+description: Propose or discuss benchmarking a new model.
 labels: ["new model"]
 body:
 

@@ -1,5 +1,5 @@
 name: New benchmark
-description: Propose or discuss a new benchmark
+description: Propose or discuss a new benchmark for existing models
 labels: ["new benchmark"]
 body:
 
