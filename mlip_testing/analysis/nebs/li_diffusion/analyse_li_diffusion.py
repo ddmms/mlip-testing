@@ -2,29 +2,18 @@
 
 from __future__ import annotations
 
-from pathlib import Path
 from typing import Literal
 
 from ase.io import read, write
 import pytest
 
 from mlip_testing.analysis.utils.decorators import build_table, plot_scatter
+from mlip_testing.app import APP_ROOT
+from mlip_testing.calcs import CALCS_ROOT
 from mlip_testing.calcs.models.models import MODELS
 
-CALC_PATH = (
-    Path(__file__).parent.parent.parent.parent
-    / "calcs"
-    / "nebs"
-    / "li_diffusion"
-    / "outputs"
-)
-OUT_PATH = (
-    Path(__file__).parent.parent.parent.parent
-    / "app"
-    / "data"
-    / "nebs"
-    / "li_diffusion"
-)
+CALC_PATH = CALCS_ROOT / "nebs" / "li_diffusion" / "outputs"
+OUT_PATH = APP_ROOT / "data" / "nebs" / "li_diffusion"
 
 REF_VALUES = {"path_b": 0.27, "path_c": 2.5}
 
