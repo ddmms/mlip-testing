@@ -156,7 +156,3 @@ def build_project(repro: bool = False) -> None:
 def test_s24():
     """Run S24 benchmark via pytest."""
     build_project(repro=True)
-
-
-if __name__ == "__main__":
-    build_project()
