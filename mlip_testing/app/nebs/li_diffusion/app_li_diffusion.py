@@ -7,6 +7,7 @@ from pathlib import Path
 from dash import Dash
 from dash.html import Div
 
+from mlip_testing.app import APP_ROOT
 from mlip_testing.app.base_app import BaseApp
 from mlip_testing.app.utils.build_callbacks import (
     plot_from_table_cell,
@@ -16,7 +17,7 @@ from mlip_testing.app.utils.load import read_plot
 from mlip_testing.calcs.models.models import MODELS
 
 BENCHMARK_NAME = Path(__file__).name.removeprefix("app_").removesuffix(".py")
-DATA_PATH = Path(__file__).parent.parent.parent / "data" / "nebs" / "li_diffusion"
+DATA_PATH = APP_ROOT / "data" / "nebs" / "li_diffusion"
 
 SCATTER_PLOTS = {
     model: {

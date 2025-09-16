@@ -8,6 +8,7 @@ from dash import Dash
 from dash.html import Div
 import numpy as np
 
+from mlip_testing.app import APP_ROOT
 from mlip_testing.app.base_app import BaseApp
 from mlip_testing.app.utils.build_callbacks import (
     plot_from_table_column,
@@ -17,7 +18,7 @@ from mlip_testing.app.utils.load import read_plot
 from mlip_testing.calcs.models.models import MODELS
 
 BENCHMARK_NAME = Path(__file__).name.removeprefix("app_").removesuffix(".py")
-DATA_PATH = Path(__file__).parent.parent.parent / "data" / "surfaces" / "OC157"
+DATA_PATH = APP_ROOT / "data" / "surfaces" / "OC157"
 
 SCATTER = read_plot(
     DATA_PATH / "figure_rel_energies.json", id=f"{BENCHMARK_NAME}-figure"
