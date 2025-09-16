@@ -31,6 +31,11 @@ of structures. Models receive a score of 0, 0.5, or 1, based on whether the pred
 lowest and highest energy pairs match the reference predictions, and this is averaged
 for all 157 combinations.
 
+Computational cost
+------------------
+
+Low: tests are likely to take a couple of minutes to run on CPU.
+
 Data availability
 -----------------
 
@@ -67,6 +72,11 @@ For each combination of surface, molecule, and surface + molecule, the adsorptio
 energy is calculated by taking the difference between the energy of the surface +
 molecule and the sum of individual surface and molecule energies. This is compared to
 the reference adsorption energy, calculated in the same way.
+
+Computational cost
+------------------
+
+Very low: tests are likely to take less than a minute to run on CPU.
 
 Data availability
 -----------------

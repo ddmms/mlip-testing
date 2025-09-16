@@ -29,6 +29,11 @@ through deletion an atom from the initial structure. These structures are relaxe
 and the Nudged Elastic Band method is used to calculate the energy barrier. This is
 compared to the reference activation energy for this path.
 
+Computational cost
+------------------
+
+Medium: tests are likely to take several minutes to run on CPU.
+
 
 Data availability
 -----------------
