@@ -1,9 +1,9 @@
 ==========
-User guide
+Benchmarks
 ==========
 
 .. toctree::
     :maxdepth: 3
 
-    get_started
-    benchmarks/index
+    surfaces
+    nebs
