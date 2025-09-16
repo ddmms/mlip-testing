@@ -8,7 +8,7 @@ OC157
 Summary
 -------
 
-Performance in predicting relative energies between three structures for 157
+Performance in predicting relative energies between three configurations for 157
 molecule-surface combinations.
 
 Metrics
