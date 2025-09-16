@@ -13,7 +13,6 @@
 *.extxyz
 *.yml
 *.yaml
-!dvc.yaml
 *.pdf
 *.hdf5
 *.traj
