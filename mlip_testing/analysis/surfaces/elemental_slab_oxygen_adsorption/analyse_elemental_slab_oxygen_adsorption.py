@@ -124,7 +124,7 @@ def adsorption_energies() -> dict[str, list]:
 
 
 @pytest.fixture
-def s24_mae(adsorption_energies) -> dict[str, float]:
+def adsorption_mae(adsorption_energies) -> dict[str, float]:
     """
     Get mean absolute error for adsorption energies.
 
@@ -154,13 +154,13 @@ def s24_mae(adsorption_energies) -> dict[str, float]:
         "MAE": "Mean Absolute Error (eV)",
     },
 )
-def metrics(s24_mae: dict[str, float]) -> dict[str, dict]:
+def metrics(adsorption_mae: dict[str, float]) -> dict[str, dict]:
     """
-    Get all S24 metrics.
+    Get all metrics.
 
     Parameters
     ----------
-    s24_mae
+    adsorption_mae
         Mean absolute errors for all models.
 
     Returns
@@ -169,17 +169,17 @@ def metrics(s24_mae: dict[str, float]) -> dict[str, dict]:
         Metric names and values for all models.
     """
     return {
-        "MAE": s24_mae,
+        "MAE": adsorption_mae,
     }
 
 
-def test_s24(metrics: dict[str, dict]) -> None:
+def test_elemental_slab_oxygen_adsorption(metrics: dict[str, dict]) -> None:
     """
-    Run S24 test.
+    Run elemental_slab_oxygen_adsorption test.
 
     Parameters
     ----------
     metrics
-        All S24 metrics.
+        All elemental_slab_oxygen_adsorption metrics.
     """
     return
