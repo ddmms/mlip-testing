@@ -15,7 +15,8 @@ PR author **must** check the checkboxes below when creating the PR.
 ## Summary
 
 <!-- Describe the new model. This can be brief, as most information can be in the linked issue. -->
-
+## Model Reference
+<!-- Add a reference for the model and a link to download the model checkpoint. -->
 ## Linked issue
 
 <!-- Enter the number of the issue this resolves. This should be labelled as "new model". -->
