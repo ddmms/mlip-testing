@@ -25,7 +25,7 @@ class ElementalSlabOxygenAdsorptionBenchmark(zntrack.Node):
     Benchmark model predictions of adsorption energies for oxygen on elemental slabs.
 
     The elemental slabs are obtained using the Materials Project API.
-    For each element, the most bulk crystal is obtained.Then, the most stable surface
+    For each element, the most bulk crystal is obtained. Then, the most stable surface
     from this bulk crystal is obtained.
     The details of how these surfaces are obtained are in Tran et al. [1].
 
