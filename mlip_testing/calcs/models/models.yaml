@@ -19,7 +19,7 @@ mace_mp_0b3:
 #   kwargs:
 #     model: "medium-mpa-0"
 
-#mace_omat_0:
+# mace_omat_0:
 #  module: mace.calculators
 #  class_name: mace_mp
 #  device: "auto"
