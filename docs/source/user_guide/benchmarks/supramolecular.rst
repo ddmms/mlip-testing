@@ -16,23 +16,12 @@ charged with charges +1 (TYK2) and -2 (FXa).
 Metrics
 -------
 
-Interaction energy error (all complexes)
+Interaction energy error
 
 For each complex, the interaction energy is calculated by taking the difference in energy
 between the host-guest complex and the sum of the individual host and guest energies. This is
 compared to the reference interaction energy, calculated in the same way.
 
-Interaction energy error (charged complexes)
-
-For each charged complex, the interaction energy is calculated by taking the difference in energy
-between the host-guest complex and the sum of the individual host and guest energies. This is
-compared to the reference interaction energy, calculated in the same way.
-
-Interaction energy error (neutral complexes)
-
-For each neutral complex, the interaction energy is calculated by taking the difference in energy
-between the host-guest complex and the sum of the individual host and guest energies. This is
-compared to the reference interaction energy, calculated in the same way.
 
 Computational cost
 ------------------
