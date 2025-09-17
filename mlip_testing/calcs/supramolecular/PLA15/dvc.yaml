@@ -1,8 +1,0 @@
-stages:
-  mace_mp_0b3_PLA15_Benchmark:
-    cmd: zntrack run calc_PLA15.PLA15_Benchmark --name mace_mp_0b3_PLA15_Benchmark
-    metrics:
-    - nodes/mace_mp_0b3/PLA15_Benchmark/node-meta.json:
-        cache: true
-    params:
-    - mace_mp_0b3_PLA15_Benchmark

@@ -1,8 +1,0 @@
-stages:
-  mace_mp_0b3_PLF547_Benchmark:
-    cmd: zntrack run calc_PLF547.PLF547_Benchmark --name mace_mp_0b3_PLF547_Benchmark
-    metrics:
-    - nodes/mace_mp_0b3/PLF547_Benchmark/node-meta.json:
-        cache: true
-    params:
-    - mace_mp_0b3_PLF547_Benchmark
