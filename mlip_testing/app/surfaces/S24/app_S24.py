@@ -7,6 +7,7 @@ from pathlib import Path
 from dash import Dash
 from dash.html import Div
 
+from mlip_testing.app import APP_ROOT
 from mlip_testing.app.base_app import BaseApp
 from mlip_testing.app.utils.build_callbacks import (
     plot_from_table_column,
@@ -16,18 +17,7 @@ from mlip_testing.app.utils.load import read_plot
 from mlip_testing.calcs.models.models import MODELS
 
 BENCHMARK_NAME = Path(__file__).name.removeprefix("app_").removesuffix(".py")
-DATA_PATH = Path(__file__).parent.parent.parent / "data" / "surfaces" / "S24"
-
-SCATTER = read_plot(
-    DATA_PATH / "figure_adsorption_energies.json", id=f"{BENCHMARK_NAME}-figure"
-)
-STRUCTS_DIR = DATA_PATH / list(MODELS.keys())[0]
-# Assets dir will be parent directory
-STRUCTS = [
-    f"assets/surfaces/S24/{list(MODELS.keys())[0]}/{struct_file.stem}.xyz"
-    for struct_file in STRUCTS_DIR.glob("*.xyz")
-    if struct_file.name != "s24_mol_surface_atoms.xyz"
-]
+DATA_PATH = APP_ROOT / "data" / "surfaces" / "S24"
 
 
 class S24App(BaseApp):
@@ -35,16 +25,30 @@ class S24App(BaseApp):
 
     def register_callbacks(self) -> None:
         """Register callbacks to app."""
+        scatter = read_plot(
+            DATA_PATH / "figure_adsorption_energies.json",
+            id=f"{BENCHMARK_NAME}-figure",
+        )
+
+        structs_dir = DATA_PATH / list(MODELS.keys())[0]
+
+        # Assets dir will be parent directory
+        structs = [
+            f"assets/surfaces/S24/{list(MODELS.keys())[0]}/{struct_file.stem}.xyz"
+            for struct_file in structs_dir.glob("*.xyz")
+            if struct_file.name != "s24_mol_surface_atoms.xyz"
+        ]
+
         plot_from_table_column(
             table_id=self.table_id,
             plot_id=f"{BENCHMARK_NAME}-figure-placeholder",
-            column_to_plot={"MAE": SCATTER},
+            column_to_plot={"MAE": scatter},
         )
 
         struct_from_scatter(
             scatter_id=f"{BENCHMARK_NAME}-figure",
             struct_id=f"{BENCHMARK_NAME}-struct-placeholder",
-            structs=STRUCTS,
+            structs=structs,
             mode="traj",
         )
 

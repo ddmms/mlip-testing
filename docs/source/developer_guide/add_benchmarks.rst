@@ -44,18 +44,18 @@ Running Calculations
 2. Write a script that will run the MLIP calculations of interest for each model being tested.
 
 The file should be named ``calc_[benchmark_name].py``,
-and placed in ``mlip_testing/calcs/[benchmark_name]``.
+and placed in ``mlip_testing/calcs/[category]/[benchmark_name]``.
 
 While not a requirement, we recommend placing input files in
-``mlip_testing/calcs/[benchmark_name]/data``, and output files in
-``mlip_testing/calcs/[benchmark_name]/outputs``, for consistency.
+``mlip_testing/calcs/[category]/[benchmark_name]/data``, and output files in
+``mlip_testing/calcs/[category]/[benchmark_name]/outputs``, for consistency.
 
 The test contained in this file may be runnable as a standalone script,
 but it should also be possible to run with ``pytest``, e.g.:
 
 .. code-block:: bash
 
-    pytest -v -s mlip_testing/calcs/[benchmark_name]/calc_[benchmark_name].py
+    pytest -v -s mlip_testing/calcs/[category]/[benchmark_name]/calc_[benchmark_name].py
 
 
 .. note::
@@ -121,7 +121,7 @@ b. Defining a ``ZnTrack`` node to run via ``mlipx``:
 
 The process of running these is largely as
 `described by mlipx <https://mlipx.readthedocs.io/en/latest/quickstart/cli.html>`_,
-including running ``dvc init`` in ``mlip_testing/calcs/[benchmark_name]``.
+including running ``dvc init`` in ``mlip_testing/calcs/[category]/[benchmark_name]``.
 
 .. note::
 
@@ -229,12 +229,13 @@ directory to be accessed by the app.
 As with the script created in :ref:`calculations`, we create a new file to be run by ``pytest``,
 containing a function beginning with ``test_`` to launch the analysis.
 
-In this case, we name the file ``mlip_testing/analysis/[benchmark_name]/analyse_[benchmark_name].py``,
+In this case, we name the file
+``mlip_testing/analysis/[category]/[benchmark_name]/analyse_[benchmark_name].py``,
 such that it can be run using:
 
 .. code-block:: bash
 
-    pytest -v -s mlip_testing/analysis/[benchmark_name]/analyse_[benchmark_name].py
+    pytest -v -s mlip_testing/analysis/[category]/[benchmark_name]/analyse_[benchmark_name].py
 
 
 In order to automatically generate the components for our application, we will make use
@@ -256,7 +257,7 @@ For ``@build_table``, the value returned should be of the form:
 This will generate a table with columns for each metric, as well as "MLIP", "Score",
 and "Rank" columns. Tooltips for each column header can also be set by the decorator,
 as well as the location to save the JSON file to be loaded when building the app,
-which typically would be placed in ``mlip_testing/app/data/[benchmark_name]``.
+which typically would be placed in ``mlip_testing/app/data/[category]/[benchmark_name]``.
 
 Every benchmark should have at least one of these tables, which includes
 the score for each metric, and allowing the table to calculate an overall score for the
@@ -308,8 +309,11 @@ which allows the value returned by a function to be used directly as a parameter
 for other functions.
 
 If your benchmark contains structures to be visualised, or images to be loaded, these
-should be saved to ``mlip_testing/app/data/[benchmark_name]``, as they must be added as
-``assets`` to be loaded into the app.
+should be saved to ``mlip_testing/app/data/[category]/[benchmark_name]``, as they must
+be added as ``assets`` to be loaded into the app.
+
+Absolute paths to ``mlip_testing/app`` and ``mlip_testing/calcs`` can be imported for
+convenience.
 
 .. note::
 
@@ -320,10 +324,12 @@ should be saved to ``mlip_testing/app/data/[benchmark_name]``, as they must be a
 
     from mlip_testing.analysis.utils.decorators import build_table, plot_parity
     from mlip_testing.analysis.utils.utils import mae
+    from mlip_testing.app import APP_ROOT
+    from mlip_testing.calcs import CALCS_ROOT
     from mlip_testing.calcs.models.models import MODELS
 
-    CALC_PATH = Path(__file__).parent.parent.parent / "calcs" / [benchmark_name] / "outputs"
-    OUT_PATH = Path(__file__).parent.parent.parent / "app" / "data" / [benchmark_name]
+    CALC_PATH = CALCS_ROOT / [category] / [benchmark_name] / "outputs"
+    OUT_PATH = APP_ROOT / "data" / [category] / [benchmark_name]
 
     REF_VALUES = {"path_b": 0.27, "path_c": 2.5}
 

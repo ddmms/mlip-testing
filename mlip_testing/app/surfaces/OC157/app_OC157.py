@@ -8,6 +8,7 @@ from dash import Dash
 from dash.html import Div
 import numpy as np
 
+from mlip_testing.app import APP_ROOT
 from mlip_testing.app.base_app import BaseApp
 from mlip_testing.app.utils.build_callbacks import (
     plot_from_table_column,
@@ -17,22 +18,7 @@ from mlip_testing.app.utils.load import read_plot
 from mlip_testing.calcs.models.models import MODELS
 
 BENCHMARK_NAME = Path(__file__).name.removeprefix("app_").removesuffix(".py")
-DATA_PATH = Path(__file__).parent.parent.parent / "data" / "surfaces" / "OC157"
-
-SCATTER = read_plot(
-    DATA_PATH / "figure_rel_energies.json", id=f"{BENCHMARK_NAME}-figure"
-)
-STRUCTS_DIR = DATA_PATH / list(MODELS.keys())[0]
-# Assets dir will be parent directory
-STRUCTS = list(
-    np.repeat(
-        [
-            f"assets/surfaces/OC157/{list(MODELS.keys())[0]}/{i}.xyz"
-            for i in range(len(list(STRUCTS_DIR.glob("*.xyz"))))
-        ],
-        3,
-    )
-)
+DATA_PATH = APP_ROOT / "data" / "surfaces" / "OC157"
 
 
 class OC157App(BaseApp):
@@ -40,16 +26,33 @@ class OC157App(BaseApp):
 
     def register_callbacks(self) -> None:
         """Register callbacks to app."""
+        scatter = read_plot(
+            DATA_PATH / "figure_rel_energies.json", id=f"{BENCHMARK_NAME}-figure"
+        )
+
+        structs_dir = DATA_PATH / list(MODELS.keys())[0]
+
+        # Assets dir will be parent directory
+        structs = list(
+            np.repeat(
+                [
+                    f"assets/surfaces/OC157/{list(MODELS.keys())[0]}/{i}.xyz"
+                    for i in range(len(list(structs_dir.glob("*.xyz"))))
+                ],
+                3,
+            )
+        )
+
         plot_from_table_column(
             table_id=self.table_id,
             plot_id=f"{BENCHMARK_NAME}-figure-placeholder",
-            column_to_plot={"MAE": SCATTER, "Ranking Error": SCATTER},
+            column_to_plot={"MAE": scatter, "Ranking Error": scatter},
         )
 
         struct_from_scatter(
             scatter_id=f"{BENCHMARK_NAME}-figure",
             struct_id=f"{BENCHMARK_NAME}-struct-placeholder",
-            structs=STRUCTS,
+            structs=structs,
             mode="traj",
         )
 

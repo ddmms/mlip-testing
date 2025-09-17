@@ -2,26 +2,18 @@
 
 from __future__ import annotations
 
-from pathlib import Path
-
 from ase.io import read, write
 import numpy as np
 import pytest
 
 from mlip_testing.analysis.utils.decorators import build_table, plot_parity
 from mlip_testing.analysis.utils.utils import mae
+from mlip_testing.app import APP_ROOT
+from mlip_testing.calcs import CALCS_ROOT
 from mlip_testing.calcs.models.models import MODELS
 
-CALC_PATH = (
-    Path(__file__).parent.parent.parent.parent
-    / "calcs"
-    / "surfaces"
-    / "OC157"
-    / "outputs"
-)
-OUT_PATH = (
-    Path(__file__).parent.parent.parent.parent / "app" / "data" / "surfaces" / "OC157"
-)
+CALC_PATH = CALCS_ROOT / "surfaces" / "OC157" / "outputs"
+OUT_PATH = APP_ROOT / "data" / "surfaces" / "OC157"
 
 
 def get_relative_energies(energies: list) -> list:

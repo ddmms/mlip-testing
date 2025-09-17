@@ -187,7 +187,3 @@ def build_project(repro: bool = False) -> None:
 def test_oc157():
     """Run OC157 benchmark via pytest."""
     build_project(repro=True)
-
-
-if __name__ == "__main__":
-    build_project()
