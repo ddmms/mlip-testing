@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from importlib import import_module
 from pathlib import Path
+import warnings
 
 from dash import Dash, Input, Output, callback
 from dash.dash_table import DataTable
@@ -40,23 +41,39 @@ def get_all_tests(
 
     # Build all layouts, and register all callbacks to main app.
     for test in tests:
-        # Import tab application layout/callbacks
-        test_name = test.parent.name
-        category_name = test.parent.parent.name
-        test_module = import_module(
-            f"mlip_testing.app.{category_name}.{test_name}.app_{test_name}"
-        )
-        test_app = test_module.get_app()
+        try:
+            # Import tab application layout/callbacks
+            test_name = test.parent.name
+            category_name = test.parent.parent.name
+            test_module = import_module(
+                f"mlip_testing.app.{category_name}.{test_name}.app_{test_name}"
+            )
+            test_app = test_module.get_app()
 
-        # Get layouts and tables for each category/test
-        if category_name not in layouts:
-            layouts[category_name] = {}
-            tables[category_name] = {}
-        layouts[category_name][test_app.name] = test_app.layout
-        tables[category_name][test_app.name] = test_app.table
+            # Get layouts and tables for each category/test
+            if category_name not in layouts:
+                layouts[category_name] = {}
+                tables[category_name] = {}
+            layouts[category_name][test_app.name] = test_app.layout
+            tables[category_name][test_app.name] = test_app.table
+        except FileNotFoundError as err:
+            warnings.warn(
+                f"Unable to load layout for {test_name} in {category_name} category. "
+                f"Full error:\n{err}",
+                stacklevel=2,
+            )
+            continue
 
         # Register tab callbacks
-        test_app.register_callbacks()
+        try:
+            test_app.register_callbacks()
+        except FileNotFoundError as err:
+            warnings.warn(
+                f"Unable to register callbacks for {test_name} in {category_name} "
+                f"category. Full error:\n{err}",
+                stacklevel=2,
+            )
+            continue
 
     return layouts, tables
 
