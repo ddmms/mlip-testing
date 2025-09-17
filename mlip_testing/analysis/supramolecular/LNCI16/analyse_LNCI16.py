@@ -30,7 +30,7 @@ OUT_PATH = (
 def get_system_names() -> list[str]:
     """
     Get list of LNCI16 system names.
-    
+
     Returns
     -------
     list[str]
@@ -50,7 +50,7 @@ def get_system_names() -> list[str]:
 def get_atom_counts() -> list[int]:
     """
     Get complex atom counts for LNCI16.
-    
+
     Returns
     -------
     list[int]
@@ -68,7 +68,7 @@ def get_atom_counts() -> list[int]:
 def get_charges() -> list[int]:
     """
     Get complex charges for LNCI16.
-    
+
     Returns
     -------
     list[int]
@@ -86,7 +86,7 @@ def get_charges() -> list[int]:
 def get_is_charged() -> list[bool]:
     """
     Get whether systems are charged for LNCI16.
-    
+
     Returns
     -------
     list[bool]
@@ -195,104 +195,14 @@ def lnci16_mae(interaction_energies) -> dict[str, float]:
 
 
 @pytest.fixture
-def charged_systems_mae(interaction_energies) -> dict[str, float]:
-    """
-    Get MAE for charged systems only.
-
-    Parameters
-    ----------
-    interaction_energies
-        Dictionary of reference and predicted interaction energies.
-
-    Returns
-    -------
-    dict[str, float]
-        Dictionary of MAE for charged systems.
-    """
-    charged_indices = []
-    system_names = get_system_names()
-
-    # Systems with non-zero charge
-    charged_systems = ["TYK2", "FXa"]
-    for i, system in enumerate(system_names):
-        if system in charged_systems:
-            charged_indices.append(i)
-
-    results = {}
-    if charged_indices:
-        ref_charged = [interaction_energies["ref"][i] for i in charged_indices]
-
-        for model_name in MODELS:
-            if interaction_energies[model_name]:
-                pred_charged = [
-                    interaction_energies[model_name][i] for i in charged_indices
-                ]
-                results[model_name] = mae(ref_charged, pred_charged)
-            else:
-                results[model_name] = float("nan")
-    else:
-        results = {model: float("nan") for model in MODELS}
-
-    return results
-
-
-@pytest.fixture
-def neutral_systems_mae(interaction_energies) -> dict[str, float]:
-    """
-    Get MAE for neutral systems only.
-
-    Parameters
-    ----------
-    interaction_energies
-        Dictionary of reference and predicted interaction energies.
-
-    Returns
-    -------
-    dict[str, float]
-        Dictionary of MAE for neutral systems.
-    """
-    neutral_indices = []
-    system_names = get_system_names()
-
-    # Systems with zero charge
-    charged_systems = ["TYK2", "FXa"]
-    for i, system in enumerate(system_names):
-        if system not in charged_systems:
-            neutral_indices.append(i)
-
-    results = {}
-    if neutral_indices:
-        ref_neutral = [interaction_energies["ref"][i] for i in neutral_indices]
-
-        for model_name in MODELS:
-            if interaction_energies[model_name]:
-                pred_neutral = [
-                    interaction_energies[model_name][i] for i in neutral_indices
-                ]
-                results[model_name] = mae(ref_neutral, pred_neutral)
-            else:
-                results[model_name] = float("nan")
-    else:
-        results = {model: float("nan") for model in MODELS}
-
-    return results
-
-
-@pytest.fixture
 @build_table(
     filename=OUT_PATH / "lnci16_metrics_table.json",
     metric_tooltips={
         "Model": "Name of the model",
         "MAE": "Mean Absolute Error for all systems (kcal/mol)",
-        "Neutral MAE": "MAE for neutral systems only (kcal/mol)",
-        "Charged MAE": "MAE for charged systems only (kcal/mol)",
     },
 )
-def metrics(
-    lnci16_mae: dict[str, float],
-    charged_systems_mae: dict[str, float],
-    neutral_systems_mae: dict[str, float],
-) -> dict[str, dict]:
+def metrics(lnci16_mae: dict[str, float]) -> dict[str, dict]:
     """
     Get all LNCI16 metrics.
 
@@ -300,10 +210,6 @@ def metrics(
     ----------
     lnci16_mae
         Mean absolute errors for all systems.
-    charged_systems_mae
-        Mean absolute errors for charged systems.
-    neutral_systems_mae
-        Mean absolute errors for neutral systems.
 
     Returns
     -------
@@ -312,8 +218,6 @@ def metrics(
     """
     return {
         "MAE": lnci16_mae,
-        "Neutral MAE": neutral_systems_mae,
-        "Charged MAE": charged_systems_mae,
     }
 
 
