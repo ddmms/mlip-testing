@@ -2,6 +2,16 @@
 Getting started
 ===============
 
+Please ensure you have consulted our
+`contribution guidelines <https://github.com/ddmms/mlip-testing/blob/main/CONTRIBUTING.md>`_
+and
+`coding style <https://github.com/ddmms/mlip-testing/blob/main/coding_style.md>`_
+before proceeding.
+
+
+Dependency management
++++++++++++++++++++++
+
 We recommend `installing uv <https://docs.astral.sh/uv/getting-started/installation/>`_ for dependency management when developing for ``mlip-testing``.
 
 This provides a number of useful features, including:

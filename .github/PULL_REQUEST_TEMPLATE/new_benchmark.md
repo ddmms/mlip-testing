@@ -18,15 +18,16 @@ PR author **must** check the checkboxes below when creating the PR.
 
 ## Linked issue
 
-<!-- Enter the number of the issue this resolves. This should be labelled as "new benchmark" -->
+<!-- Enter the number of the issue this resolves. This should be labelled as "new benchmark". -->
 Resolves #
 
 ## Progress
 
-<!-- Which aspects of the new benchmark are complete? -->
+<!-- Which aspects of adding the new benchmark are complete? Any issues encountered can also be discussed here. -->
 - [ ] Calculations
 - [ ] Analysis
 - [ ] Application
+- [ ] Documentation
 
 ## Testing
 
