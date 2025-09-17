@@ -248,6 +248,10 @@ def build_full_app(full_app: Dash) -> None:
     """
     # Get layouts and tables for each test, grouped by categories
     all_layouts, all_tables = get_all_tests()
+
+    if not all_layouts:
+        raise ValueError("No tests were built successfully")
+
     # Combine tests into categories and create category summary
     category_layouts, category_tables = build_category(all_layouts, all_tables)
     # Build overall summary table
