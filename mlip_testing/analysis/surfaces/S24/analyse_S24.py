@@ -49,12 +49,35 @@ def system_names() -> list:
     """
     system_names = []
     for model_name in MODELS:
-        for system_path in (CALC_PATH / model_name).glob("*.xyz"):
-            if system_path.name == "s24_mol_surface_atoms.xyz":
-                continue
-            system_names.append(system_path.stem)
-        break
+        model_dir = CALC_PATH / model_name
+        if model_dir.exists():
+            for system_path in sorted(model_dir.glob("*.xyz")):
+                mol_surface = read(system_path)
+                if "system_name" in mol_surface.info:
+                    system_names.append(mol_surface.info["system_name"])
+            break
     return system_names
+
+
+def sys_ids() -> list:
+    """
+    Get list of system IDs.
+
+    Returns
+    -------
+    list
+        List of all system IDs.
+    """
+    sys_ids = []
+    for model_name in MODELS:
+        model_dir = CALC_PATH / model_name
+        if model_dir.exists():
+            for system_path in sorted(model_dir.glob("*.xyz")):
+                mol_surface = read(system_path)
+                if "sys_id" in mol_surface.info:
+                    sys_ids.append(mol_surface.info["sys_id"])
+            break
+    return sys_ids
 
 
 @pytest.fixture
@@ -65,6 +88,7 @@ def system_names() -> list:
     y_label="Reference adsorption energy / eV",
     hoverdata={
         "System": system_names(),
+        "Sys ID": sys_ids(),
     },
 )
 def adsorption_energies() -> dict[str, list]:
@@ -80,39 +104,26 @@ def adsorption_energies() -> dict[str, list]:
     ref_stored = False
 
     for model_name in MODELS:
-        for system_path in sorted((CALC_PATH / model_name).glob("*.xyz")):
-            if system_path.name == "s24_mol_surface_atoms.xyz":
-                continue
-
-            structs = read(system_path, index=":")
-            if len(structs) != 3:
-                continue
-
-            surface, mol_surface, molecule = structs
-
-            # Get predicted energies
-            surface_e = surface.get_potential_energy()
-            mol_surf_e = mol_surface.get_potential_energy()
-            molecule_e = molecule.get_potential_energy()
-            pred_ads_energy = compute_adsorption_energy(
-                surface_e, mol_surf_e, molecule_e
-            )
+        model_dir = CALC_PATH / model_name
+        if not model_dir.exists():
+            results[model_name] = []
+            continue
+            
+        for system_path in sorted(model_dir.glob("*.xyz")):
+            mol_surface = read(system_path)
+            
+            # Get pre-calculated adsorption energies
+            pred_ads_energy = mol_surface.info["adsorption_energy"]
             results[model_name].append(pred_ads_energy)
-
-            # Get reference energies (only store once)
+            
             if not ref_stored:
-                ref_surface_e = surface.info["ref_energy"]
-                ref_mol_surf_e = mol_surface.info["ref_energy"]
-                ref_molecule_e = molecule.info["ref_energy"]
-                ref_ads_energy = compute_adsorption_energy(
-                    ref_surface_e, ref_mol_surf_e, ref_molecule_e
-                )
+                ref_ads_energy = mol_surface.info["ref_adsorption_energy"]
                 results["ref"].append(ref_ads_energy)
 
-            # Write structures in order
+            # Write molecule-surface structure to app data
             structs_dir = OUT_PATH / model_name
             structs_dir.mkdir(parents=True, exist_ok=True)
-            write(structs_dir / f"{system_path.stem}.xyz", structs)
+            write(structs_dir / f"{system_path.stem}.xyz", mol_surface)
 
         ref_stored = True
     return results

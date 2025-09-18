@@ -78,8 +78,6 @@ class S24Benchmark(zntrack.Node):
         data = get_benchmark_data("s24.zip") / "s24/s24_data.extxyz"
         atoms_list = read(data, ":")
 
-        mol_surface_list = []
-
         for i in tqdm(
             range(0, len(atoms_list), 3),
             desc=f"Processing Triplets for model: {self.model_name}",
@@ -87,8 +85,9 @@ class S24Benchmark(zntrack.Node):
             surface = atoms_list[i]
             mol_surface = atoms_list[i + 1]
             molecule = atoms_list[i + 2]
-            surface_formula = surface.get_chemical_formula()
-            molecule_formula = molecule.get_chemical_formula()
+            
+            # Create sys_id
+            sys_id = f"{(i // 3) + 1:03d}"
 
             # Store reference energies
             surface.info["ref_energy"] = surface.get_potential_energy()
@@ -96,34 +95,36 @@ class S24Benchmark(zntrack.Node):
             molecule.info["ref_energy"] = molecule.get_potential_energy()
 
             # Store system information
+            surface_formula = surface.get_chemical_formula()
+            molecule_formula = molecule.get_chemical_formula()
             system_name = f"{surface_formula}-{molecule_formula}"
-            surface.info["system_name"] = system_name
+            
+            mol_surface.info["sys_id"] = sys_id
             mol_surface.info["system_name"] = system_name
-            molecule.info["system_name"] = system_name
-
-            # Store structure types
-            surface.info["structure_type"] = "surface"
-            mol_surface.info["structure_type"] = "mol_surface"
-            molecule.info["structure_type"] = "molecule"
 
             # Evaluate with the model
             triplet = [surface, mol_surface, molecule]
             self.evaluate_energies(triplet, calc)
 
-            mol_surface_list.append(mol_surface)
+            # Calculate and store adsorption energies
+            surface_e = surface.get_potential_energy()
+            mol_surf_e = mol_surface.get_potential_energy()
+            molecule_e = molecule.get_potential_energy()
+            pred_ads_energy = self.compute_adsorption_energy(surface_e, mol_surf_e, molecule_e)
+            
+            ref_surface_e = surface.info["ref_energy"]
+            ref_mol_surf_e = mol_surface.info["ref_energy"]
+            ref_molecule_e = molecule.info["ref_energy"]
+            ref_ads_energy = self.compute_adsorption_energy(ref_surface_e, ref_mol_surf_e, ref_molecule_e)
+            
+            # Store adsorption energies in mol_surface
+            mol_surface.info["adsorption_energy"] = pred_ads_energy
+            mol_surface.info["ref_adsorption_energy"] = ref_ads_energy
 
-        # Write structures to output
-        write_dir = OUT_PATH / self.model_name
-        write_dir.mkdir(parents=True, exist_ok=True)
-        write(write_dir / "s24_mol_surface_atoms.xyz", mol_surface_list)
-
-        # Write all structures organized by system
-        for i in range(0, len(atoms_list), 3):
-            surface = atoms_list[i]
-            mol_surface = atoms_list[i + 1]
-            molecule = atoms_list[i + 2]
-            system_name = surface.info["system_name"]
-            write(write_dir / f"{system_name}.xyz", [surface, mol_surface, molecule])
+            # Save individual molecule-surface structure using sys_id
+            write_dir = OUT_PATH / self.model_name
+            write_dir.mkdir(parents=True, exist_ok=True)
+            write(write_dir / f"{sys_id}.xyz", mol_surface)
 
 
 def build_project(repro: bool = False) -> None:

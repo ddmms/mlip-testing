@@ -35,8 +35,7 @@ class S24App(BaseApp):
         # Assets dir will be parent directory
         structs = [
             f"assets/surfaces/S24/{list(MODELS.keys())[0]}/{struct_file.stem}.xyz"
-            for struct_file in structs_dir.glob("*.xyz")
-            if struct_file.name != "s24_mol_surface_atoms.xyz"
+            for struct_file in sorted(structs_dir.glob("*.xyz"))
         ]
 
         plot_from_table_column(
@@ -79,7 +78,7 @@ def get_app() -> S24App:
 
 if __name__ == "__main__":
     # Create Dash app
-    full_app = Dash(__name__, assets_folder=DATA_PATH.parent)
+    full_app = Dash(__name__, assets_folder=DATA_PATH.parent.parent)
 
     # Construct layout and register callbacks
     s24_app = get_app()
