@@ -2,7 +2,6 @@
 *.html
 *.dat
 *.lock
-!dvc.lock
 *.log
 *.pyc
 *.swo
