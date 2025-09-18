@@ -85,7 +85,7 @@ class S24Benchmark(zntrack.Node):
             surface = atoms_list[i]
             mol_surface = atoms_list[i + 1]
             molecule = atoms_list[i + 2]
-            
+
             # Create sys_id
             sys_id = f"{(i // 3) + 1:03d}"
 
@@ -98,7 +98,7 @@ class S24Benchmark(zntrack.Node):
             surface_formula = surface.get_chemical_formula()
             molecule_formula = molecule.get_chemical_formula()
             system_name = f"{surface_formula}-{molecule_formula}"
-            
+
             mol_surface.info["sys_id"] = sys_id
             mol_surface.info["system_name"] = system_name
 
@@ -110,13 +110,17 @@ class S24Benchmark(zntrack.Node):
             surface_e = surface.get_potential_energy()
             mol_surf_e = mol_surface.get_potential_energy()
             molecule_e = molecule.get_potential_energy()
-            pred_ads_energy = self.compute_adsorption_energy(surface_e, mol_surf_e, molecule_e)
-            
+            pred_ads_energy = self.compute_adsorption_energy(
+                surface_e, mol_surf_e, molecule_e
+            )
+
             ref_surface_e = surface.info["ref_energy"]
             ref_mol_surf_e = mol_surface.info["ref_energy"]
             ref_molecule_e = molecule.info["ref_energy"]
-            ref_ads_energy = self.compute_adsorption_energy(ref_surface_e, ref_mol_surf_e, ref_molecule_e)
-            
+            ref_ads_energy = self.compute_adsorption_energy(
+                ref_surface_e, ref_mol_surf_e, ref_molecule_e
+            )
+
             # Store adsorption energies in mol_surface
             mol_surface.info["adsorption_energy"] = pred_ads_energy
             mol_surface.info["ref_adsorption_energy"] = ref_ads_energy

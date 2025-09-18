@@ -108,14 +108,14 @@ def adsorption_energies() -> dict[str, list]:
         if not model_dir.exists():
             results[model_name] = []
             continue
-            
+
         for system_path in sorted(model_dir.glob("*.xyz")):
             mol_surface = read(system_path)
-            
+
             # Get pre-calculated adsorption energies
             pred_ads_energy = mol_surface.info["adsorption_energy"]
             results[model_name].append(pred_ads_energy)
-            
+
             if not ref_stored:
                 ref_ads_energy = mol_surface.info["ref_adsorption_energy"]
                 results["ref"].append(ref_ads_energy)
