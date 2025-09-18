@@ -2,6 +2,7 @@
 *.html
 *.dat
 *.lock
+!*dvc.lock
 *.log
 *.pyc
 *.swo
@@ -12,6 +13,7 @@
 *.extxyz
 *.yml
 *.yaml
+!dvc.yaml
 *.pdf
 *.hdf5
 *.traj
