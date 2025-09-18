@@ -69,13 +69,13 @@ def calc_scores(
     weights = weights if weights else {}
 
     for row in metrics_data:
-        score = 0
+        scores = []
+        weights_list = []
         for key, value in row.items():
-            weight = weights.get(key, 1.0)
-            if key in ("MLIP", "Score", "Rank", "id"):
-                continue
-            score += value * weight
-        row["Score"] = score
+            if key not in ("MLIP", "Score", "Rank", "id"):
+                scores.append(value)
+                weights_list.append(weights.get(key, 1.0))
+        row["Score"] = np.average(scores, weights=weights_list)
 
     return metrics_data
 
