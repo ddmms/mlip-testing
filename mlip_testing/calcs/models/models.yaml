@@ -1,3 +1,10 @@
+mace_mp_0a:
+  module: mace.calculators
+  class_name: mace_mp
+  device: "auto"
+  kwargs:
+    model: "medium"
+
 #mace_mp_0b3:
 #  module: mace.calculators
 #  class_name: mace_mp
