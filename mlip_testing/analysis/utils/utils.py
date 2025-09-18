@@ -7,6 +7,7 @@ from typing import Any
 from matplotlib import cm
 from matplotlib.colors import Colormap
 import numpy as np
+from scipy.stats import rankdata
 from sklearn.metrics import mean_absolute_error, mean_squared_error
 
 
@@ -94,11 +95,9 @@ def calc_ranks(metrics_data: list[dict]) -> list[dict]:
     list[dict]
         Rows of data with rank for each model added.
     """
-    ranked_scores = np.argsort([x["Score"] for x in metrics_data]) + 1
+    ranked_scores = rankdata([x["Score"] for x in metrics_data])
     for i, row in enumerate(metrics_data):
-        row["Rank"] = int(
-            ranked_scores[i]
-        )  # Convert numpy int64 to Python int, can't json serialise numpy types
+        row["Rank"] = int(ranked_scores[i])
     return metrics_data
 
 
