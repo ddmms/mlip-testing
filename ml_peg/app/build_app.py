@@ -3,16 +3,16 @@
 from __future__ import annotations
 
 from importlib import import_module
-from pathlib import Path
 import warnings
 
 from dash import Dash, Input, Output, callback
 from dash.dash_table import DataTable
 from dash.dcc import Store, Tab, Tabs
-from dash.html import H1, Div
+from dash.html import H1, H3, Div
+from yaml import safe_load
 
-from ml_peg import app
 from ml_peg.analysis.utils.utils import calc_ranks, calc_scores, get_table_style
+from ml_peg.app import APP_ROOT
 from ml_peg.app.utils.build_components import build_weight_components
 
 
@@ -35,41 +35,47 @@ def get_all_tests(
     # Find Python files e.g. app_OC157.py in mlip_tesing.app module.
     # We will get the category from the parent's parent directory
     # E.g. ml_peg/app/surfaces/OC157/app_OC157.py -> surfaces
-    tests = Path(app.__file__).parent.glob(f"{category}/*/app*.py")
+    tests = APP_ROOT.glob(f"{category}/*/app*.py")
     layouts = {}
     tables = {}
 
     # Build all layouts, and register all callbacks to main app.
     for test in tests:
         try:
-            # Import tab application layout/callbacks
+            # Import test layout/callbacks
             test_name = test.parent.name
-            category_name = test.parent.parent.name
+            category_dir_name = test.parent.parent.name
             test_module = import_module(
-                f"ml_peg.app.{category_name}.{test_name}.app_{test_name}"
+                f"ml_peg.app.{category_dir_name}.{test_name}.app_{test_name}"
             )
             test_app = test_module.get_app()
 
+            with open(
+                APP_ROOT / category_dir_name / f"{category_dir_name}.yml"
+            ) as file:
+                category_info = safe_load(file)
+                category_title = category_info["title"]
+
             # Get layouts and tables for each category/test
-            if category_name not in layouts:
-                layouts[category_name] = {}
-                tables[category_name] = {}
-            layouts[category_name][test_app.name] = test_app.layout
-            tables[category_name][test_app.name] = test_app.table
+            if category_title not in layouts:
+                layouts[category_title] = {}
+                tables[category_title] = {}
+            layouts[category_title][test_app.name] = test_app.layout
+            tables[category_title][test_app.name] = test_app.table
         except FileNotFoundError as err:
             warnings.warn(
-                f"Unable to load layout for {test_name} in {category_name} category. "
+                f"Unable to load layout for {test_name} in {category_title} category. "
                 f"Full error:\n{err}",
                 stacklevel=2,
             )
             continue
 
-        # Register tab callbacks
+        # Register test callbacks
         try:
             test_app.register_callbacks()
         except FileNotFoundError as err:
             warnings.warn(
-                f"Unable to register callbacks for {test_name} in {category_name} "
+                f"Unable to register callbacks for {test_name} in {category_title} "
                 f"category. Full error:\n{err}",
                 stacklevel=2,
             )
@@ -94,14 +100,20 @@ def build_category(
 
     Returns
     -------
-    ...
-        ...
+    tuple[dict[str, list[Div]], dict[str, DataTable]]
+        Dictionary of category layouts, and dictionary of category summary tables.
     """
     # Take all tables in category, build new table, and set layout
     category_layouts = {}
     category_tables = {}
 
     for category in all_layouts:
+        # Get category name and description
+        with open(APP_ROOT / category / f"{category}.yml") as file:
+            category_info = safe_load(file)
+            category_title = category_info["title"]
+            category_descrip = category_info["description"]
+
         # Build summary table
         summary_table = build_summary_table(
             all_tables[category], table_id=f"{category}-summary-table"
@@ -119,7 +131,8 @@ def build_category(
         # Build full layout with summary table, weight controls, and test layouts
         category_layouts[category] = Div(
             [
-                H1(category),
+                H1(category_title),
+                H3(category_descrip),
                 summary_table,
                 weight_components,
                 Div([all_layouts[category][test] for test in all_layouts[category]]),

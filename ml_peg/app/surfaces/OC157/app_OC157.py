@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-from pathlib import Path
-
 from dash import Dash
 from dash.html import Div
 import numpy as np
@@ -17,7 +15,7 @@ from ml_peg.app.utils.build_callbacks import (
 from ml_peg.app.utils.load import read_plot
 from ml_peg.calcs.models.models import MODELS
 
-BENCHMARK_NAME = Path(__file__).name.removeprefix("app_").removesuffix(".py")
+BENCHMARK_NAME = "OC157"
 DATA_PATH = APP_ROOT / "data" / "surfaces" / "OC157"
 
 
@@ -68,7 +66,6 @@ def get_app() -> OC157App:
     """
     return OC157App(
         name=BENCHMARK_NAME,
-        title="OC157",
         description=(
             "Performance in predicting relative energies between 3 structures for 157 "
             "molecule-surface combinations."

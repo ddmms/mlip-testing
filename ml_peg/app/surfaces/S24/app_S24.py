@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-from pathlib import Path
-
 from dash import Dash
 from dash.html import Div
 
@@ -16,7 +14,7 @@ from ml_peg.app.utils.build_callbacks import (
 from ml_peg.app.utils.load import read_plot
 from ml_peg.calcs.models.models import MODELS
 
-BENCHMARK_NAME = Path(__file__).name.removeprefix("app_").removesuffix(".py")
+BENCHMARK_NAME = "S24"
 DATA_PATH = APP_ROOT / "data" / "surfaces" / "S24"
 
 
@@ -63,7 +61,6 @@ def get_app() -> S24App:
     """
     return S24App(
         name=BENCHMARK_NAME,
-        title="S24",
         description=(
             "Performance in predicting adsorption energies for 24 "
             "molecule-surface combinations."
