@@ -114,10 +114,10 @@ def adsorption_energies() -> dict[str, list]:
                 )
                 results["ref"].append(ref_ads_energy)
 
-            # Write structures in order
+            # Only write the first struct (slab+oxygen)
             structs_dir = OUT_PATH / model_name
             structs_dir.mkdir(parents=True, exist_ok=True)
-            write(structs_dir / f"{system_path.stem}.xyz", structs)
+            write(structs_dir / f"{system_path.stem}.xyz", structs[1])
 
         ref_stored = True
     return results
