@@ -103,7 +103,7 @@ Reference data:
 * PBE-D3(BJ), MPRelaxSet settings
 
 Elemental Slab Oxygen Adsorption
-===
+================================
 
 Summary
 -------
