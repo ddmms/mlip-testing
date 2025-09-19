@@ -135,7 +135,7 @@ def build_weight_components(
 
 
 def build_test_layout(
-    title: str,
+    name: str,
     description: str,
     table: DataTable,
     extra_components: list[Component] | None = None,
@@ -145,8 +145,8 @@ def build_test_layout(
 
     Parameters
     ----------
-    title
-        Title of test.
+    name
+        Name of test.
     description
         Description of test.
     table
@@ -160,7 +160,7 @@ def build_test_layout(
         Layout for test layout.
     """
     layout_contents = [
-        H2(title, style={"color": "black"}),
+        H2(name, style={"color": "black"}),
         H3(description),
         Div(table),
     ]
