@@ -108,7 +108,7 @@ Elemental Slab Oxygen Adsorption
 Summary
 -------
 
-Performance in predicting adsorption energies for a oxygen on elemental slabs.
+Performance in predicting adsorption energies for oxygen on elemental slabs.
 
 Metrics
 -------
@@ -131,13 +131,17 @@ Data availability
 
 Input data:
 
-* Elemental slabs were obtained using the materials project API. The lowest-surface-energy slab
-  of the most-stable experimentally-obserevd bulk crystal is chosen. The relaxed slabs were
-  submitted to materials project by
-  * R. Tran, Z. Xu, B. Radhakrishnan, D. Winston, W. Sun, K. A. Persson, S. P. Ong, Surface Energies of Elemental Crystals, Scientific Data, 2016, 3:160080 doi: 10.1038/sdata.2016.80.
+* Elemental slabs were obtained using the Materials Project API. The lowest-surface-energy slab
+  of the most stable experimentally observed bulk crystal is chosen. The relaxed slabs were
+  submitted to the Materials Project by:
+
+  * R. Tran, Z. Xu, B. Radhakrishnan, D. Winston, W. Sun, K. A. Persson, S. P. Ong, "Surface Energies of Elemental Crystals," Scientific Data, 2016, 3:160080. https://doi.org/10.1038/sdata.2016.80
+
 Reference data:
 
 * Single points are performed with the MatPESStatic set, with a cutoff energy of 520 eV.
-  * Kaplan, A. D.; Liu, R.; Qi, J.; Ko, T. W.; Deng, B.; Riebesell, J.; Ceder, G.; Persson, K. A.; Ong, S. P. A, Foundational Potential Energy Surface Dataset for Materials. arXiv 2025. DOI: 10.48550/arXiv.2503.04070.
-  * Shyue Ping Ong, William Davidson Richards, Anubhav Jain, Geoffroy Hautier, Michael Kocher, Shreyas Cholia, Dan Gunter, Vincent Chevrier, Kristin A. Persson, Gerbrand Ceder. Python Materials Genomics (pymatgen) : A Robust, Open-Source Python Library for Materials Analysis. Computational Materials Science, 2013, 68, 314–319. https://doi.org/10.1016/j.commatsci.2012.10.028
-* Tran et Al. relax the slabs using spin-polarized PBE calculations performed in VASP, with a cutoff energy of 400 eV.
+
+  * A. D. Kaplan, R. Liu, J. Qi, T. W. Ko, B. Deng, J. Riebesell, G. Ceder, K. A. Persson, S. P. Ong, "A Foundational Potential Energy Surface Dataset for Materials," arXiv preprint arXiv:2503.04070, 2025. https://doi.org/10.48550/arXiv.2503.04070
+  * S. P. Ong, W. D. Richards, A. Jain, G. Hautier, M. Kocher, S. Cholia, D. Gunter, V. Chevrier, K. A. Persson, G. Ceder, "Python Materials Genomics (pymatgen): A Robust, Open-Source Python Library for Materials Analysis," Comput. Mater. Sci., 2013, 68, 314–319. https://doi.org/10.1016/j.commatsci.2012.10.028
+
+* Tran et al. relaxed the slabs using spin-polarized PBE calculations performed in VASP, with a cutoff energy of 400 eV.
