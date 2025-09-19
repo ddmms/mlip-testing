@@ -31,8 +31,8 @@ STRUCTS = [
 ]
 
 
-class S24App(BaseApp):
-    """S24 benchmark app layout and callbacks."""
+class ElementalSlabOxygenAdsorptionApp(BaseApp):
+    """elemental_slab_oxygen_adsorption_app benchmark app layout and callbacks."""
 
     def register_callbacks(self) -> None:
         """Register callbacks to app."""
@@ -49,16 +49,16 @@ class S24App(BaseApp):
         )
 
 
-def get_app() -> S24App:
+def get_app() -> ElementalSlabOxygenAdsorptionApp:
     """
     Get elemental_slab_oxygen_adsorption benchmark app layout and callback registration.
 
     Returns
     -------
-    S24App
+    ElementalSlabOxygenAdsorptionApp
         Benchmark layout and callback registration.
     """
-    return S24App(
+    return ElementalSlabOxygenAdsorptionApp(
         name="elemental_slab_oxygen_adsorption",
         title="Elemental Slab Oxygen Adsorption",
         description=(
@@ -78,9 +78,9 @@ if __name__ == "__main__":
     full_app = Dash(__name__, assets_folder=DATA_PATH.parent)
 
     # Construct layout and register callbacks
-    s24_app = get_app()
-    full_app.layout = s24_app.layout
-    s24_app.register_callbacks()
+    elemental_slab_oxygen_adsorption_app = get_app()
+    full_app.layout = elemental_slab_oxygen_adsorption_app.layout
+    elemental_slab_oxygen_adsorption_app.register_callbacks()
 
     # Run app
     full_app.run(port=8052, debug=True)
