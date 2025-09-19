@@ -101,3 +101,43 @@ Reference data:
 
 * Same as input data
 * PBE-D3(BJ), MPRelaxSet settings
+
+Elemental Slab Oxygen Adsorption
+===
+
+Summary
+-------
+
+Performance in predicting adsorption energies for a oxygen on elemental slabs.
+
+Metrics
+-------
+
+Adsorption energy error
+
+For each slab, two single points are performed.
+The first is for the isolated slab and the second is the slab with
+an oxygen placed on-top of the site furthest along the slab's normal
+direction. The distance between the oxygen and the site is that which
+minimizes the energy according to MACE-MatPES-r2SCAN.
+
+Computational cost
+------------------
+
+Very low: tests are likely to take less than a minute to run on CPU.
+
+Data availability
+-----------------
+
+Input data:
+
+* Elemental slabs were obtained using the materials project API. The lowest-surface-energy slab
+  of the most-stable experimentally-obserevd bulk crystal is chosen. The relaxed slabs were
+  submitted to materials project by
+  * R. Tran, Z. Xu, B. Radhakrishnan, D. Winston, W. Sun, K. A. Persson, S. P. Ong, Surface Energies of Elemental Crystals, Scientific Data, 2016, 3:160080 doi: 10.1038/sdata.2016.80.
+Reference data:
+
+* Single points are performed with the MatPESStatic set, with a cutoff energy of 520 eV.
+  * Kaplan, A. D.; Liu, R.; Qi, J.; Ko, T. W.; Deng, B.; Riebesell, J.; Ceder, G.; Persson, K. A.; Ong, S. P. A, Foundational Potential Energy Surface Dataset for Materials. arXiv 2025. DOI: 10.48550/arXiv.2503.04070.
+  * Shyue Ping Ong, William Davidson Richards, Anubhav Jain, Geoffroy Hautier, Michael Kocher, Shreyas Cholia, Dan Gunter, Vincent Chevrier, Kristin A. Persson, Gerbrand Ceder. Python Materials Genomics (pymatgen) : A Robust, Open-Source Python Library for Materials Analysis. Computational Materials Science, 2013, 68, 314–319. https://doi.org/10.1016/j.commatsci.2012.10.028
+* Tran et Al. relax the slabs using spin-polarized PBE calculations performed in VASP, with a cutoff energy of 400 eV.
