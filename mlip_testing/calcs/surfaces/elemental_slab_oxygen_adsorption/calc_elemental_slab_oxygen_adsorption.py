@@ -150,4 +150,3 @@ def build_project(repro: bool = False) -> None:
 def test_elemental_slab_oxygen_adsorption():
     """Run elemental slab oxygen adsorption benchmark via pytest."""
     build_project(repro=True)
-
