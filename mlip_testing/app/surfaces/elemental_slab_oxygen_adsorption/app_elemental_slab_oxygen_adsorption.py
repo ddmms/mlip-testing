@@ -27,7 +27,7 @@ STRUCTS_DIR = DATA_PATH / list(MODELS.keys())[0]
 # Assets dir will be parent directory
 STRUCTS = [
     f"assets/elemental_slab_oxygen_adsorption/{list(MODELS.keys())[0]}/{struct_file.stem}.xyz"
-    for struct_file in STRUCTS_DIR.glob("*.xyz")
+    for struct_file in sorted(STRUCTS_DIR.glob("*.xyz"))
 ]
 
 
