@@ -1,4 +1,4 @@
-"""Run elemental_slab_oxygen_adsorption app."""
+"""Run elemental slab oxygen adsorption app."""
 
 from __future__ import annotations
 
@@ -54,7 +54,7 @@ class ElementalSlabOxygenAdsorptionApp(BaseApp):
 
 def get_app() -> ElementalSlabOxygenAdsorptionApp:
     """
-    Get elemental_slab_oxygen_adsorption benchmark app layout and callback registration.
+    Get elemental slab oxygen adsorption benchmark app layout and callback registration.
 
     Returns
     -------
