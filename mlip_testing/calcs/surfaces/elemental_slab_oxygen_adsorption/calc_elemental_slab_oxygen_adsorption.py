@@ -151,6 +151,3 @@ def test_elemental_slab_oxygen_adsorption():
     """Run elemental slab oxygen adsorption benchmark via pytest."""
     build_project(repro=True)
 
-
-if __name__ == "__main__":
-    build_project()
