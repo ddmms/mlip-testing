@@ -1,4 +1,4 @@
-"""Run calculations for calc_elemental_slab_oxygen_adsorptio n  benchmark."""
+"""Run calculations for elemental slab oxygen adsorption benchmark."""
 
 from __future__ import annotations
 
@@ -84,7 +84,7 @@ class ElementalSlabOxygenAdsorptionBenchmark(zntrack.Node):
     @staticmethod
     def evaluate_energies(atoms_list: list[Atoms], calc: Calculator) -> None:
         """
-        Evaluate energies for elemental oxygen adsorption structures.
+        Evaluate energies for elemental slab oxygen adsorption structures.
 
         Parameters
         ----------
@@ -148,7 +148,7 @@ def build_project(repro: bool = False) -> None:
 
 
 def test_elemental_slab_oxygen_adsorption():
-    """Run elemental_slab_oxygen_adsorption benchmark via pytest."""
+    """Run elemental slab oxygen adsorption benchmark via pytest."""
     build_project(repro=True)
 
 

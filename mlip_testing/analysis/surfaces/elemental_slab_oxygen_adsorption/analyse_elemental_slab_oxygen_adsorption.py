@@ -1,4 +1,4 @@
-"""Analyse elemental_slab_oxygen_adsorption benchmark."""
+"""Analyse elemental slab oxygen adsorption benchmark."""
 
 from __future__ import annotations
 
@@ -180,6 +180,6 @@ def test_elemental_slab_oxygen_adsorption(metrics: dict[str, dict]) -> None:
     Parameters
     ----------
     metrics
-        All elemental_slab_oxygen_adsorption metrics.
+        All elemental slab oxygen adsorption metrics.
     """
     return
