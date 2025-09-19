@@ -2,29 +2,17 @@
 
 from __future__ import annotations
 
-from pathlib import Path
-
 from ase.io import read, write
 import pytest
 
 from mlip_testing.analysis.utils.decorators import build_table, plot_parity
 from mlip_testing.analysis.utils.utils import mae
+from mlip_testing.app import APP_ROOT
+from mlip_testing.calcs import CALCS_ROOT
 from mlip_testing.calcs.models.models import MODELS
 
-CALC_PATH = (
-    Path(__file__).parent.parent.parent.parent
-    / "calcs"
-    / "surfaces"
-    / "elemental_slab_oxygen_adsorption"
-    / "outputs"
-)
-OUT_PATH = (
-    Path(__file__).parent.parent.parent.parent
-    / "app"
-    / "data"
-    / "surfaces"
-    / "elemental_slab_oxygen_adsorption"
-)
+CALC_PATH = CALCS_ROOT / "surfaces" / "elemental_slab_oxygen_adsorption" / "outputs"
+OUT_PATH = APP_ROOT / "data" / "surfaces" / "elemental_slab_oxygen_adsorption"
 
 
 def compute_adsorption_energy(
