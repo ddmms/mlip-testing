@@ -39,7 +39,7 @@ or quantifying the stability of a simulation.
 Running Calculations
 ====================
 
-1. Create a new directory in ``ml_peg/calcs`` with a short, unique benchmark name.
+1. Create a new directory in ``ml_peg/calcs/[category]`` with a short, unique benchmark name.
 
 2. Write a script that will run the MLIP calculations of interest for each model being tested.
 
@@ -204,11 +204,6 @@ run identified and run using ``pytest``.
     def test_new_benchmark():
         """Run new benchmark via pytest."""
         build_project(repro=True)
-
-
-    if __name__ == "__main__":
-        build_project()
-
 
 
 .. _analysis:
