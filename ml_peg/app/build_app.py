@@ -44,27 +44,21 @@ def get_all_tests(
         try:
             # Import test layout/callbacks
             test_name = test.parent.name
-            category_dir_name = test.parent.parent.name
+            category_name = test.parent.parent.name
             test_module = import_module(
-                f"ml_peg.app.{category_dir_name}.{test_name}.app_{test_name}"
+                f"ml_peg.app.{category_name}.{test_name}.app_{test_name}"
             )
             test_app = test_module.get_app()
 
-            with open(
-                APP_ROOT / category_dir_name / f"{category_dir_name}.yml"
-            ) as file:
-                category_info = safe_load(file)
-                category_title = category_info["title"]
-
             # Get layouts and tables for each category/test
-            if category_title not in layouts:
-                layouts[category_title] = {}
-                tables[category_title] = {}
-            layouts[category_title][test_app.name] = test_app.layout
-            tables[category_title][test_app.name] = test_app.table
+            if category_name not in layouts:
+                layouts[category_name] = {}
+                tables[category_name] = {}
+            layouts[category_name][test_app.name] = test_app.layout
+            tables[category_name][test_app.name] = test_app.table
         except FileNotFoundError as err:
             warnings.warn(
-                f"Unable to load layout for {test_name} in {category_title} category. "
+                f"Unable to load layout for {test_name} in {category_name} category. "
                 f"Full error:\n{err}",
                 stacklevel=2,
             )
@@ -75,7 +69,7 @@ def get_all_tests(
             test_app.register_callbacks()
         except FileNotFoundError as err:
             warnings.warn(
-                f"Unable to register callbacks for {test_name} in {category_title} "
+                f"Unable to register callbacks for {test_name} in {category_name} "
                 f"category. Full error:\n{err}",
                 stacklevel=2,
             )
@@ -118,7 +112,7 @@ def build_category(
         summary_table = build_summary_table(
             all_tables[category], table_id=f"{category}-summary-table"
         )
-        category_tables[category] = summary_table
+        category_tables[category_title] = summary_table
 
         # Build weight components for summary table
         weight_components = build_weight_components(
@@ -129,7 +123,7 @@ def build_category(
         )
 
         # Build full layout with summary table, weight controls, and test layouts
-        category_layouts[category] = Div(
+        category_layouts[category_title] = Div(
             [
                 H1(category_title),
                 H3(category_descrip),
