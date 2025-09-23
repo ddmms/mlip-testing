@@ -6,7 +6,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: github.repository == 'ddmms/ml-peg'
+    # if: github.repository == 'ddmms/ml-peg'
     permissions:
       packages: write
       contents: read
@@ -28,5 +28,5 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
-            ghcr.io/ddmms/ml-peg-app:latest
-            ghcr.io/ddmms/ml-peg-app:${{ github.sha }}
+            ghcr.io/elliottkasoar/ml-peg-app:latest
+            ghcr.io/elliottkasoar/ml-peg-app:${{ github.sha }}
