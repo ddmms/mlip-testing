@@ -28,7 +28,13 @@ To get all the latest changes, ``ML-PEG`` can also be installed from GitHub:
 Running the application
 -----------------------
 
-To build the container using the ``Dockerfile`` provided, run:
+A Docker image of the latest changes can be pulled from the GitHub container registry,
+following the command that can be found under this repository's:
+`packages <https://github.com/ddmms/ML-PEG/pkgs/container/ml-peg-app>`_.
+
+Alternatively, to build the container yourself, you can use the
+`Dockerfile <https://github.com/ddmms/ML-PEG/blob/main/containers/Dockerfile>`_
+provided, and run:
 
 .. code-block:: bash
 
@@ -39,10 +45,12 @@ Once built, you can mount your current directory and start the app by running:
 
 .. code-block:: bash
 
-    docker run --volume .:/app  --publish 8050:8050 benchmark-app
+    docker run --volume .:/app  --publish 8050:8050 ml-peg-app
 
 
-Alternatively, you can use the ``compose.yml`` file provided, via Docker Compose:
+Alternatively, you can use the
+`compose.yml <https://github.com/ddmms/ML-PEG/blob/main/containers/compose.yml>`_
+file provided, via Docker Compose:
 
 .. code-block:: bash
 
