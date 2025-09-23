@@ -28,5 +28,5 @@ jobs:
           file: ./containers/Dockerfile
           push: true
           tags: |
-            ghcr.io/elliottkasoar/ml-peg-app:latest
-            ghcr.io/elliottkasoar/ml-peg-app:${{ github.sha }}
+            ghcr.io/ddmms/ml-peg-app:latest
+            ghcr.io/ddmms/ml-peg-app:${{ github.sha }}
