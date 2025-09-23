@@ -4,7 +4,10 @@ version = "0.0.1"
 description = "ML potential usability and performance guide"
 authors = [
     { name = "Elliott Kasoar" },
-    { name = "Joe Hart" },
+    { name = "Joseph Hart" },
+    { name = "Ilyes Batatia" },
+    { name = "Alin M. Elena" },
+    { name = "Gábor Csányi" },
 ]
 requires-python = ">=3.10"
 classifiers = [
