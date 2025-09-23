@@ -11,14 +11,14 @@ All required and optional dependencies can be found in `pyproject.toml <https://
 Installation
 ------------
 
-The latest stable release of ``ml-peg``, including its dependencies, will soon be installable from PyPI by running:
+The latest stable release of ``ML-PEG``, including its dependencies, will soon be installable from PyPI by running:
 
 .. code-block:: bash
 
     python3 -m pip install ml-peg
 
 
-To get all the latest changes, ``ml-peg`` can also be installed from GitHub:
+To get all the latest changes, ``ML-PEG`` can also be installed from GitHub:
 
 .. code-block:: bash
 
