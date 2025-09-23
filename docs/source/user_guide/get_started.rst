@@ -29,8 +29,15 @@ Running the application
 -----------------------
 
 A Docker image of the latest changes can be pulled from the GitHub container registry,
-following the command that can be found under this repository's:
-`packages <https://github.com/ddmms/ML-PEG/pkgs/container/ml-peg-app>`_.
+following the command that can be found under this repository's
+`packages <https://github.com/ddmms/ML-PEG/pkgs/container/ml-peg-app>`_:
+
+.. note::
+
+    Currently, this repository only contains images for the linux/amd64 platform.
+    On MacOS with ARM silicon, this can often still be run by setting
+    ``--platform linux/amd64`` when using ``docker run``.
+
 
 Alternatively, to build the container yourself, you can use the
 `Dockerfile <https://github.com/ddmms/ML-PEG/blob/main/containers/Dockerfile>`_
@@ -39,6 +46,7 @@ provided, and run:
 .. code-block:: bash
 
     docker build . -t ml-peg-app
+
 
 
 Once built, you can mount your current directory and start the app by running:
