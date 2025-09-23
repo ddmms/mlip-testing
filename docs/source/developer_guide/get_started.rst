@@ -3,16 +3,16 @@ Getting started
 ===============
 
 Please ensure you have consulted our
-`contribution guidelines <https://github.com/ddmms/mlip-testing/blob/main/CONTRIBUTING.md>`_
+`contribution guidelines <https://github.com/ddmms/ml-peg/blob/main/CONTRIBUTING.md>`_
 and
-`coding style <https://github.com/ddmms/mlip-testing/blob/main/coding_style.md>`_
+`coding style <https://github.com/ddmms/ml-peg/blob/main/coding_style.md>`_
 before proceeding.
 
 
 Dependency management
 +++++++++++++++++++++
 
-We recommend `installing uv <https://docs.astral.sh/uv/getting-started/installation/>`_ for dependency management when developing for ``mlip-testing``.
+We recommend `installing uv <https://docs.astral.sh/uv/getting-started/installation/>`_ for dependency management when developing for ``ml-peg``.
 
 This provides a number of useful features, including:
 
@@ -52,7 +52,7 @@ These commands interact with (and require) ``pyproject.toml``, and ``uv`` will e
 including creating or updating a `lockfile <https://docs.astral.sh/uv/concepts/projects/sync/>`_,
 a universal resolution that is `portable across platforms <https://docs.astral.sh/uv/concepts/resolution/#universal-resolution>`_.
 
-When developing for ``mlip-testing``, it is usually recommended to use project commands, as described in `Getting started`_
+When developing for ``ml-peg``, it is usually recommended to use project commands, as described in `Getting started`_
 rather than using ``uv pip install`` to modify the project environment manually.
 
 .. tip::
@@ -92,14 +92,14 @@ Rules enforced by ruff are currently set up to be comparable to:
 - `isort <https://pycqa.github.io/isort/>`_ (import sorter)
 - `flake8-bugbear <https://pypi.org/project/flake8-bugbear/>`_ (bug finder)
 
-The full set of `ruff rules <https://docs.astral.sh/ruff/rules/>`_ are specified by the ``[tool.ruff]`` sections of `pyproject.toml <https://github.com/ddmms/mlip-testing/blob/main/pyproject.toml>`_.
+The full set of `ruff rules <https://docs.astral.sh/ruff/rules/>`_ are specified by the ``[tool.ruff]`` sections of `pyproject.toml <https://github.com/ddmms/ml-peg/blob/main/pyproject.toml>`_.
 
 
 Building the documentation
 ++++++++++++++++++++++++++
 
 Packages in the ``docs`` dependency group install `Sphinx <https://www.sphinx-doc.org>`_
-and other Python packages required to build ``mlip-testing``'s documentation.
+and other Python packages required to build ``ml-peg``'s documentation.
 
 It is also necessary to `install pandoc <https://pandoc.org/installing.html>`_ on your system.
 
@@ -111,9 +111,9 @@ Individual individual documentation pages can be edited directly::
         docs/source/developer_guide/index.rst
         docs/source/developer_guide/get_started.rst
         docs/source/developer_guide/add_benchmarks.rst
-        docs/source/apidoc/mlip_testing.rst
+        docs/source/apidoc/ml_peg.rst
 
-API documentation is automatically generated from ``docs/source/apidoc/mlip_testing.rst``.
+API documentation is automatically generated from ``docs/source/apidoc/ml_peg.rst``.
 
 ``Sphinx`` can then be used to generate the html documentation::
 
@@ -124,7 +124,7 @@ API documentation is automatically generated from ``docs/source/apidoc/mlip_test
 Continuous integration
 ++++++++++++++++++++++
 
-``mlip-testing`` comes with a ``.github`` folder that contains continuous integration workflows that run on every push and pull request using `GitHub Actions <https://github.com/features/actions>`_. These will:
+``ml-peg`` comes with a ``.github`` folder that contains continuous integration workflows that run on every push and pull request using `GitHub Actions <https://github.com/features/actions>`_. These will:
 
 #. Run all non-optional unit tests
 #. Build the documentation
