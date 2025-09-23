@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-from pathlib import Path
-
 from dash import Dash
 from dash.html import Div
 
@@ -16,7 +14,7 @@ from ml_peg.app.utils.build_callbacks import (
 from ml_peg.app.utils.load import read_plot
 from ml_peg.calcs.models.models import MODELS
 
-BENCHMARK_NAME = Path(__file__).name.removeprefix("app_").removesuffix(".py")
+BENCHMARK_NAME = "Li diffusion"
 DATA_PATH = APP_ROOT / "data" / "nebs" / "li_diffusion"
 
 
@@ -75,8 +73,7 @@ def get_app() -> LiDiffusionApp:
         Benchmark layout and callback registration.
     """
     return LiDiffusionApp(
-        name="NEBs",
-        title="NEBs",
+        name=BENCHMARK_NAME,
         description=("Performance in predicting energy barriers for Li diffision."),
         table_path=DATA_PATH / "li_diffusion_metrics_table.json",
         extra_components=[

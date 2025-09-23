@@ -19,9 +19,7 @@ class BaseApp(ABC):
     Parameters
     ----------
     name
-        Name for application tab.
-    title
-        Title for application.
+        Name of application test.
     description
         Description of benchmark.
     table_path
@@ -33,7 +31,6 @@ class BaseApp(ABC):
     def __init__(
         self,
         name: str,
-        title: str,
         description: str,
         table_path: Path,
         extra_components: list[Component],
@@ -44,9 +41,7 @@ class BaseApp(ABC):
         Parameters
         ----------
         name
-            Name for application test.
-        title
-            Title for benchmark.
+            Name of application test.
         description
             Description of benchmark.
         table_path
@@ -55,7 +50,6 @@ class BaseApp(ABC):
             List of other Dash components to add to app.
         """
         self.name = name
-        self.title = title
         self.description = description
         self.table_path = table_path
         self.extra_components = extra_components
@@ -75,7 +69,7 @@ class BaseApp(ABC):
         """
         # Define all components/placeholders
         return build_test_layout(
-            title=self.title,
+            name=self.name,
             description=self.description,
             table=self.table,
             extra_components=self.extra_components,

@@ -3,16 +3,16 @@
 from __future__ import annotations
 
 from importlib import import_module
-from pathlib import Path
 import warnings
 
 from dash import Dash, Input, Output, callback
 from dash.dash_table import DataTable
 from dash.dcc import Store, Tab, Tabs
-from dash.html import H1, Div
+from dash.html import H1, H3, Div
+from yaml import safe_load
 
-from ml_peg import app
 from ml_peg.analysis.utils.utils import calc_ranks, calc_scores, get_table_style
+from ml_peg.app import APP_ROOT
 from ml_peg.app.utils.build_components import build_weight_components
 
 
@@ -35,14 +35,14 @@ def get_all_tests(
     # Find Python files e.g. app_OC157.py in mlip_tesing.app module.
     # We will get the category from the parent's parent directory
     # E.g. ml_peg/app/surfaces/OC157/app_OC157.py -> surfaces
-    tests = Path(app.__file__).parent.glob(f"{category}/*/app*.py")
+    tests = APP_ROOT.glob(f"{category}/*/app*.py")
     layouts = {}
     tables = {}
 
     # Build all layouts, and register all callbacks to main app.
     for test in tests:
         try:
-            # Import tab application layout/callbacks
+            # Import test layout/callbacks
             test_name = test.parent.name
             category_name = test.parent.parent.name
             test_module = import_module(
@@ -64,7 +64,7 @@ def get_all_tests(
             )
             continue
 
-        # Register tab callbacks
+        # Register test callbacks
         try:
             test_app.register_callbacks()
         except FileNotFoundError as err:
@@ -94,19 +94,29 @@ def build_category(
 
     Returns
     -------
-    ...
-        ...
+    tuple[dict[str, list[Div]], dict[str, DataTable]]
+        Dictionary of category layouts, and dictionary of category summary tables.
     """
     # Take all tables in category, build new table, and set layout
     category_layouts = {}
     category_tables = {}
 
     for category in all_layouts:
+        # Get category name and description
+        try:
+            with open(APP_ROOT / category / f"{category}.yml") as file:
+                category_info = safe_load(file)
+                category_title = category_info.get("title", category)
+                category_descrip = category_info.get("description", "")
+        except FileNotFoundError:
+            category_title = category
+            category_descrip = ""
+
         # Build summary table
         summary_table = build_summary_table(
             all_tables[category], table_id=f"{category}-summary-table"
         )
-        category_tables[category] = summary_table
+        category_tables[category_title] = summary_table
 
         # Build weight components for summary table
         weight_components = build_weight_components(
@@ -117,9 +127,10 @@ def build_category(
         )
 
         # Build full layout with summary table, weight controls, and test layouts
-        category_layouts[category] = Div(
+        category_layouts[category_title] = Div(
             [
-                H1(category),
+                H1(category_title),
+                H3(category_descrip),
                 summary_table,
                 weight_components,
                 Div([all_layouts[category][test] for test in all_layouts[category]]),
