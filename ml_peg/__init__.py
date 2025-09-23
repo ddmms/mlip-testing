@@ -4,4 +4,4 @@ from __future__ import annotations
 
 from importlib.metadata import version
 
-__version__ = version("mlip-testing")
+__version__ = version("ml-peg")
