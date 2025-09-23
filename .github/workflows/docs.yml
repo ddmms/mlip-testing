@@ -16,7 +16,7 @@ concurrency:
 
 jobs:
   docs-deploy:
-    if: github.ref == 'refs/heads/main' && github.repository == 'ddmms/mlip-testing'
+    if: github.ref == 'refs/heads/main' && github.repository == 'ddmms/ml-peg'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
