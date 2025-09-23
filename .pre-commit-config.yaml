@@ -23,4 +23,4 @@ repos:
   rev: v1.8.0
   hooks:
     - id: numpydoc-validation
-      files: ^mlip_testing/
+      files: ^ml_peg/

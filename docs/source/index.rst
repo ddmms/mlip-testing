@@ -1,7 +1,7 @@
-Welcome to mlip-testing's documentation!
+Welcome to ml-peg's documentation!
 ========================================
 
-``mlip-testing`` provides tools to perform and analyse calculations using machine learnt interatomic potentials (MLIPs),
+``ml-peg`` provides tools to perform and analyse calculations using machine learnt interatomic potentials (MLIPs),
 as well as facilitating training and fine-tuning of MLIPs.
 
 .. toctree::
@@ -10,9 +10,9 @@ as well as facilitating training and fine-tuning of MLIPs.
 
    user_guide/index
    developer_guide/index
-   API documentation <apidoc/mlip_testing>
+   API documentation <apidoc/ml_peg>
 
-``mlip-testing`` is released under the `GNU General Public License version 3 <https://opensource.org/license/gpl-3-0>`_.
+``ml-peg`` is released under the `GNU General Public License version 3 <https://opensource.org/license/gpl-3-0>`_.
 
 Indices and tables
 ==================

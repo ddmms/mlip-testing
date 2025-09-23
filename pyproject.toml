@@ -1,7 +1,7 @@
 [project]
-name = "mlip-testing"
+name = "ml-peg"
 version = "0.0.1"
-description = "Testing framework for machine learnt interatomic potentials"
+description = "ML potential usability and performance guide"
 authors = [
     { name = "Elliott Kasoar" },
     { name = "Joe Hart" },
@@ -48,8 +48,8 @@ orb = [
 ]
 
 [project.urls]
-Repository = "https://github.com/ddmms/mlip-testing/"
-Documentation = "https://ddmms.github.io/mlip-testing/"
+Repository = "https://github.com/ddmms/ml-peg/"
+Documentation = "https://ddmms.github.io/ml-peg/"
 
 [dependency-groups]
 dev = [
@@ -94,7 +94,7 @@ pythonpath = ["."]
 [tool.coverage.run]
 # Configuration of [coverage.py](https://coverage.readthedocs.io)
 # reporting which lines of your plugin are covered by tests
-source=["mlip_testing"]
+source=["ml_peg"]
 
 [tool.ruff]
 exclude = ["conf.py", "*ipynb"]

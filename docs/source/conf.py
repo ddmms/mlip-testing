@@ -1,5 +1,5 @@
 #
-# Sphinx configuration for mlip-testing
+# Sphinx configuration for ml-peg
 #
 # This file is execfile()d with the current directory set to its
 # containing dir.
@@ -13,7 +13,7 @@
 from importlib import metadata
 import time
 
-import mlip_testing
+import ml_peg
 
 # -- General configuration ------------------------------------------------
 
@@ -65,9 +65,9 @@ source_suffix = ".rst"
 master_doc = "index"
 
 # General information about the project.
-project = "mlip-testing"
+project = "ml-peg"
 copyright_first_year = "2025"
-copyright_owners = metadata.metadata("mlip-testing")["author"]
+copyright_owners = metadata.metadata("ml-peg")["author"]
 
 current_year = str(time.localtime().tm_year)
 copyright_year_string = (
@@ -82,7 +82,7 @@ copyright = f"{copyright_year_string}, {copyright_owners}. All rights reserved"
 # built documents.
 #
 # The full version, including alpha/beta/rc tags.
-release = mlip_testing.__version__
+release = ml_peg.__version__
 
 # The short X.Y version.
 version = ".".join(release.split(".")[:2])
@@ -115,15 +115,15 @@ pygments_style = "sphinx"
 # -- Options for HTML output ----------------------------------------------
 
 html_theme = "furo"
-html_title = f"mlip-testing v{release}"
+html_title = f"ml-peg v{release}"
 html_theme_options = {
-    "source_repository": "https://github.com/ddmms/mlip-testing/",
+    "source_repository": "https://github.com/ddmms/ml-peg/",
     "source_branch": "main",
     "source_directory": "docs/source",
     "footer_icons": [
         {
             "name": "GitHub",
-            "url": "https://github.com/ddmms/mlip-testing",
+            "url": "https://github.com/ddmms/ml-peg",
             "html": """
                 <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 16 16">
                     <path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"></path>
@@ -188,7 +188,7 @@ html_show_sphinx = True
 # If true, an OpenSearch description file will be output, and all pages will
 # contain a <link> tag referring to it.  The value of this option must be the
 # base URL from which the finished HTML is served.
-html_use_opensearch = "https://ddmms.github.io/mlip-testing/"
+html_use_opensearch = "https://ddmms.github.io/ml-peg/"
 
 # This is the file name suffix for HTML files (e.g. ".xhtml").
 # html_file_suffix = None

@@ -1,1 +1,1 @@
-pytest -v mlip_testing/analysis/*/*/analyse* -s
+pytest -v ml_peg/analysis/*/*/analyse* -s

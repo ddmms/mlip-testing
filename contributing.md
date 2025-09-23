@@ -1,12 +1,12 @@
 # Contribution workflow and the review process
 
 This document outlines the best practice, using git and CI, which **must** be followed
-for all contributions to `mlip-testing`. Also contained are instructions and tips for
+for all contributions to `ml-peg`. Also contained are instructions and tips for
 managing your fork of the project, which will help keep merges clean and avoid many
 headaches.
 
 Please read our
-[developer documentation](https://ddmms.github.io/mlip-testing/developer_guide/index.html)
+[developer documentation](https://ddmms.github.io/ml-peg/developer_guide/index.html)
 for more technical details relating to contributions.
 
 ## Golden rules
@@ -23,9 +23,9 @@ In brief the rules for contribution are as follows:
 ## Contributing benchmarks/models
 
 Please consult our online documentation on
-[adding benchmarks](https://ddmms.github.io/mlip-testing/developer_guide/add_benchmarks.html)
+[adding benchmarks](https://ddmms.github.io/ml-peg/developer_guide/add_benchmarks.html)
 and
-[adding models](https://ddmms.github.io/mlip-testing/developer_guide/add_models.html)
+[adding models](https://ddmms.github.io/ml-peg/developer_guide/add_models.html)
 for a detailed description of the process involved.
 
 ## Issues
@@ -94,20 +94,20 @@ exceptional circumstances are branches allowed in *upstream*.
 The *upstream* repository may be cloned as follows,
 
 ``` sh
-git clone git@github.com:ddmms/mlip-testing.git
+git clone git@github.com:ddmms/ml-peg.git
 ```
 
 A *fork* is created using the web UI. It may then be cloned for a user called
 'username' as follows:
 
 ``` sh
-git clone git@github.com:username/mlip-testing.git mlip-testing-username
+git clone git@github.com:username/ml-peg.git ml-peg-username
 ```
 
 or added as an alternative origin in the *upstream* cloned repository:
 
 ``` sh
-git remote add username git@github.com:username/mlip-testing.git
+git remote add username git@github.com:username/ml-peg.git
 ```
 
 ### Branch, fix, merge model:
@@ -121,15 +121,15 @@ Create a new branch for the issue on the dashboard of your fork, we will assume 
 branch is called 'fix-xyz'. Clone the branch,
 
 ``` sh
-$ git clone -b fix-xyz --single-branch git@github.com:username/mlip-testing.git mlip-testing-fix-xyz
+$ git clone -b fix-xyz --single-branch git@github.com:username/ml-peg.git ml-peg-fix-xyz
 ```
 
 Alternatively you can create the branch in the CLI using
 
 ``` sh
 # clone the repository, if you already have a local repository this is not nessecary
-$ git clone git@github.com:username/mlip-testing.git mlip-testing-fix-xyz
-$ pushd mlip-testing-fix-xyz
+$ git clone git@github.com:username/ml-peg.git ml-peg-fix-xyz
+$ pushd ml-peg-fix-xyz
 # create and checkout a new branch (this is equivalent to git branch followed by git checkout)
 $ git checkout -b fix-xyz
 # create a remote tracking branch for you to push your changes to
@@ -177,7 +177,7 @@ hand. GitHub provides instructions for this, or you can follow this routine,
 
 ``` sh
 # add upstream as a remote if you have not already
-$ git remote add upstream git@github.com:ddmms/mlip-testing.git
+$ git remote add upstream git@github.com:ddmms/ml-peg.git
 # get the changes to upstream since you started working on your issue
 $ git fetch upstream
 # merge these changes into your branch (assuming you want to merge into the main branch on upstream)
@@ -193,7 +193,7 @@ merge and rebase.
 
 ``` sh
 # add upstream as a remote if you have not already
-$ git remote add upstream git@github.com:ddmms/mlip-testing.git
+$ git remote add upstream git@github.com:ddmms/ml-peg.git
 # get the changes to upstream since you started working on your issue
 $ git fetch upstream
 # merge these changes into your branch (assuming you want to merge into the main branch on upstream)
@@ -214,10 +214,10 @@ GitHub also offers a sync functionality in their web UI that achieves the same.
 
 ``` sh
 # clone your fork
-$ git clone git@github.com:username/mlip-testing.git mlip-testing-username
-pushd mlip-testing-username
+$ git clone git@github.com:username/ml-peg.git ml-peg-username
+pushd ml-peg-username
 # add a remote for upstream
-$ git remote add upstream git@github.com:ddmms/mlip-testing.git
+$ git remote add upstream git@github.com:ddmms/ml-peg.git
 ```
 
 These commands need to be done only once. `git remote -v` shall show you
@@ -225,10 +225,10 @@ the origin and project fetch and push links
 
 ``` sh
 $ git remote -v
-origin  git@github.com:username/mlip-testing.git (fetch)
-origin  git@github.com:username/mlip-testing.git (push)
-upstream git@github.com:ddmms/mlip-testing.git (fetch)
-upstream git@github.com:ddmms/mlip-testing.git (push)
+origin  git@github.com:username/ml-peg.git (fetch)
+origin  git@github.com:username/ml-peg.git (push)
+upstream git@github.com:ddmms/ml-peg.git (fetch)
+upstream git@github.com:ddmms/ml-peg.git (push)
 ```
 
 When you need to sync your *fork* with *upstream*, do the following,

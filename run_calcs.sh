@@ -1,1 +1,1 @@
-pytest -v mlip_testing/calcs/*/*/calc* -s --run-slow
+pytest -v ml_peg/calcs/*/*/calc* -s --run-slow

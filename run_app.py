@@ -2,6 +2,6 @@
 
 from __future__ import annotations
 
-from mlip_testing.app.run_app import run_app
+from ml_peg.app.run_app import run_app
 
 run_app()

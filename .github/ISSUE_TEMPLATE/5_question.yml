@@ -1,5 +1,5 @@
 name: Question
-description: Ask a question about mlip-testing
+description: Ask a question about ML-PEG
 labels: ["question"]
 body:
   - type: markdown

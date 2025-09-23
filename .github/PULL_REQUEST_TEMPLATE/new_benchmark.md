@@ -10,7 +10,7 @@ Thank you for contributing! To help us out with reviewing, please consider the f
 
 PR author **must** check the checkboxes below when creating the PR.
 
-- [ ] I've confirmed the [contribution guidelines](https://github.com/ddmms/mlip-testing/blob/main/contributing.md).
+- [ ] I've confirmed the [contribution guidelines](https://github.com/ddmms/ml-peg/blob/main/contributing.md).
 
 ## Summary
 

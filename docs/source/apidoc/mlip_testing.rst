@@ -4,7 +4,7 @@ mlip\_testing package
 Module contents
 ---------------
 
-.. automodule:: mlip_testing
+.. automodule:: ml_peg
    :members:
    :special-members:
    :private-members:
