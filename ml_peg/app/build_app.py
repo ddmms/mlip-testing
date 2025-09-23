@@ -103,10 +103,14 @@ def build_category(
 
     for category in all_layouts:
         # Get category name and description
-        with open(APP_ROOT / category / f"{category}.yml") as file:
-            category_info = safe_load(file)
-            category_title = category_info["title"]
-            category_descrip = category_info["description"]
+        try:
+            with open(APP_ROOT / category / f"{category}.yml") as file:
+                category_info = safe_load(file)
+                category_title = category_info.get("title", category)
+                category_descrip = category_info.get("description", "")
+        except FileNotFoundError:
+            category_title = category
+            category_descrip = ""
 
         # Build summary table
         summary_table = build_summary_table(
