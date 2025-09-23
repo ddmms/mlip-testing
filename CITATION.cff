@@ -13,8 +13,9 @@ authors:
     orcid: "https://orcid.org/0000-0002-7013-6670"
   - family-names: Batatia
     given-names: Ilyes
-  - family-names: Csanyi
-    given-names: Gabor
+  - family-names: Csányi
+    given-names: Gábor
+    orcid: "https://orcid.org/0000-0002-8180-2034"
 identifiers:
   - type: doi
     value: 10.5281/zenodo.16904444

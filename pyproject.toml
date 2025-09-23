@@ -7,7 +7,7 @@ authors = [
     { name = "Joe Hart" },
     { name = "Ilyes Batatia" },
     { name = "Alin M. Elena" },
-    { name = "Gabor Csanyi" },
+    { name = "Gábor Csányi" },
 ]
 requires-python = ">=3.10"
 classifiers = [
