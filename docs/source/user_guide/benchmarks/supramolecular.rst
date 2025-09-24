@@ -17,6 +17,21 @@ four and three of them contain F and Cl atoms, respectively.
 Metrics
 -------
 
+Total MAE
+
+For each complex, the interaction energy is calculated by taking the difference in energy between the protein-ligand complex and the sum of the individual protein and ligand energies. The MAE is computed by comparing predicted interaction energies to reference interaction energies across all 15 systems.
+
+Pearson's r²
+
+The squared Pearson correlation coefficient between predicted and reference interaction energies, measuring the proportion of variance in the reference values explained by the model predictions.
+
+Ion-Ion MAE
+
+For each complex where both protein and ligand fragments have non-zero charges, the interaction energy error is calculated. This metric reports the MAE for these ion-ion interaction systems.
+
+Ion-Neutral MAE
+
+For each complex where one fragment (protein or ligand) has a non-zero charge and the other is neutral, the interaction energy error is calculated. This metric reports the MAE for these ion-neutral interaction systems.
 
 
 Computational cost
