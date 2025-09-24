@@ -48,12 +48,15 @@ provided, and run:
     docker build . -t ml-peg-app
 
 
-
 Once built, you can mount your current directory and start the app by running:
 
 .. code-block:: bash
 
     docker run --volume .:/app  --publish 8050:8050 ml-peg-app
+
+.. tip::
+
+    Ensure ``ml_peg/app/data`` is populated with results before running the container.
 
 
 Alternatively, you can use the
