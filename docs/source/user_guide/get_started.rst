@@ -11,14 +11,14 @@ All required and optional dependencies can be found in `pyproject.toml <https://
 Installation
 ------------
 
-The latest stable release of ``ML-PEG``, including its dependencies, will soon be installable from PyPI by running:
+The latest stable release of ML-PEG, including its dependencies, will soon be installable from PyPI by running:
 
 .. code-block:: bash
 
     python3 -m pip install ml-peg
 
 
-To get all the latest changes, ``ML-PEG`` can also be installed from GitHub:
+To get all the latest changes, ML-PEG can also be installed from GitHub:
 
 .. code-block:: bash
 
@@ -30,7 +30,7 @@ Running the application
 
 A Docker image of the latest changes can be pulled from the GitHub container registry,
 following the command that can be found under this repository's
-`packages <https://github.com/ddmms/ML-PEG/pkgs/container/ml-peg-app>`_:
+`packages <https://github.com/ddmms/ml-peg/pkgs/container/ml-peg-app>`_:
 
 .. note::
 
@@ -40,7 +40,7 @@ following the command that can be found under this repository's
 
 
 Alternatively, to build the container yourself, you can use the
-`Dockerfile <https://github.com/ddmms/ML-PEG/blob/main/containers/Dockerfile>`_
+`Dockerfile <https://github.com/ddmms/ml-peg/blob/main/containers/Dockerfile>`_
 provided, and run:
 
 .. code-block:: bash
@@ -60,7 +60,7 @@ Once built, you can mount your current directory and start the app by running:
 
 
 Alternatively, you can use the
-`compose.yml <https://github.com/ddmms/ML-PEG/blob/main/containers/compose.yml>`_
+`compose.yml <https://github.com/ddmms/ml-peg/blob/main/containers/compose.yml>`_
 file provided, via Docker Compose:
 
 .. code-block:: bash

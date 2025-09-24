@@ -15,7 +15,7 @@ which tests are run based on our
 `custom markers <https://docs.pytest.org/en/7.1.x/example/markers.html>`_.
 
 ALl current tests can be launched using the
-`run_calcs.sh <https://github.com/ddmms/ML-PEG/blob/main/run_calcs.sh>`_ script:
+`run_calcs.sh <https://github.com/ddmms/ml-peg/blob/main/run_calcs.sh>`_ script:
 
 .. code-block:: bash
 
@@ -38,7 +38,7 @@ Analysis
 
 As with calculations, analysis of results should also be launched using ``pytest``,
 which can be done using the
-`run_analysis.sh <https://github.com/ddmms/ML-PEG/blob/main/run_analysis.sh>`_ script:
+`run_analysis.sh <https://github.com/ddmms/ml-peg/blob/main/run_analysis.sh>`_ script:
 
 .. code-block:: bash
 
@@ -59,7 +59,7 @@ Application
 -----------
 
 Having run analysis, the app can now be launched by running the
-`run_app.py <https://github.com/ddmms/ML-PEG/blob/main/run_app.py>`_ Python script:
+`run_app.py <https://github.com/ddmms/ml-peg/blob/main/run_app.py>`_ Python script:
 
 .. code-block:: bash
 

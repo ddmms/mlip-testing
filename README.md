@@ -33,13 +33,13 @@ All required and optional dependencies can be found in [pyproject.toml](pyprojec
 
 ### Installation
 
-The latest stable release of `ML-PEG`, including its dependencies, will be installable from PyPI by running:
+The latest stable release of ML-PEG, including its dependencies, will be installable from PyPI by running:
 
 ```
 python3 -m pip install ml-peg
 ```
 
-To get all the latest changes, `ML-PEG` can be installed from GitHub:
+To get all the latest changes, ML-PEG can be installed from GitHub:
 
 ```
 python3 -m pip install git+https://github.com/ddmms/ml-peg.git
@@ -58,10 +58,10 @@ and
 [coding style](coding_style.md)
 before proceeding.
 
-We recommend installing `uv` for dependency management when developing for `ML-PEG`:
+We recommend installing `uv` for dependency management when developing for ML-PEG:
 
 1. Install [uv](https://docs.astral.sh/uv/getting-started/installation)
-2. Install `ML-PEG` with dependencies in a virtual environment:
+2. Install ML-PEG with dependencies in a virtual environment:
 
 ```shell
 git clone https://github.com/ddmms/ml-peg
