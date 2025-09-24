@@ -4,8 +4,11 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
+  build-linux:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        architecture: [amd64, arm64]
     # if: github.repository == 'ddmms/ml-peg'
     permissions:
       packages: write
@@ -25,8 +28,8 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           file: ./containers/Dockerfile
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/${{ matrix.architecture }}
           push: true
           tags: |
-            ghcr.io/elliottkasoar/ml-peg-app:latest
-            ghcr.io/elliottkasoar/ml-peg-app:${{ github.sha }}
+            ghcr.io/elliottkasoar/ml-peg-app:${{ matrix.architecture }}-latest
+            ghcr.io/elliottkasoar/ml-peg-app:${{ matrix.architecture }}-${{ github.sha }}
