@@ -1,5 +1,5 @@
 =============
-Running Tests
+Running tests
 =============
 
 This guide will break down how to run calculations, analysis, and the interactive
@@ -7,7 +7,7 @@ application.
 
 
 Calculations
-++++++++++++
+------------
 
 Currently, all calculations should be launched using ``pytest``. This will help to
 automatically discover and run each test, handle intermediate errors, and control
@@ -34,7 +34,7 @@ This will run all calculations in the surfaces category, including any marked as
 
 
 Analysis
-++++++++
+--------
 
 As with calculations, analysis of results should also be launched using ``pytest``,
 which can be done using the
@@ -56,7 +56,7 @@ Will analyse the results of calculations in the surfaces category.
 
 
 Application
-+++++++++++
+-----------
 
 Having run analysis, the app can now be launched by running the
 `run_app.py <https://github.com/ddmms/ML-PEG/blob/main/run_app.py>`_ Python script:

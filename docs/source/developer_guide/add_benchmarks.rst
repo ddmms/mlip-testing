@@ -12,7 +12,7 @@ This guide will break down the process of adding a new benchmark into several st
 .. _metrics:
 
 Identifying metrics
-===================
+-------------------
 
 Having selected an application/system/property of interest to test,
 the first step is to identify quantifiable metrics of performance.
@@ -37,7 +37,7 @@ or quantifying the stability of a simulation.
 .. _calculations:
 
 Running Calculations
-====================
+--------------------
 
 1. Create a new directory in ``ml_peg/calcs/[category]`` with a short, unique benchmark name.
 
@@ -209,7 +209,7 @@ run identified and run using ``pytest``.
 .. _analysis:
 
 Analysing Calculations
-======================
+----------------------
 
 The output files created by :ref:`calculations` must then be analysed to calculate the metrics
 as planned in :ref:`metrics`.
@@ -469,7 +469,7 @@ convenience.
 .. _dash:
 
 Build Dash components
-=====================
+---------------------
 
 Any tables and figures to be added to the app should have been created and saved by
 running the test defined in :ref:`analysis`.

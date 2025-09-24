@@ -7,5 +7,6 @@ Developer guide
 
     get_started
     add_benchmarks
+    add_category
     add_models
     running

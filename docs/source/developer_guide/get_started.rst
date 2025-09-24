@@ -10,7 +10,7 @@ before proceeding.
 
 
 Dependency management
-+++++++++++++++++++++
+---------------------
 
 We recommend `installing uv <https://docs.astral.sh/uv/getting-started/installation/>`_ for dependency management when developing for ``ml-peg``.
 
@@ -36,7 +36,7 @@ Dependencies useful for development can then be installed by running::
 
 
 Using uv
-++++++++
+--------
 
 ``uv`` manages a `persistent environment <https://docs.astral.sh/uv/concepts/projects/layout/#the-project-environment>`_
 with the project and its dependencies in a ``.venv`` directory, adjacent to ``pyproject.toml``. This will be created automatically as needed.
@@ -66,7 +66,7 @@ For further information, please refer to the `documentation <https://docs.astral
 
 
 Running unit tests
-++++++++++++++++++
+------------------
 
 Packages in the ``dev`` dependency group allow tests to be run locally using ``pytest``, by running::
 
@@ -74,7 +74,7 @@ Packages in the ``dev`` dependency group allow tests to be run locally using ``p
 
 
 Automatic coding style check
-++++++++++++++++++++++++++++
+----------------------------
 
 Packages in the ``pre-commit`` dependency group allow automatic code formatting and linting on every commit.
 
@@ -96,7 +96,7 @@ The full set of `ruff rules <https://docs.astral.sh/ruff/rules/>`_ are specified
 
 
 Building the documentation
-++++++++++++++++++++++++++
+--------------------------
 
 Packages in the ``docs`` dependency group install `Sphinx <https://www.sphinx-doc.org>`_
 and other Python packages required to build ``ml-peg``'s documentation.
@@ -122,7 +122,7 @@ API documentation is automatically generated from ``docs/source/apidoc/ml_peg.rs
 
 
 Continuous integration
-++++++++++++++++++++++
+----------------------
 
 ``ml-peg`` comes with a ``.github`` folder that contains continuous integration workflows that run on every push and pull request using `GitHub Actions <https://github.com/features/actions>`_. These will:
 
