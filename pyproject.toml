@@ -29,6 +29,7 @@ dependencies = [
     "kaleido>=1.0.0",
     "mlipx<0.2,>=0.1.5",
     "scikit-learn>=1.7.1",
+    "mdanalysis>=2.9.0",
 ]
 
 [project.optional-dependencies]
