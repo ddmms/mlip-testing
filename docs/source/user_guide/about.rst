@@ -1,6 +1,11 @@
 ============
-Using ML-PEG
+About ML-PEG
 ============
+
+This section will describe some of the broader concepts and design choices in ML-PEG.
+
+Please refer to our documentation on :doc:`benchmarks </user_guide/benchmarks/index>`
+for more specific information about the calculations and analaysis that we run.
 
 Categories
 ----------

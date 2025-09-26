@@ -13,7 +13,7 @@ and its calculation script, ``ml_peg/calcs/new_category/new_test/calc_new_test.p
 
 For calculations and analaysis, these categories are largely for organisation of code.
 However, in the case of the test apps, categories also define the tabs and
-summarisation of data, as described in :doc:`Using ML-PEG </user_guide/application>`.
+summarisation of data, as described in :doc:`About ML-PEG </user_guide/about>`.
 
 Additionally, a yaml file can be provided for the category, providing a human-friendly
 name, used for the tab name and title, as well as a description of the category. For

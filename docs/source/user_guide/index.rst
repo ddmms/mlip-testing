@@ -6,5 +6,5 @@ User guide
     :maxdepth: 3
 
     get_started
-    application
+    about
     benchmarks/index
