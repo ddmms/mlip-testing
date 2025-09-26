@@ -1,7 +1,7 @@
 # Contribution workflow and the review process
 
 This document outlines the best practice, using git and CI, which **must** be followed
-for all contributions to `ml-peg`. Also contained are instructions and tips for
+for all contributions to ML-PEG. Also contained are instructions and tips for
 managing your fork of the project, which will help keep merges clean and avoid many
 headaches.
 

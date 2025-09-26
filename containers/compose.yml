@@ -1,6 +1,6 @@
 services:
   app:
-    image: benchmark-app
+    image: ml-peg-app
     ports:
       - 8050:8050
     working_dir: /app

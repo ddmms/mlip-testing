@@ -1,7 +1,7 @@
-Welcome to ml-peg's documentation!
+Welcome to ML-PEG's documentation!
 ========================================
 
-``ml-peg`` provides tools to perform and analyse calculations using machine learnt interatomic potentials (MLIPs),
+ML-PEG provides tools to perform and analyse calculations using machine learnt interatomic potentials (MLIPs),
 as well as facilitating training and fine-tuning of MLIPs.
 
 .. toctree::
@@ -12,7 +12,7 @@ as well as facilitating training and fine-tuning of MLIPs.
    developer_guide/index
    API documentation <apidoc/ml_peg>
 
-``ml-peg`` is released under the `GNU General Public License version 3 <https://opensource.org/license/gpl-3-0>`_.
+ML-PEG is released under the `GNU General Public License version 3 <https://opensource.org/license/gpl-3-0>`_.
 
 Indices and tables
 ==================

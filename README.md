@@ -1,4 +1,4 @@
-# ml-peg
+# ML-PEG
 
 [![Build Status][ci-badge]][ci-link]
 [![Coverage Status][cov-badge]][cov-link]
@@ -6,9 +6,7 @@
 [![License][license-badge]][license-link]
 [![DOI][doi-badge]][doi-link]
 
-Testing framework for machine learnt interatomic potentials.
-
-The interactive analysis suite is currently hosted at: http://mlip-testing.stfc.ac.uk:8050
+ML potential usability and performance guide
 
 > [!NOTE]
 > Migration in progress! The live benchmarks are currently run and analysed using
@@ -17,6 +15,8 @@ The interactive analysis suite is currently hosted at: http://mlip-testing.stfc.
 >
 > New benchmarks are expected to be added following the format defined in this
 > repository, and work is ongoing to migrate all existing benchmarks to this format.
+
+Our original interactive analysis suite is currently hosted at: http://mlip-testing.stfc.ac.uk:8050
 
 ## Contents
 - [Getting started](#getting-started)
@@ -33,13 +33,13 @@ All required and optional dependencies can be found in [pyproject.toml](pyprojec
 
 ### Installation
 
-The latest stable release of `ml-peg`, including its dependencies, will be installable from PyPI by running:
+The latest stable release of ML-PEG, including its dependencies, will be installable from PyPI by running:
 
 ```
 python3 -m pip install ml-peg
 ```
 
-To get all the latest changes, `ml-peg` can be installed from GitHub:
+To get all the latest changes, ML-PEG can be installed from GitHub:
 
 ```
 python3 -m pip install git+https://github.com/ddmms/ml-peg.git
@@ -53,15 +53,15 @@ Coming soon!
 ## Development
 
 Please ensure you have consulted our
-[contribution guidelines](https://github.com/ddmms/ml-peg/blob/main/contributing.md)
+[contribution guidelines](contributing.md)
 and
-[coding style](https://github.com/ddmms/ml-peg/blob/main/coding_style.md)
+[coding style](coding_style.md)
 before proceeding.
 
-We recommend installing `uv` for dependency management when developing for `ml-peg`:
+We recommend installing `uv` for dependency management when developing for ML-PEG:
 
 1. Install [uv](https://docs.astral.sh/uv/getting-started/installation)
-2. Install `ml-peg` with dependencies in a virtual environment:
+2. Install ML-PEG with dependencies in a virtual environment:
 
 ```shell
 git clone https://github.com/ddmms/ml-peg
