@@ -6,7 +6,7 @@ on:
 jobs:
   build-amd64:
     runs-on: ubuntu-latest
-    # if: github.repository == 'ddmms/ml-peg'
+    if: github.repository == 'ddmms/ml-peg'
     permissions:
       packages: write
       contents: read
@@ -28,12 +28,12 @@ jobs:
           platforms: linux/amd64
           push: true
           tags: |
-            ghcr.io/elliottkasoar/ml-peg-app:amd64-latest
-            ghcr.io/elliottkasoar/ml-peg-app:amd64-${{ github.sha }}
+            ghcr.io/ddmms/ml-peg-app:amd64-latest
+            ghcr.io/ddmms/ml-peg-app:amd64-${{ github.sha }}
 
   build-arm64:
     runs-on: ubuntu-24.04-arm
-    # if: github.repository == 'ddmms/ml-peg'
+    if: github.repository == 'ddmms/ml-peg'
     permissions:
       packages: write
       contents: read
@@ -55,5 +55,5 @@ jobs:
           platforms: linux/arm64
           push: true
           tags: |
-            ghcr.io/elliottkasoar/ml-peg-app:arm64-latest
-            ghcr.io/elliottkasoar/ml-peg-app:arm64-${{ github.sha }}
+            ghcr.io/ddmms/ml-peg-app:arm64-latest
+            ghcr.io/ddmms/ml-peg-app:arm64-${{ github.sha }}
