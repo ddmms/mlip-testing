@@ -80,3 +80,9 @@ By default, this will make the app visiable at http://localhost:8050.
 
 When launched, the app will attempt to automatically construct tables, figures, and
 interactive features, based on any importable test apps defined in ``ml_peg/apps/``.
+
+If any plots are unable to be loaded, a warning will be raised, and only the table will
+be rendered for the test.
+
+If a test's table is also unable to be loaded, the test will not be added to the app,
+but the app builder should continue to attempt adding other tests.
