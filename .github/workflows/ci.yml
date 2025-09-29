@@ -32,6 +32,7 @@ jobs:
         uses: coverallsapp/github-action@v2
         with:
           parallel: true
+          fail-on-error: false
           flag-name: run-${{ matrix.python-version }}
           file: coverage.xml
           base-path: ml_peg
@@ -44,6 +45,7 @@ jobs:
         uses: coverallsapp/github-action@v2
         with:
           parallel-finished: true
+          fail-on-error: false
 
   pre-commit:
     runs-on: ubuntu-latest
