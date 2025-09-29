@@ -139,7 +139,7 @@ Input data:
 
 Reference data:
 
-* Single points are performed with the MatPESStatic set, with a cutoff energy of 520 eV.
+* PBE single points are performed with the MatPESStatic set, with a cutoff energy of 520 eV.
 
   * A. D. Kaplan, R. Liu, J. Qi, T. W. Ko, B. Deng, J. Riebesell, G. Ceder, K. A. Persson, S. P. Ong, "A Foundational Potential Energy Surface Dataset for Materials," arXiv preprint arXiv:2503.04070, 2025. https://doi.org/10.48550/arXiv.2503.04070
   * S. P. Ong, W. D. Richards, A. Jain, G. Hautier, M. Kocher, S. Cholia, D. Gunter, V. Chevrier, K. A. Persson, G. Ceder, "Python Materials Genomics (pymatgen): A Robust, Open-Source Python Library for Materials Analysis," Comput. Mater. Sci., 2013, 68, 314–319. https://doi.org/10.1016/j.commatsci.2012.10.028
