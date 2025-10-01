@@ -2,11 +2,12 @@
 
 from __future__ import annotations
 
+from dash import html
 from dash.dash_table import DataTable
 from dash.dcc import Input as DCC_Input
 from dash.dcc import Slider, Store
 from dash.development.base_component import Component
-from dash.html import H2, H3, Br, Button, Div, Label
+from dash.html import H2, H3, Br, Button, Details, Div, Label, Summary
 
 from ml_peg.app.utils.register_callbacks import (
     register_summary_table_callbacks,
@@ -139,6 +140,7 @@ def build_test_layout(
     description: str,
     table: DataTable,
     extra_components: list[Component] | None = None,
+    docs_url: str | None = None,
 ) -> Div:
     """
     Build app layout for a test.
@@ -153,6 +155,8 @@ def build_test_layout(
         Dash Table with metric results.
     extra_components
         List of Dash Components to include after the metrics table.
+    docs_url
+        URL to online documentation. Default is None.
 
     Returns
     -------
@@ -162,8 +166,33 @@ def build_test_layout(
     layout_contents = [
         H2(name, style={"color": "black"}),
         H3(description),
-        Div(table),
     ]
+
+    layout_contents.extend(
+        [
+            Details(
+                [
+                    Summary(
+                        "Click for more information",
+                        style={
+                            "cursor": "pointer",
+                            "fontWeight": "bold",
+                            "padding": "5px",
+                        },
+                    ),
+                    Label([html.A("Online documentation", href=docs_url)]),
+                ],
+                style={
+                    # "border": "1px solid #ddd",
+                    "padding": "10px",
+                    # "borderRadius": "5px",
+                },
+            ),
+            Br(),
+        ]
+    )
+
+    layout_contents.append(Div(table))
 
     layout_contents.append(
         Store(

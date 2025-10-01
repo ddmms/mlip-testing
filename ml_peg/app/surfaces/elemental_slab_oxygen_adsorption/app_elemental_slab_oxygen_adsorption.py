@@ -15,6 +15,7 @@ from ml_peg.app.utils.load import read_plot
 from ml_peg.calcs.models.models import MODELS
 
 BENCHMARK_NAME = "Elemental Slab Oxygen Adsorption"
+DOCS_URL = "https://ddmms.github.io/ml-peg/user_guide/benchmarks/surfaces.html#elemental-slab-oxygen-adsorption"
 DATA_PATH = APP_ROOT / "data" / "surfaces" / "elemental_slab_oxygen_adsorption"
 
 
@@ -65,6 +66,7 @@ def get_app() -> ElementalSlabOxygenAdsorptionApp:
             "Performance in predicting adsorption energies of oxygen "
             "on elemental slabs."
         ),
+        docs_url=DOCS_URL,
         table_path=DATA_PATH / "elemental_slab_oxygen_adsorption_metrics_table.json",
         extra_components=[
             Div(id=f"{BENCHMARK_NAME}-figure-placeholder"),

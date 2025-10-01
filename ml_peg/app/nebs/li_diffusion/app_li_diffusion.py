@@ -15,6 +15,7 @@ from ml_peg.app.utils.load import read_plot
 from ml_peg.calcs.models.models import MODELS
 
 BENCHMARK_NAME = "Li diffusion"
+DOCS_URL = "https://ddmms.github.io/ml-peg/user_guide/benchmarks/nebs.html#li-diffusion"
 DATA_PATH = APP_ROOT / "data" / "nebs" / "li_diffusion"
 
 
@@ -75,6 +76,7 @@ def get_app() -> LiDiffusionApp:
     return LiDiffusionApp(
         name=BENCHMARK_NAME,
         description=("Performance in predicting energy barriers for Li diffision."),
+        docs_url=DOCS_URL,
         table_path=DATA_PATH / "li_diffusion_metrics_table.json",
         extra_components=[
             Div(id=f"{BENCHMARK_NAME}-figure-placeholder"),

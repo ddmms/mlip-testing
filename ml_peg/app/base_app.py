@@ -26,6 +26,8 @@ class BaseApp(ABC):
         Path to json file containing Dash table data for application metrics.
     extra_components
         List of other Dash components to add to app.
+    docs_url
+        URL for online documentation. Default is None.
     """
 
     def __init__(
@@ -34,6 +36,7 @@ class BaseApp(ABC):
         description: str,
         table_path: Path,
         extra_components: list[Component],
+        docs_url: str | None = None,
     ):
         """
         Initiaise class.
@@ -48,11 +51,14 @@ class BaseApp(ABC):
             Path to json file containing Dash table data for application metrics.
         extra_components
             List of other Dash components to add to app.
+        docs_url
+            URL to online documentation. Default is None.
         """
         self.name = name
         self.description = description
         self.table_path = table_path
         self.extra_components = extra_components
+        self.docs_url = docs_url
 
         self.table_id = f"{self.name}-table"
         self.table = rebuild_table(self.table_path, id=self.table_id)
@@ -71,6 +77,7 @@ class BaseApp(ABC):
         return build_test_layout(
             name=self.name,
             description=self.description,
+            docs_url=self.docs_url,
             table=self.table,
             extra_components=self.extra_components,
         )

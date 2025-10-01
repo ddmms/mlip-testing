@@ -16,6 +16,7 @@ from ml_peg.app.utils.load import read_plot
 from ml_peg.calcs.models.models import MODELS
 
 BENCHMARK_NAME = "OC157"
+DOCS_URL = "https://ddmms.github.io/ml-peg/user_guide/benchmarks/surfaces.html#oc157"
 DATA_PATH = APP_ROOT / "data" / "surfaces" / "OC157"
 
 
@@ -70,6 +71,7 @@ def get_app() -> OC157App:
             "Performance in predicting relative energies between 3 structures for 157 "
             "molecule-surface combinations."
         ),
+        docs_url=DOCS_URL,
         table_path=DATA_PATH / "oc157_metrics_table.json",
         extra_components=[
             Div(id=f"{BENCHMARK_NAME}-figure-placeholder"),

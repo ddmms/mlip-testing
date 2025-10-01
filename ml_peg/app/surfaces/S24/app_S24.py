@@ -15,6 +15,7 @@ from ml_peg.app.utils.load import read_plot
 from ml_peg.calcs.models.models import MODELS
 
 BENCHMARK_NAME = "S24"
+DOCS_URL = "https://ddmms.github.io/ml-peg/user_guide/benchmarks/surfaces.html#s24"
 DATA_PATH = APP_ROOT / "data" / "surfaces" / "S24"
 
 
@@ -65,6 +66,7 @@ def get_app() -> S24App:
             "Performance in predicting adsorption energies for 24 "
             "molecule-surface combinations."
         ),
+        docs_url=DOCS_URL,
         table_path=DATA_PATH / "s24_metrics_table.json",
         extra_components=[
             Div(id=f"{BENCHMARK_NAME}-figure-placeholder"),
