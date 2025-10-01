@@ -101,6 +101,8 @@ def build_category(
     category_layouts = {}
     category_tables = {}
 
+    # `category` corresponds to the category's directory name
+    # We will use the loaded `category_title` for IDs/dictionary keys returned
     for category in all_layouts:
         # Get category name and description
         try:
@@ -114,7 +116,7 @@ def build_category(
 
         # Build summary table
         summary_table = build_summary_table(
-            all_tables[category], table_id=f"{category}-summary-table"
+            all_tables[category], table_id=f"{category_title}-summary-table"
         )
         category_tables[category_title] = summary_table
 
@@ -123,7 +125,7 @@ def build_category(
             header="Benchmark weights",
             columns=list(all_tables[category].keys()),
             input_ids=list(all_tables[category].keys()),
-            table_id=f"{category}-summary-table",
+            table_id=f"{category_title}-summary-table",
         )
 
         # Build full layout with summary table, weight controls, and test layouts
