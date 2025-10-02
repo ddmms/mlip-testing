@@ -180,7 +180,9 @@ def build_test_layout(
                             "padding": "5px",
                         },
                     ),
-                    Label([html.A("Online documentation", href=docs_url)]),
+                    Label(
+                        [html.A("Online documentation", href=docs_url, target="_blank")]
+                    ),
                 ],
                 style={
                     # "border": "1px solid #ddd",
